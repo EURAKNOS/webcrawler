@@ -42,13 +42,17 @@ class ParsePage {
         //Download Page
         echo "Downloading: $this->target\n";
         
+      
+        
         $dwl = new DownloadPage();
         $dwl->target = $this->target;
+        
         $dwl->referer = $this->referer;
         $contents = $dwl->downloadData();
         
         echo "Done\n";
         //Check Status
+        //var_dump($contents['headers']);
         if( $contents['headers']['status_info'][1] != 200 ) {
             //If not ok, mark as downloaded but skip
             $MySql->url_path = $url_path;
@@ -63,30 +67,29 @@ class ParsePage {
         
         
         //Get title
-        $titleTags = $doc->getElementsByTagName('title');
+        /*$titleTags = $doc->getElementsByTagName('title');
         if( count( $titleTags ) > 0 ) {
             $this->result['title'] = '';
             
             $this->result['title'] = $titleTags[0]->nodeValue;
-        }
+        }*/
          
         //Get Description ------------------------------------------
-       
         $metaTags = $doc->getElementsByTagName('meta');
         foreach( $metaTags as $tag ) {
             if( isset($_POST['meta-title']) ) {
                 if( $tag->getAttribute('name') == 'title' ) {
-                    $title = $tag->getAttribute( 'content' );
+                    $this->result['meta-title'] = $tag->getAttribute( 'content' );
                 }
             }
             if( isset($_POST['meta-keywords']) ) {
                 if( $tag->getAttribute('name') == 'keywords' ) {
-                    $keywords = $tag->getAttribute( 'content' );
+                    $this->result['meta-keywords'] = $tag->getAttribute( 'content' );
                 }
             }
             if( isset($_POST['meta-description']) ) {
                 if( $tag->getAttribute('name') == 'description' ) {
-                    $description = $tag->getAttribute( 'content' );
+                    $this->result['meta-description'] = $tag->getAttribute( 'content' );
                 }
             }
         }
@@ -126,7 +129,17 @@ class ParsePage {
                 $this->result[$item['name']] = array('data' => $nodes->item(0)->nodeValue, 'title' => $item['title']);
             }
         }
-       
+        
+        echo '<pre>';
+        print_r($this->result);
+        echo '</pre>';
+        
+        
+        $MySql->data = json_encode($this->result);
+        
+        //$MySql->savePage();
+        $MySql->endDownload();
+        
         //Get Links
         $links = Array();
         $link_tags = $doc->getElementsByTagName( 'a' );

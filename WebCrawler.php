@@ -14,7 +14,7 @@
 class WebCrawler
 {
 
-    public $version = '0.0.1';
+    public $version = '0.0.2';
 
     public $html;
 
@@ -91,18 +91,7 @@ class WebCrawler
                 <h3 class="other-element">Other searching elements</h3>
                 <div class="row">
                 <div class="col-lg-12">
-                <div id="inputFormRow">
-                <div class="input-group mb-3">
-                <input type="text" name="class[0][name]"
-                    class="form-control m-input" placeholder="Enter class name"
-                        autocomplete="off"> <input type="text"
-                            name="class[0][title]" class="form-control m-input"
-                                placeholder="Enter title" autocomplete="off">
-                                <div class="input-group-append">
-                                <button id="removeRow" type="button" class="btn btn-danger">Remove</button>
-                                </div>
-                                </div>
-                                </div>
+             
                                 <div id="newRow"></div>
                                 <button id="addRow" type="button" class="btn btn-info">Add
                                 Row</button>
@@ -167,6 +156,9 @@ class WebCrawler
                         if ($path[0] != '/') {
                             continue;
                         }
+                       /* echo '<pre>';
+                        print_r($row);
+                        echo '</pre>';*/
                         $path = $row['path'];
                         $referer = $row['referer'];
                         $parsePage = new ParsePage();

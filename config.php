@@ -1,6 +1,6 @@
 <?php
 define('MYSQL_HOST', 'localhost');
-define('MYSQL_USERNAME', 'test1');
-define('MYSQL_PASSWORD', 'test1');
-define('MYSQL_DATABASE', 'test1');
+define('MYSQL_USERNAME', 'webc');
+define('MYSQL_PASSWORD', 'test');
+define('MYSQL_DATABASE', 'webc');
 define('PAGE_TABLE', 'pages');

@@ -14,6 +14,8 @@ class DbMysql {
     
     public $selectLinksResult; // Selected url
     
+    public $data;  // data
+    
     /**
      * Builds a connection to the mysql database
      */
@@ -21,7 +23,7 @@ class DbMysql {
     {
         $this->mysql_conn = mysqli_connect( MYSQL_HOST, MYSQL_USERNAME, MYSQL_PASSWORD, MYSQL_DATABASE );
         if ( !$this->mysql_conn ) {
-            echo "Error: Unable to connect to MySQL." . PHP_EOL;
+            echo "__construct function, Error: Unable to connect to MySQL." . PHP_EOL;
             echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
             echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
             exit;
@@ -35,7 +37,7 @@ class DbMysql {
     {
         $query = "INSERT INTO " . PAGE_TABLE . " (path, download_time) VALUES (\"". mysqli_real_escape_string( $this->mysql_conn, $this->target ). "\", NOW()) ON DUPLICATE KEY UPDATE download_time=NOW()";
          if( !mysqli_query($this->mysql_conn, $query) ) {
-            die( "Error: Unable to perform Download Time Update Query (path)\n" );
+            die( "startDownload function, Error: Unable to perform Download Time Update Query (path)\n" );
          }
     }
     
@@ -46,7 +48,7 @@ class DbMysql {
     {
         $query = "INSERT INTO " . PAGE_TABLE . " (path, download_time) VALUES (\"". mysqli_real_escape_string( $this->mysql_conn, $this->url_path ). "\", NOW()) ON DUPLICATE KEY UPDATE download_time=NOW()";
         if( !mysqli_query($this->mysql_conn, $query) ) {
-            die( "Error: Unable to perform Download Time Update Query (http status)\n" );
+            die( "StatusSave function, Error: Unable to perform Download Time Update Query (http status)\n" );
         }
     }
     
@@ -60,11 +62,31 @@ class DbMysql {
             $link_escaped = mysqli_real_escape_string( $this->mysql_conn, $link );
             $query = "INSERT IGNORE INTO " . PAGE_TABLE . " (path, referer, download_time) VALUES (\"$link_escaped\", \"". mysqli_real_escape_string( $this->mysql_conn, $this->target ). "\", NULL)";
             if( !mysqli_query($this->mysql_conn, $query) ) {
-                die( "Error: Unable to perform Insert Link Value Query\n" );
+                die( "saveLinks function, Error: Unable to perform Insert Link Value Query\n" );
             }
             
         }
         
+    }
+    
+    /**
+     * Stores a status
+     */
+    public function endDownload()
+    {
+        $query = "INSERT INTO pages (path, download_time) VALUES (\"". mysqli_real_escape_string( $this->mysql_conn, $this->url_path ). "\", NOW()) ON DUPLICATE KEY UPDATE download_time=NOW()";
+        if( !mysqli_query($this->mysql_conn, $query) ) {
+            die( "endDownload function, Error: Unable to perform Download Time Update Query (http status)\n" );
+        }
+        
+    }
+    
+    public function savePage()
+    {
+        $query = 'INSERT INTO page1 (url, data, download_time) VALUES (\''. mysqli_real_escape_string( $this->mysql_conn, $this->target ). '\', ' .$this->data . ' NOW())';
+        if( !mysqli_query($this->mysql_conn, $query) ) {
+            die( "savePage function, Error: Unable to perform Download Time Update Query (http status)\n" );
+        }
     }
     
     public function getLinks()

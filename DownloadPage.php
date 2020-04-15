@@ -26,10 +26,12 @@ class DownloadPage {
         $info = pathinfo($this->target);
         if (isset($info["extension"])) {
             if ($info["extension"] == "pdf") {
-                $this->processPdf();
+                return $this->processPdf();
             } else {
-                $this->DownloadPage();
+                return $this->DownloadPage();
             }
+        } else {
+            return $this->DownloadPage();
         }
     }
     
@@ -41,6 +43,10 @@ class DownloadPage {
     {
         $handle = curl_init();
         //Define Settings Curl
+        echo '<pre>';
+        echo $this->target . '<br>';
+        echo $this->referer;
+        echo '</pre>';
         curl_setopt ( $handle, CURLOPT_HTTPGET, true );
         curl_setopt ( $handle, CURLOPT_HEADER, true );
         curl_setopt ( $handle, CURLOPT_COOKIEJAR, "cookie_jar.txt" );
@@ -76,6 +82,7 @@ class DownloadPage {
         }
         //Form Return Structure
         $ret = Array("headers" => $header_array, "body" => $body );
+        
         return $ret;
     }
     
@@ -84,7 +91,11 @@ class DownloadPage {
      */
     public function processPdf()
     {
-        
+       $pdf = new Filedata();
+       $pdf->fileLocation = '';
+       $pdf->PdfReviewing();
+       $pdf->result;
+       
     }
     
     
