@@ -91,13 +91,65 @@ class DownloadPage {
      */
     public function processPdf()
     {
-       $pdf = new Filedata();
-       $pdf->fileLocation = '';
-       $pdf->PdfReviewing();
-       $pdf->result;
+       $dl = new DownloadFile();
+       $dl->location = $this->target;
+       $dl->localFile = basename($this->target);
+       $dl->downloadFile();
        
+       $p = new PDFInfo;
+       $result = $p->load($dl->localFile);
+       
+       /*echo '<pre>';
+       print_r($this->target);
+       print_r($dl->localFile);
+       print_r($result);
+       echo '</pre>';
+       die();*/
     }
     
     
+    
+}
+
+/**
+ * File Download
+ * @author szabo
+ *
+ */
+class DownloadFile {
+    
+    public $buffer = 1024;
+    
+    public $location;
+    
+    public $localFile;
+    
+    public function __construct()
+    {
+        
+    }
+    
+    public function downloadFile()
+    {
+        $downloadedFile = fopen($this->location, 'rb');
+        if (!$downloadedFile) {
+            return false;
+        }
+        
+        $lFile = fopen($this->localFile, 'wb');
+        if (!$lFile) {
+            fclose($downloadedFile);
+            return false;
+        }
+        
+        while ($buffer = fread($downloadedFile, $this->buffer)) {
+            fwrite($lFile, $buffer);
+        }
+        
+        fclose($lFile);
+        fclose($downloadedFile);
+        
+        return true;
+    }
     
 }

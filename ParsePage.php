@@ -108,7 +108,7 @@ class ParsePage {
             $this->result['h2'] = '';
             $h2Tags = $doc->getElementsByTagName('h2');
             if( count( $h2Tags ) > 0 ) {
-                $$this->result['h2'] = $h2Tags[0]->nodeValue;
+                $this->result['h2'] = $h2Tags[0]->nodeValue;
             }
         }
         
@@ -136,7 +136,8 @@ class ParsePage {
         
         
         $MySql->data = json_encode($this->result);
-        
+        $MySql->url_path = $url_path;
+        echo $url_path;
         //$MySql->savePage();
         $MySql->endDownload();
         

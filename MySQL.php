@@ -74,7 +74,8 @@ class DbMysql {
      */
     public function endDownload()
     {
-        $query = "INSERT INTO pages (path, download_time) VALUES (\"". mysqli_real_escape_string( $this->mysql_conn, $this->url_path ). "\", NOW()) ON DUPLICATE KEY UPDATE download_time=NOW()";
+        $query = "INSERT INTO pages (path, download_time) VALUES (\"". mysqli_real_escape_string( $this->mysql_conn, $this->url_path ). "\", NOW()) ON DUPLICATE KEY UPDATE path=\"". mysqli_real_escape_string( $this->mysql_conn, $this->url_path ). "\", download_time=NOW()";
+        echo $query;
         if( !mysqli_query($this->mysql_conn, $query) ) {
             die( "endDownload function, Error: Unable to perform Download Time Update Query (http status)\n" );
         }
