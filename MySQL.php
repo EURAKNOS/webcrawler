@@ -16,17 +16,23 @@ class DbMysql {
     
     public $data;  // data
     
+    public $id; // insterted ID
+    
     /**
      * Builds a connection to the mysql database
      */
     public function __construct()
-    {
-        $this->mysql_conn = mysqli_connect( MYSQL_HOST, MYSQL_USERNAME, MYSQL_PASSWORD, MYSQL_DATABASE );
-        if ( !$this->mysql_conn ) {
-            echo "__construct function, Error: Unable to connect to MySQL." . PHP_EOL;
-            echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
-            echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
-            exit;
+    {        
+        try {
+            $this->db= new PDO("mysql:host=".DB_SERVER_HOST.";dbname=".DB_SERVER_DATABASE."", DB_USER_NAME, DB_SERVER_PASSWORD);
+            // set the PDO error mode to exception
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->db->exec("set names utf8");
+            return $this->db;
+        }
+        catch(PDOException $e)
+        {
+            echo "Connecting error: " . $e->getMessage();
         }
     }
     
@@ -35,9 +41,11 @@ class DbMysql {
      */
     public function startDownload()
     {
-        $query = "INSERT INTO " . PAGE_TABLE . " (path, download_time) VALUES (\"". mysqli_real_escape_string( $this->mysql_conn, $this->target ). "\", NOW()) ON DUPLICATE KEY UPDATE download_time=NOW()";
-         if( !mysqli_query($this->mysql_conn, $query) ) {
-            die( "startDownload function, Error: Unable to perform Download Time Update Query (path)\n" );
+         $data['path'] = $this->target;
+         
+         $statement = $this->db->prepare("INSERT INTO ".PAGE_TABLE." (path, download_time) VALUES(:path, NOW()) ON DUPLICATE KEY UPDATE download_time = NOW()");
+         if(!$statement->execute($data)){
+             throw new Exception("An operation failed startDownload function");
          }
     }
     
@@ -46,9 +54,12 @@ class DbMysql {
      */
     public function statusSave()
     {
-        $query = "INSERT INTO " . PAGE_TABLE . " (path, download_time) VALUES (\"". mysqli_real_escape_string( $this->mysql_conn, $this->url_path ). "\", NOW()) ON DUPLICATE KEY UPDATE download_time=NOW()";
-        if( !mysqli_query($this->mysql_conn, $query) ) {
-            die( "StatusSave function, Error: Unable to perform Download Time Update Query (http status)\n" );
+        $data['path'] = $this->path;
+        
+        $statement = $this->db->prepare("UPDATE ".PAGE_TABLE." SET download_time = NOW() WHERE path = :path");
+        
+        if(!$statement->execute($data)){
+            throw new Exception("An operation failed endDownload function");
         }
     }
     
@@ -59,12 +70,23 @@ class DbMysql {
     public function saveLinks()
     {
         foreach($this->links as $link) {
-            $link_escaped = mysqli_real_escape_string( $this->mysql_conn, $link );
-            $query = "INSERT IGNORE INTO " . PAGE_TABLE . " (path, referer, download_time) VALUES (\"$link_escaped\", \"". mysqli_real_escape_string( $this->mysql_conn, $this->target ). "\", NULL)";
-            if( !mysqli_query($this->mysql_conn, $query) ) {
-                die( "saveLinks function, Error: Unable to perform Insert Link Value Query\n" );
-            }
+            $data = array();
+            $data['path'] = $link;
             
+            $statementSelect = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE path = :path ");
+            if(!$statementSelect->execute($data)){
+             
+            }
+                
+            $rowCount = $statementSelect->rowCount();
+            
+            if ( $rowCount == 0 ) {
+                $data['referer'] = $this->referer;
+                $statement = $this->db->prepare("INSERT INTO ".PAGE_TABLE." (path, referer, download_time) VALUES(:path, :referer, NULL)");
+                if(!$statement->execute($data)){
+                    throw new Exception("An operation failed saveLinks function");
+                }
+            }
         }
         
     }
@@ -74,41 +96,79 @@ class DbMysql {
      */
     public function endDownload()
     {
-        $query = "INSERT INTO pages (path, download_time) VALUES (\"". mysqli_real_escape_string( $this->mysql_conn, $this->url_path ). "\", NOW()) ON DUPLICATE KEY UPDATE path=\"". mysqli_real_escape_string( $this->mysql_conn, $this->url_path ). "\", download_time=NOW()";
-        echo $query;
-        if( !mysqli_query($this->mysql_conn, $query) ) {
-            die( "endDownload function, Error: Unable to perform Download Time Update Query (http status)\n" );
+        $data['path'] = $this->path;
+        
+        $statement = $this->db->prepare("UPDATE ".PAGE_TABLE." SET download_time = NOW() WHERE path = :path");
+
+        if(!$statement->execute($data)){
+            throw new Exception("An operation failed endDownload function");
         }
         
     }
     
     public function savePage()
     {
-        $query = 'INSERT INTO page1 (url, data, download_time) VALUES (\''. mysqli_real_escape_string( $this->mysql_conn, $this->target ). '\', ' .$this->data . ' NOW())';
+        $statement = $this->db->prepare("INSERT INTO ".CONTENTS_TABLE." (`id`, `page`, `path`, `content`, `download_time`) VALUES (NULL, :page, :path, :content, NOW())");
+        if(!$statement->execute($this->data)){
+            throw new Exception("An operation failed saveLinks function");
+        }
+        $this->id = $this->db->lastInsertId();
+    }
+    
+    public function getLinks()
+    {       
+        $statement = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE download_time IS NULL ");
+        $statement->execute();
+        $rowCount = $statement->rowCount();
+        if ( $rowCount > 0 ) {
+            return $rowCount;
+        }
+        return false;
+        
+    }
+    
+    public function getLinkRow()
+    {
+        $statement = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE download_time IS NULL ");
+        $statement->execute();
+       
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result;
+       
+    }
+    
+    /**
+     * Downloded file save
+     * ID
+     * Path: Where it was downloaded from
+     * Local location: Where it was saved
+     * 
+     */
+    public function saveFile()
+    {
+        $query = 'INSERT INTO ' . FILES_TABLE . ' (url, data, download_time) VALUES (\''. mysqli_real_escape_string( $this->mysql_conn, $this->target ). '\', ' .$this->data . ' NOW())';
         if( !mysqli_query($this->mysql_conn, $query) ) {
             die( "savePage function, Error: Unable to perform Download Time Update Query (http status)\n" );
         }
     }
     
-    public function getLinks()
+    public function startDownloadFile()
     {
-        $query = "SELECT * FROM " . PAGE_TABLE . " WHERE download_time IS NULL";        
-        if (($this->selectLinksResult = mysqli_query($this->mysql_conn, $query)) !== false) {
-            if (($rowCount = mysqli_num_rows($this->selectLinksResult)) > 0) {
-                return $rowCount;       
-            }
-            return false;
+        $data['path'] = $this->target;
+        $statement = $this->db->prepare("INSERT INTO ".FILES_TABLE." (id, path) VALUES(NULL, :path)");
+        if(!$statement->execute($data)){
+            throw new Exception("An operation failed saveLinks function");
         }
-        return false;
+        $this->id = $this->db->lastInsertId();
     }
     
-    public function getLinkRow()
+    public function endDownloadFile()
     {
-        if (($row = mysqli_fetch_assoc($this->selectLinksResult)) !== false) {
-            return $row;
+        $statement = $this->db->prepare("UPDATE ".FILES_TABLE." SET local_location = :local_location , downloaded_time = NOW(), meta_data = :meta_data WHERE id = :id");
+        if(!$statement->execute($this->data)){
+            throw new Exception("An operation failed endDownloadFile function");
         }
-        return false;
+        return true;
     }
-    
     
 }

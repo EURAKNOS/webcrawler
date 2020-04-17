@@ -9,12 +9,13 @@
  * 
  * @author Zoltan Szabo
  * Email: szabo.zoltan@aki.naik.hu
+ * 
  *
  */
 class WebCrawler
 {
 
-    public $version = '0.0.3';
+    public $version = '0.0.4';
 
     public $html;
 
@@ -136,9 +137,14 @@ class WebCrawler
         $seed_host = $seed_components['host'];
         $url_start = $seed_scheme . '://' . $seed_host;
         // Download Seed URL
+
         $parsePage = new ParsePage();
         $parsePage->target = $seed_url;
         $parsePage->referer = "";
+        /*var_dump($seed_components);
+        die();
+        $parsePage->path = ($seed_components['path'] == '')? '/':$seed_components['path'];*/
+        $parsePage->path =$seed_components['path'];
         $parsePage->parsePage();
         // Loop through all pages on site.
 
@@ -164,6 +170,7 @@ class WebCrawler
                         $parsePage = new ParsePage();
                         $parsePage->target = $url_start . $path;
                         $parsePage->referer = $referer;
+                        $parsePage->path = $path;
 
                         if ($parsePage->parsePage()) {
                             $counter ++;

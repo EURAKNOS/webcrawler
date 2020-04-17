@@ -1,4 +1,5 @@
 <?php
+session_start ();
 require_once 'config.php';
 require_once 'WebCrawler.php';
 require_once 'ParsePage.php';

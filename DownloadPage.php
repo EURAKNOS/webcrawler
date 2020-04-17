@@ -43,10 +43,7 @@ class DownloadPage {
     {
         $handle = curl_init();
         //Define Settings Curl
-        echo '<pre>';
-        echo $this->target . '<br>';
-        echo $this->referer;
-        echo '</pre>';
+
         curl_setopt ( $handle, CURLOPT_HTTPGET, true );
         curl_setopt ( $handle, CURLOPT_HEADER, true );
         curl_setopt ( $handle, CURLOPT_COOKIEJAR, "cookie_jar.txt" );
@@ -91,20 +88,30 @@ class DownloadPage {
      */
     public function processPdf()
     {
-       $dl = new DownloadFile();
-       $dl->location = $this->target;
-       $dl->localFile = basename($this->target);
-       $dl->downloadFile();
-       
-       $p = new PDFInfo;
-       $result = $p->load($dl->localFile);
-       
-       /*echo '<pre>';
-       print_r($this->target);
-       print_r($dl->localFile);
-       print_r($result);
-       echo '</pre>';
-       die();*/
+        $MySql = new DbMysql();
+        $MySql->target = $this->target;
+        $MySql->startDownloadFile();
+        
+        $dl = new DownloadFile();
+        $dl->location = $this->target;
+        $dl->folder = FOLDER_DEFAULT . '/' . FOLDER_PDF . '/' . $MySql->id;
+        $dl->localFile = FOLDER_PDF . '/' . $MySql->id . '/' . basename($this->target);
+        $dl->downloadFile();
+        
+        $p = new PDFInfo;
+        $result = $p->load(FOLDER_DEFAULT . '/' . $dl->localFile);       
+        $saveData['meta_data'] = '';
+        if (isset($result) && !empty($result)) {
+            $saveData['meta_data'] = serialize($result);
+        }
+        $saveData['id'] = $MySql->id;
+        $saveData['local_location'] = $dl->localFile;
+        $MySql->data = $saveData;
+        if ($MySql->endDownloadFile()) {
+            $fileDownload['ok'] = 1;
+        }
+        
+        return $fileDownload;
     }
     
     
@@ -131,12 +138,15 @@ class DownloadFile {
     
     public function downloadFile()
     {
+        if (!file_exists($this->folder)) {
+            mkdir($this->folder, 0777, true);
+        }
         $downloadedFile = fopen($this->location, 'rb');
         if (!$downloadedFile) {
             return false;
         }
         
-        $lFile = fopen($this->localFile, 'wb');
+        $lFile = fopen(FOLDER_DEFAULT . '/' . $this->localFile, 'wb');
         if (!$lFile) {
             fclose($downloadedFile);
             return false;
