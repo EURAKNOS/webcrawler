@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.0.4';
+    public $version = '0.0.5';
 
     public $html;
 
@@ -37,11 +37,11 @@ class WebCrawler
      * (Due to the minimal frontend part, I don't create a separate file for it or use a temaplet manager.)
      */
     public function template()
-    {
+    {   
         $this->html .= ('<html><head><meta charset="utf-8"><title>Euraknos WebCrawler</title><link rel="stylesheet" href="style/css/bootstrap.min.css"><link rel="stylesheet" href="style/css.css"><link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css"><script src="style/js/jquery.min.js"></script><script src="style/js/bootstrap.min.js"></script></head>');
         $this->html .= ('<body>');
         $this->html .= ('
-        <form action="/euraknos/webcrawler/" method="post" name="webcrawler">
+        <form action="' . ROOT_PATH . '" method="post" name="webcrawler">
         <div class="header">
         <p>WebCrawler</p>
         </div>
