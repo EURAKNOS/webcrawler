@@ -145,7 +145,10 @@ class ParsePage
             $MySqlPage = new DbMysql();
             $MySqlPage->data['page'] = $this->referer;
             $MySqlPage->data['path'] = $this->path;
-            $MySqlPage->data['content'] = serialize($this->result);
+            $MySqlPage->data['content'] = '';
+            if (isset($this->result)) {
+                $MySqlPage->data['content'] = serialize($this->result);
+            }
             $MySqlPage->savePage();
         }
         
@@ -165,6 +168,25 @@ class ParsePage
                 }
             }
         }
+        
+        $link_tags = $doc->getElementsByTagName('img');
+        foreach ($link_tags as $tag) {
+            if (($href_value = $tag->getAttribute('src'))) {
+                if (strpos($href_value, 'data:image') !== false) {
+                    continue;
+                }
+                $link_absolute = $this->relativeToAbsolute($href_value, $this->target);
+                $link_parsed = parse_url($link_absolute);
+                if ($link_parsed === null || $link_parsed === false) {
+                    die('Unable to Parse Link URL');
+                }
+                if ((! array_key_exists('host', $link_parsed) || $link_parsed['host'] == "" || $link_parsed['host'] == $url_host) && array_key_exists('path', $link_parsed) && $link_parsed['path'] != "" && array_search($link_parsed['path'], $links) === false) {
+                    $links[] = $link_parsed['path'];
+                }
+            }
+        }
+        
+        
         // Insert Links
         $MySql->referer = $this->referer;
         $MySql->links = $links;

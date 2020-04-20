@@ -24,7 +24,7 @@ class DbMysql {
     public function __construct()
     {        
         try {
-            $this->db= new PDO("mysql:host=".DB_SERVER_HOST.";dbname=".DB_SERVER_DATABASE."", DB_USER_NAME, DB_SERVER_PASSWORD);
+            $this->db= new PDO("mysql:host=".DB_SERVER_HOST."; charset=utf8; dbname=".DB_SERVER_DATABASE."", DB_USER_NAME, DB_SERVER_PASSWORD);
             // set the PDO error mode to exception
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->db->exec("set names utf8");
@@ -164,7 +164,7 @@ class DbMysql {
     
     public function endDownloadFile()
     {
-        $statement = $this->db->prepare("UPDATE ".FILES_TABLE." SET local_location = :local_location , downloaded_time = NOW(), meta_data = :meta_data WHERE id = :id");
+        $statement = $this->db->prepare("UPDATE ".FILES_TABLE." SET local_location = :local_location, file_type = :file_type, downloaded_time = NOW(), meta_data = :meta_data WHERE id = :id");
         if(!$statement->execute($this->data)){
             throw new Exception("An operation failed endDownloadFile function");
         }

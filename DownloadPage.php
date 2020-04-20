@@ -27,7 +27,19 @@ class DownloadPage {
         if (isset($info["extension"])) {
             if ($info["extension"] == "pdf") {
                 return $this->processPdf();
-            } else {
+            } elseif ($info["extension"] == "jpg") {
+                return $this->processJpg();
+            } /*elseif ($info["extension"] == "png") {
+                return $this->processPng();
+            } elseif ($info["extension"] == "pptx") {
+                return $this->processPptx();
+            } elseif ($info["extension"] == "docx") {
+                return $this->processDocx();
+            } elseif ($info["extension"] == "xlsx") {
+                return $this->processXlsx();
+            } elseif ($info["extension"] == "pptx") {
+                return $this->processPng();
+            } */else {
                 return $this->DownloadPage();
             }
         } else {
@@ -43,7 +55,7 @@ class DownloadPage {
     {
         $handle = curl_init();
         //Define Settings Curl
-
+        
         curl_setopt ( $handle, CURLOPT_HTTPGET, true );
         curl_setopt ( $handle, CURLOPT_HEADER, true );
         curl_setopt ( $handle, CURLOPT_COOKIEJAR, "cookie_jar.txt" );
@@ -88,35 +100,141 @@ class DownloadPage {
      */
     public function processPdf()
     {
-        $MySql = new DbMysql();
-        $MySql->target = $this->target;
-        $MySql->startDownloadFile();
-        
-        $dl = new DownloadFile();
-        $dl->location = $this->target;
-        $dl->folder = FOLDER_DEFAULT . '/' . FOLDER_PDF . '/' . $MySql->id;
-        $dl->localFile = FOLDER_PDF . '/' . $MySql->id . '/' . basename($this->target);
-        $dl->downloadFile();
+        $dl = new DownloadFileExtended();
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_PDF;
+        $dl->downloadProcessing();
         
         $p = new PDFInfo;
-        $result = $p->load(FOLDER_DEFAULT . '/' . $dl->localFile);       
+        $result = $p->load($dl->localfile);
         $saveData['meta_data'] = '';
         if (isset($result) && !empty($result)) {
             $saveData['meta_data'] = serialize($result);
         }
-        $saveData['id'] = $MySql->id;
-        $saveData['local_location'] = $dl->localFile;
-        $MySql->data = $saveData;
-        if ($MySql->endDownloadFile()) {
-            $fileDownload['ok'] = 1;
-        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'pdf';
         
-        return $fileDownload;
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
+    }
+    
+    public function processJpg()
+    {
+        $dl = new DownloadFileExtended();
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_JPG;
+        $dl->downloadProcessing();
+        
+        
+        $result = exif_read_data($dl->localfile);
+        $saveData['meta_data'] = '';
+        if (isset($result) && !empty($result)) {
+            $saveData['meta_data'] = serialize($result);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'jpg';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
+        
+        
+        
     }
     
     
     
 }
+
+/**
+ * File Download
+ *
+ * Saves the file to be processed to a database.
+ * The download to the local machine will then take place.
+ * Returns control to the function for the current file type.
+ * It then saves the obtained values ​​in the database.
+ *
+ * @author szabo
+ *
+ */
+class DownloadFileExtended {
+    
+    public $buffer = 1024;
+    
+    public $target;
+    
+    public $folder;
+    
+    public $localfile;
+    
+    public $saveData;
+    
+    public $MySql;
+    
+    public $id;
+    
+    public function __construct()
+    {
+        
+    }
+    
+    public function downloadProcessing()
+    {
+        $this->preSaveDatabaseDownlodedFile();
+        $this->downloadFile();
+    }
+    
+    /**
+     * Presave to database
+     */
+    public function preSaveDatabaseDownlodedFile()
+    {
+        $this->MySql = new DbMysql();
+        $this->MySql->target = $this->target;
+        $this->MySql->startDownloadFile();
+        $this->id = $this->MySql->id;
+    }
+    
+    public function downloadFile()
+    {
+        if (!file_exists(FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id)) {
+            mkdir(FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id, 0777, true);
+        }
+        $downloadedFile = fopen($this->target, 'rb');
+        if (!$downloadedFile) {
+            return false;
+        }
+        $this->localfile = FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id . '/' . basename($this->target);
+        $lFile = fopen($this->localfile, 'wb');
+        if (!$lFile) {
+            fclose($downloadedFile);
+            return false;
+        }
+        
+        while ($buffer = fread($downloadedFile, $this->buffer)) {
+            fwrite($lFile, $buffer);
+        }
+        
+        fclose($lFile);
+        fclose($downloadedFile);
+        
+        return true;
+    }
+    
+    public function saveEnd()
+    {
+        $this->MySql->data = $this->saveData;
+        if ($this->MySql->endDownloadFile()) {
+            $fileDownload['ok'] = 1;
+        }
+        return $fileDownload;
+    }
+    
+}
+
 
 /**
  * File Download
