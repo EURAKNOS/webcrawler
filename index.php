@@ -1,6 +1,6 @@
 <?php
 session_start ();
-header('Content-type: text/plain; charset=utf-8');
+//header('Content-type: text/plain; charset=utf-8');
 require_once 'config.php';
 require_once 'WebCrawler.php';
 require_once 'ParsePage.php';
