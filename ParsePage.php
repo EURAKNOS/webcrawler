@@ -43,18 +43,20 @@ class ParsePage
             $url_path = $url_components['path'];
         }
         // Download Page
-        echo "Downloading: $this->target\n";
+        
+        echo "Downloading: $this->target\n<br>";
 
         $dwl = new DownloadPage();
         $dwl->target = $this->target;
 
         $dwl->referer = $this->referer;
         $contents = $dwl->downloadData();
-        echo "Done\n";
+        //echo "Done\n";
         // Check Status
         if (isset($contents['ok'])) {
             $MySql->path = $this->path;
             $MySql->endDownload();
+            return;
         } elseif ($contents['headers']['status_info'][1] != 200) {
             // If not ok, mark as downloaded but skip
             $MySql->path = $this->path;
@@ -164,7 +166,7 @@ class ParsePage
                     die('Unable to Parse Link URL');
                 }
                 if ((! array_key_exists('host', $link_parsed) || $link_parsed['host'] == "" || $link_parsed['host'] == $url_host) && array_key_exists('path', $link_parsed) && $link_parsed['path'] != "" && array_search($link_parsed['path'], $links) === false) {
-                    $links[] = $link_parsed['path'];
+                    $links[] = htmlspecialchars($link_parsed['path'], ENT_NOQUOTES, "UTF-8");
                 }
             }
         }
@@ -181,8 +183,16 @@ class ParsePage
                     die('Unable to Parse Link URL');
                 }
                 if ((! array_key_exists('host', $link_parsed) || $link_parsed['host'] == "" || $link_parsed['host'] == $url_host) && array_key_exists('path', $link_parsed) && $link_parsed['path'] != "" && array_search($link_parsed['path'], $links) === false) {
-                    $links[] = $link_parsed['path'];
+                    $links[] = htmlspecialchars($link_parsed['path'], ENT_NOQUOTES, "UTF-8");
                 }
+            }
+        }
+        
+        foreach ($links as $key => $string){
+            $pattern = '/[a-z0-9_\-\+\.]+@[a-z0-9\-]+\.([a-z]{2,4})(?:\.[a-z]{2})?/i';
+            preg_match_all($pattern, $string, $matches);
+            if (isset($matches[0]) && $matches[0]) {
+                unset($links[$key]);
             }
         }
         

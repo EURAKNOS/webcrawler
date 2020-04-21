@@ -129,7 +129,7 @@ class DbMysql {
     
     public function getLinkRow()
     {
-        $statement = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE download_time IS NULL ");
+        $statement = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE path != '' AND download_time IS NULL ");
         $statement->execute();
        
         $result = $statement->fetch(PDO::FETCH_ASSOC);

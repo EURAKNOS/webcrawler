@@ -1,4 +1,15 @@
 <?php
+// import the Joserick PNGMetadata
+require_once 'vendor/pdfinfo.php';
+require_once 'vendor/PNGMetadata/src/PNGMetadata.php';
+use PNGMetadata\PNGMetadata;
+
+require_once 'vendor/PHPPresentation/src/PhpPresentation/Autoloader.php';
+\PhpOffice\PhpPresentation\Autoloader::register();
+
+// with your own install
+require_once 'vendor/PHPPresentation/src/PhpPresentation/DocumentProperties.php';
+\PhpOffice\PhpPresentation\DocumentProperties
 /**
  * Download Actual URL
  * @author szabo
@@ -24,16 +35,20 @@ class DownloadPage {
     public function downloadData()
     {
         $info = pathinfo($this->target);
+
         if (isset($info["extension"])) {
+            /*echo '<pre>';
+            print_r($info["extension"]);
+            echo '</pre>';*/
             if ($info["extension"] == "pdf") {
                 return $this->processPdf();
             } elseif ($info["extension"] == "jpg") {
                 return $this->processJpg();
-            } /*elseif ($info["extension"] == "png") {
+            } elseif ($info["extension"] == "png") {
                 return $this->processPng();
-            } elseif ($info["extension"] == "pptx") {
+            } /*elseif ($info["extension"] == "pptx") {
                 return $this->processPptx();
-            } elseif ($info["extension"] == "docx") {
+            }*/ /*elseif ($info["extension"] == "docx") {
                 return $this->processDocx();
             } elseif ($info["extension"] == "xlsx") {
                 return $this->processXlsx();
@@ -120,6 +135,10 @@ class DownloadPage {
         return $dl->saveEnd();
     }
     
+    /**
+     * Download and store jpg metadata and file
+     * @return array
+     */
     public function processJpg()
     {
         $dl = new DownloadFileExtended();
@@ -140,12 +159,43 @@ class DownloadPage {
         // File data Save Database
         $dl->saveData = $saveData;
         return $dl->saveEnd();
-        
-        
-        
+          
     }
     
+    /**
+     * Download and store png metadata and file
+     * @return array
+     */
+    public function processPng()
+    {
+        $dl = new DownloadFileExtended();
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_PNG;
+        $dl->downloadProcessing();
+        
+        $png_metadata = new PNGMetadata($dl->localfile);
+        
+        $saveData['meta_data'] = '';
+        if (isset($png_metadata) && !empty($png_metadata)) {
+            $saveData['meta_data'] = serialize($png_metadata);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'png';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
+    }
     
+    /**
+     * Download and store pptx metadata and file
+     * @return array
+     */
+    public function processPptx()
+    {
+        $pptx = new DocumentProperties();
+    }
     
 }
 

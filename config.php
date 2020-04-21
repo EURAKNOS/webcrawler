@@ -12,3 +12,4 @@ define('ROOT_PATH', $_SERVER['REQUEST_URI']);
 define('FOLDER_DEFAULT', 'download');
 define('FOLDER_PDF', 'pdf');
 define('FOLDER_JPG', 'jpg');
+define('FOLDER_PNG', 'png');
