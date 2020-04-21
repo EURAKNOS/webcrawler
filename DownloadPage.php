@@ -3,13 +3,6 @@
 require_once 'vendor/pdfinfo.php';
 require_once 'vendor/PNGMetadata/src/PNGMetadata.php';
 use PNGMetadata\PNGMetadata;
-
-require_once 'vendor/PHPPresentation/src/PhpPresentation/Autoloader.php';
-\PhpOffice\PhpPresentation\Autoloader::register();
-
-// with your own install
-require_once 'vendor/PHPPresentation/src/PhpPresentation/DocumentProperties.php';
-\PhpOffice\PhpPresentation\DocumentProperties
 /**
  * Download Actual URL
  * @author szabo
