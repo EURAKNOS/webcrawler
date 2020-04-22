@@ -185,8 +185,6 @@ class DbMysql {
     {
         $this->data['download_time'] = time();
         $statement = $this->db->prepare("UPDATE ".FILES_TABLE." SET local_location = :local_location, file_type = :file_type, downloaded_time = :download_time, meta_data = :meta_data WHERE id = :id");
-        $this->log->m_log("UPDATE ".FILES_TABLE." SET local_location = :local_location, file_type = :file_type, downloaded_time = :download_time, meta_data = :meta_data WHERE id = :id");
-        $this->log->m_log(print_r($this->data));
         if(!$statement->execute($this->data)){
             $this->log->m_log('endDownloadFile MySql function error');
             throw new Exception("An operation failed endDownloadFile function");
