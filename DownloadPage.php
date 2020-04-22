@@ -174,13 +174,11 @@ class DownloadPage {
         $dl->downloadProcessing();
         
         $png_metadata = new PNGMetadata($dl->localfile);
-        echo '<pre>';
-        print_r($png_metadata);
-        echo '</pre>';
+      
         $this->log->m_log('PNG metadata Ok');
         $saveData['meta_data'] = '';
         if (isset($png_metadata) && !empty($png_metadata)) {
-            $saveData['meta_data'] = serialize($png_metadata);
+            $saveData['meta_data'] = htmlspecialchars(serialize($png_metadata), ENT_NOQUOTES, "UTF-8");
         }
         $saveData['id'] = $dl->id;
         $saveData['local_location'] = $dl->localfile;
