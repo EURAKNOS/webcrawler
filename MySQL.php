@@ -171,8 +171,9 @@ class DbMysql {
     {
         $this->log->m_log('startDownloadFile MySql function start');
         $data['path'] = $this->target;
+        $this->log->m_log("INSERT INTO ".FILES_TABLE." (id, path) VALUES(NULL, :path) - " . $data['path']);
         $statement = $this->db->prepare("INSERT INTO ".FILES_TABLE." (id, path) VALUES(NULL, :path)");
-        $this->log->m_log($statement);
+        
         if(!$statement->execute($data)){
             $this->log->m_log('startDownloadFile MySql function error');
             throw new Exception("An operation failed saveLinks function");
