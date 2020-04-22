@@ -13,12 +13,12 @@ class WLog {
         {
             //concatenate msg with datetime
             foreach($arMsg as $msg)
-                $stEntry.=$arLogData['event_datetime']." ".$msg."<br>";
+                $stEntry.=$arLogData['event_datetime']." ".$msg."\r\n";
         }
         else
         {   //concatenate msg with datetime
             
-            $stEntry.=$arLogData['event_datetime']." ".$arMsg."rn";
+            $stEntry.=$arLogData['event_datetime']." ".$arMsg."\r\n";
         }
         //create file with current date name
         $stCurLogFileName='log_'.date('Ymd').'.txt';

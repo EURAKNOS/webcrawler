@@ -229,6 +229,8 @@ class DownloadFileExtended {
     
     public $id;
     
+    public $log;
+    
     public function __construct()
     {
         
@@ -236,6 +238,7 @@ class DownloadFileExtended {
     
     public function downloadProcessing()
     {
+        $this->log = new WLog();
         $this->preSaveDatabaseDownlodedFile();
         $this->downloadFile();
     }
