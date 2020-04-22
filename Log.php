@@ -13,7 +13,7 @@ class WLog {
         {
             //concatenate msg with datetime
             foreach($arMsg as $msg)
-                $stEntry.=$arLogData['event_datetime']." ".$msg."\r\n";
+                $stEntry.=$arLogData['event_datetime']." ".$msg."<br>";
         }
         else
         {   //concatenate msg with datetime
