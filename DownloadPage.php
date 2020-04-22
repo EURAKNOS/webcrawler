@@ -122,7 +122,7 @@ class DownloadPage {
         $result = $p->load($dl->localfile);
         $saveData['meta_data'] = '';
         if (isset($result) && !empty($result)) {
-            $saveData['meta_data'] = htmlspecialchars(serialize($result));
+            $saveData['meta_data'] = serialize($result);
         }
         $saveData['id'] = $dl->id;
         $saveData['local_location'] = $dl->localfile;
@@ -178,7 +178,7 @@ class DownloadPage {
         $this->log->m_log('PNG metadata Ok');
         $saveData['meta_data'] = '';
         if (isset($png_metadata) && !empty($png_metadata)) {
-            $saveData['meta_data'] = htmlspecialchars(serialize($png_metadata), ENT_NOQUOTES, "UTF-8");
+            $saveData['meta_data'] = serialize($png_metadata);
         }
         $saveData['id'] = $dl->id;
         $saveData['local_location'] = $dl->localfile;
