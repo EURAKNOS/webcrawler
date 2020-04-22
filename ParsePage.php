@@ -25,6 +25,8 @@ class ParsePage
         }
         $_SESSION['skipped'] = $this->target;*/
         // Create mysql
+        $log = new WLog();
+        $log->m_log('Targer URL start process: ' . $this->target);
         $MySql = new DbMysql();
         $MySql->target = $this->target;
         
@@ -153,7 +155,7 @@ class ParsePage
             }
             $MySqlPage->savePage();
         }
-        
+        $log->m_log('Page parser end: ' . $this->target);
         $MySql->endDownload();
         // Get Links
         $links = Array();

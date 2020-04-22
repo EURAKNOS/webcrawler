@@ -16,9 +16,11 @@ class DownloadPage {
     
     public $result;
     
+    public $log;
+    
     public function __construct()
     {
-        
+        $this->log = new WLog();
     }
     
     /**
@@ -61,6 +63,7 @@ class DownloadPage {
      */
     public function DownloadPage()
     {
+        $this->log->m_log('Start download (downloadFile) content');
         $handle = curl_init();
         //Define Settings Curl
         
@@ -100,7 +103,7 @@ class DownloadPage {
         }
         //Form Return Structure
         $ret = Array("headers" => $header_array, "body" => $body );
-        
+        $this->log->m_log('End download (downloadFile) content');
         return $ret;
     }
     
@@ -109,6 +112,7 @@ class DownloadPage {
      */
     public function processPdf()
     {
+        $this->log->m_log('Start download pdf');
         $dl = new DownloadFileExtended();
         $dl->target = $this->target;
         $dl->folder = FOLDER_PDF;
@@ -135,6 +139,7 @@ class DownloadPage {
      */
     public function processJpg()
     {
+        $this->log->m_log('Start download jpg');
         $dl = new DownloadFileExtended();
         $dl->target = $this->target;
         $dl->folder = FOLDER_JPG;
@@ -162,6 +167,7 @@ class DownloadPage {
      */
     public function processPng()
     {
+        $this->log->m_log('Start download png');
         $dl = new DownloadFileExtended();
         $dl->target = $this->target;
         $dl->folder = FOLDER_PNG;
@@ -188,7 +194,7 @@ class DownloadPage {
      */
     public function processPptx()
     {
-        $pptx = new DocumentProperties();
+       // $pptx = new DocumentProperties();
     }
     
 }
@@ -236,6 +242,7 @@ class DownloadFileExtended {
      */
     public function preSaveDatabaseDownlodedFile()
     {
+        $this->log->m_log('Start file download presave to database');
         $this->MySql = new DbMysql();
         $this->MySql->target = $this->target;
         $this->MySql->startDownloadFile();
@@ -244,9 +251,12 @@ class DownloadFileExtended {
     
     public function downloadFile()
     {
+        $this->log->m_log('Create folder: ' . FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id);
         if (!file_exists(FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id)) {
             mkdir(FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id, 0777, true);
+            $this->log->m_log('Create folder success: ' . FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id);
         }
+        
         
        /* $opts= array(
             'http' => array(
@@ -258,11 +268,13 @@ class DownloadFileExtended {
         //$downloadedFile = fopen($this->target, 'rb', false, $context);
         $downloadedFile = fopen($this->target, 'rb');
         if (!$downloadedFile) {
+            $this->log->m_log('Error download file from url : ' . $this->target);
             return false;
         }
         $this->localfile = FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id . '/' . basename($this->target);
         $lFile = fopen($this->localfile, 'wb');
         if (!$lFile) {
+            $this->log->m_log('Error open localfile : ' . $this->localfile);
             fclose($downloadedFile);
             return false;
         }
@@ -272,7 +284,9 @@ class DownloadFileExtended {
         }
         
         fclose($lFile);
+        $this->log->m_log('localfile close success');
         fclose($downloadedFile);
+        $this->log->m_log('targetUrlFile close success');
         
         return true;
     }
@@ -283,6 +297,7 @@ class DownloadFileExtended {
         if ($this->MySql->endDownloadFile()) {
             $fileDownload['ok'] = 1;
         }
+        $this->log->m_log('Downlod success');
         return $fileDownload;
     }
     
