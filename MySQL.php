@@ -171,7 +171,6 @@ class DbMysql {
     {
         $this->log->m_log('startDownloadFile MySql function start');
         $data['path'] = $this->target;
-        $this->log->m_log("INSERT INTO ".FILES_TABLE." (id, path) VALUES(NULL, :path) - " . $data['path']);
         $statement = $this->db->prepare("INSERT INTO ".FILES_TABLE." (id, path) VALUES(NULL, :path)");
         
         if(!$statement->execute($data)){
