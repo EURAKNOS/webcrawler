@@ -13,3 +13,5 @@ define('FOLDER_DEFAULT', 'download');
 define('FOLDER_PDF', 'pdf');
 define('FOLDER_JPG', 'jpg');
 define('FOLDER_PNG', 'png');
+
+set_time_limit(5000);
