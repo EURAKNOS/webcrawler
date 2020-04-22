@@ -122,7 +122,7 @@ class DownloadPage {
         $result = $p->load($dl->localfile);
         $saveData['meta_data'] = '';
         if (isset($result) && !empty($result)) {
-            $saveData['meta_data'] = serialize($result);
+            $saveData['meta_data'] = htmlspecialchars(serialize($result));
         }
         $saveData['id'] = $dl->id;
         $saveData['local_location'] = $dl->localfile;
