@@ -70,7 +70,7 @@ class DownloadPage {
         curl_setopt ( $handle, CURLOPT_COOKIEFILE, "cookies.txt" );
         curl_setopt ( $handle, CURLOPT_USERAGENT, "web-crawler-tutorial-test" );
         curl_setopt ( $handle, CURLOPT_TIMEOUT, 300);
-        curl_setopt ( $handle, CURLOPT_PROXY, "192.168.5.254:3128");
+        //curl_setopt ( $handle, CURLOPT_PROXY, "192.168.5.254:3128");
         curl_setopt ( $handle, CURLOPT_URL, $this->target );
         curl_setopt ( $handle, CURLOPT_REFERER, $this->referer );
         curl_setopt ( $handle, CURLOPT_FOLLOWLOCATION, true );
@@ -248,14 +248,15 @@ class DownloadFileExtended {
             mkdir(FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id, 0777, true);
         }
         
-        $opts= array(
+       /* $opts= array(
             'http' => array(
                 'proxy' => 'tcp://192.168.5.254:3128'
             )
         );
-        $context = stream_context_create($opts); 
+        $context = stream_context_create($opts);*/ 
         
-        $downloadedFile = fopen($this->target, 'rb', false, $context);
+        //$downloadedFile = fopen($this->target, 'rb', false, $context);
+        $downloadedFile = fopen($this->target, 'rb');
         if (!$downloadedFile) {
             return false;
         }
