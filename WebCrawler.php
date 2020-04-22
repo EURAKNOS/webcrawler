@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.0.8';
+    public $version = '0.0.9';
 
     public $html;
 
@@ -127,6 +127,10 @@ class WebCrawler
      */
     private function startCrawler()
     {
+        /*$req = new HTTP_Request("http://example.com/");
+        $req->setProxy("192.168.5.254", 3128);*/
+        
+        
         // Define Seed Settings
         $seed_url = $_POST['url'];
         $seed_components = parse_url($seed_url);

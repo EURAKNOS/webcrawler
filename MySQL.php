@@ -42,8 +42,8 @@ class DbMysql {
     public function startDownload()
     {
          $data['path'] = $this->target;
-         
-         $statement = $this->db->prepare("INSERT INTO ".PAGE_TABLE." (path, download_time) VALUES(:path, NOW()) ON DUPLICATE KEY UPDATE download_time = NOW()");
+         $data['download_time'] = time();
+         $statement = $this->db->prepare("INSERT INTO ".PAGE_TABLE." (path, download_time) VALUES(:path, :download_time) ON DUPLICATE KEY UPDATE download_time = NOW()");
          if(!$statement->execute($data)){
              throw new Exception("An operation failed startDownload function");
          }
@@ -55,8 +55,8 @@ class DbMysql {
     public function statusSave()
     {
         $data['path'] = $this->path;
-        
-        $statement = $this->db->prepare("UPDATE ".PAGE_TABLE." SET download_time = NOW() WHERE path = :path");
+        $data['download_time'] = time();
+        $statement = $this->db->prepare("UPDATE ".PAGE_TABLE." SET download_time = :download_time WHERE path = :path");
         
         if(!$statement->execute($data)){
             throw new Exception("An operation failed endDownload function");
@@ -72,7 +72,6 @@ class DbMysql {
         foreach($this->links as $link) {
             $data = array();
             $data['path'] = $link;
-            
             $statementSelect = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE path = :path ");
             if(!$statementSelect->execute($data)){
              
@@ -97,8 +96,8 @@ class DbMysql {
     public function endDownload()
     {
         $data['path'] = $this->path;
-        
-        $statement = $this->db->prepare("UPDATE ".PAGE_TABLE." SET download_time = NOW() WHERE path = :path");
+        $data['download_time'] = time();
+        $statement = $this->db->prepare("UPDATE ".PAGE_TABLE." SET download_time = :download_time WHERE path = :path");
 
         if(!$statement->execute($data)){
             throw new Exception("An operation failed endDownload function");
@@ -108,7 +107,8 @@ class DbMysql {
     
     public function savePage()
     {
-        $statement = $this->db->prepare("INSERT INTO ".CONTENTS_TABLE." (`id`, `page`, `path`, `content`, `download_time`) VALUES (NULL, :page, :path, :content, NOW())");
+        $this->data['download_time'] = time();
+        $statement = $this->db->prepare("INSERT INTO ".CONTENTS_TABLE." (`id`, `page`, `path`, `content`, `download_time`) VALUES (NULL, :page, :path, :content, :download_time)");
         if(!$statement->execute($this->data)){
             throw new Exception("An operation failed saveLinks function");
         }
@@ -117,7 +117,7 @@ class DbMysql {
     
     public function getLinks()
     {       
-        $statement = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE download_time IS NULL ");
+        $statement = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE path != '' AND download_time IS NULL ");
         $statement->execute();
         $rowCount = $statement->rowCount();
         if ( $rowCount > 0 ) {
@@ -164,7 +164,8 @@ class DbMysql {
     
     public function endDownloadFile()
     {
-        $statement = $this->db->prepare("UPDATE ".FILES_TABLE." SET local_location = :local_location, file_type = :file_type, downloaded_time = NOW(), meta_data = :meta_data WHERE id = :id");
+        $this->data['download_time'] = time();
+        $statement = $this->db->prepare("UPDATE ".FILES_TABLE." SET local_location = :local_location, file_type = :file_type, downloaded_time = :download_time, meta_data = :meta_data WHERE id = :id");
         if(!$statement->execute($this->data)){
             throw new Exception("An operation failed endDownloadFile function");
         }
