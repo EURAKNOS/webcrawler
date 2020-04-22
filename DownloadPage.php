@@ -141,11 +141,8 @@ class DownloadPage {
     {
         $this->log->m_log('Start download jpg');
         $dl = new DownloadFileExtended();
-        $this->log->m_log('1');
         $dl->target = $this->target;
-        $this->log->m_log('2');
         $dl->folder = FOLDER_JPG;
-        $this->log->m_log('3');
         $dl->downloadProcessing();
         
         
@@ -177,7 +174,7 @@ class DownloadPage {
         $dl->downloadProcessing();
         
         $png_metadata = new PNGMetadata($dl->localfile);
-        
+        $this->log->m_log('PNG metadata Ok');
         $saveData['meta_data'] = '';
         if (isset($png_metadata) && !empty($png_metadata)) {
             $saveData['meta_data'] = serialize($png_metadata);
