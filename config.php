@@ -13,5 +13,8 @@ define('FOLDER_DEFAULT', 'download');
 define('FOLDER_PDF', 'pdf');
 define('FOLDER_JPG', 'jpg');
 define('FOLDER_PNG', 'png');
+define('FOLDER_DOCX', 'docx');
+define('FOLDER_PPTX', 'pptx');
+define('FOLDER_XLSX', 'xlsx');
 
 set_time_limit(5000);

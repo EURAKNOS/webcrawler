@@ -2,6 +2,8 @@
 // import the Joserick PNGMetadata
 require_once 'vendor/pdfinfo.php';
 require_once 'vendor/PNGMetadata/src/PNGMetadata.php';
+require_once 'vendor/docx_metadata.php';
+
 use PNGMetadata\PNGMetadata;
 /**
  * Download Actual URL
@@ -41,15 +43,13 @@ class DownloadPage {
                 return $this->processJpg();
             } elseif ($info["extension"] == "png") {
                 return $this->processPng();
-            } /*elseif ($info["extension"] == "pptx") {
+            } elseif ($info["extension"] == "pptx") {
                 return $this->processPptx();
-            }*/ /*elseif ($info["extension"] == "docx") {
+            } elseif ($info["extension"] == "docx") {
                 return $this->processDocx();
             } elseif ($info["extension"] == "xlsx") {
                 return $this->processXlsx();
-            } elseif ($info["extension"] == "pptx") {
-                return $this->processPng();
-            } */else {
+            }  else {
                 return $this->DownloadPage();
             }
         } else {
@@ -195,9 +195,96 @@ class DownloadPage {
      */
     public function processPptx()
     {
-       // $pptx = new DocumentProperties();
+        $this->log->m_log('Start download pptx');
+        $dl = new DownloadFileExtended();
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_PPTX;
+        $dl->downloadProcessing();
+        
+        
+        $docxmeta = new docxmetadata();
+        $docxmeta->setDocument($dl->localfile);
+        $result = $docxmeta->allData();
+        
+        $this->log->m_log('PPTX metadata Ok');
+        $saveData['meta_data'] = '';
+        if (isset($result) && !empty($result)) {
+            $saveData['meta_data'] = serialize($result);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'pptx';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
+        
     }
     
+    /**
+     * Download and store docx metadata and file
+     * @return array
+     */
+    public function processDocx()
+    {
+        $this->log->m_log('Start download Docx');
+        $dl = new DownloadFileExtended();
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_DOCX;
+        $dl->downloadProcessing();
+        
+        
+        $docxmeta = new docxmetadata();
+        $docxmeta->setDocument($dl->localfile);
+        $result = $docxmeta->allData();
+        
+        $this->log->m_log('DOCX metadata Ok');
+        $saveData['meta_data'] = '';
+        if (isset($result) && !empty($result)) {
+            $saveData['meta_data'] = serialize($result);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'docx';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
+        
+    }
+    
+    /**
+     * Download and store xlsx metadata and file
+     * @return array
+     */
+    public function processXlsx()
+    {
+        $this->log->m_log('Start download xlsx');
+        $dl = new DownloadFileExtended();
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_XLSX;
+        $dl->downloadProcessing();
+        
+        
+        $docxmeta = new docxmetadata();
+        $docxmeta->setDocument($dl->localfile);
+        $result = $docxmeta->allData();
+        
+        $this->log->m_log('XLSX metadata Ok');
+        $saveData['meta_data'] = '';
+        if (isset($result) && !empty($result)) {
+            $saveData['meta_data'] = serialize($result);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'xlsx';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
+        
+    }
+
 }
 
 /**
