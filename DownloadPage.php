@@ -205,7 +205,6 @@ class DownloadPage {
         $docxmeta = new docxmetadata();
         $docxmeta->setDocument($dl->localfile);
         $result = $docxmeta->allData();
-        print_r($result);
         
         $this->log->m_log('PPTX metadata Ok');
         $saveData['meta_data'] = '';
