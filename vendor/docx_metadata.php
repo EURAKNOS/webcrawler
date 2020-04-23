@@ -1,9 +1,14 @@
 <?php
-	class docxmetadata{
+	class docxmetadata {
 		var $metadocument = "";
 		var $mxsi = " xsi:type=\"dcterms:W3CDTF\"";
+		
+		public function __construct() {
+		    $this->log = new WLog();
+		}
 
-		function setDocument($path){
+		public function setDocument($path){
+		    $this->log->m_log('Start Office Meta search' . $path);
 			$zip = new ZipArchive;
 			$res = $zip->open($path);
 			if ($res === TRUE) {
@@ -18,7 +23,7 @@
 			}	
 		}
 		
-		function getMeta($x, $dc="dc", $xsi=''){
+		public function getMeta($x, $dc="dc", $xsi=''){
 		   /* print_r($this->metadocument);
 		    die();*/
 		    if (strpos($this->metadocument, $x) !== false) {
@@ -32,47 +37,58 @@
 		    return '';
 		}
 		
-		function getDateCreated(){
+		public function getDateCreated(){
+		    $this->log->m_log('Office meta data getDateCreated');
 			return $this->getMeta("created", 'dcterms', $this->mxsi);
 		}
 
-		function getDateModified(){
+		public function getDateModified(){
+		    $this->log->m_log('Office meta data getDateModified');
 			return $this->getMeta("modified", 'dcterms', $this->mxsi);
 		}
-		function getTitle(){
+		public function getTitle(){
+		    $this->log->m_log('Office meta data getTitle');
 			return $this->getMeta("title");
 		}
 
-		function getSubject(){
+		public function getSubject(){
+		    $this->log->m_log('Office meta data getSubject');
 			return $this->getMeta("subject");
 		}
 
-		function getCreator(){
+		public function getCreator(){
+		    $this->log->m_log('Office meta data getCreator');
 			return $this->getMeta("creator");
 		}
 
-		function getKeywords(){
+		public function getKeywords(){
+		    $this->log->m_log('Office meta data getKeywords');
 			return $this->getMeta("keywords", 'cp');
 		}
 
-		function getDescription(){
+		public function getDescription(){
+		    $this->log->m_log('Office meta data getDescription');
 			return $this->getMeta("description");
 		}
 
-		function getLastModifiedBy(){
+		public function getLastModifiedBy(){
+		    $this->log->m_log('Office meta data getLastModifiedBy');
 			return $this->getMeta("lastModifiedBy", 'cp');
 		}
 
-		function getRevision(){
+		public function getRevision(){
+		    $this->log->m_log('Office meta data getRevision');
 			return $this->getMeta("revision", 'cp');
 		}
 		
-		function getCategory(){
+		public function getCategory(){
+		    $this->log->m_log('Office meta data getCategory');
 		    return $this->getMeta("category", 'cp');
 		}
 		
-		function alldata()
+		public function alldata()
 		{
+		    $this->log->m_log('Start Office Meta all datafunction' . $path);
 		    $data['title'] = $this->getTitle();
 		    $data['Subject'] = $this->getSubject();
 		    $data['Creator'] = $this->getCreator();
@@ -83,6 +99,7 @@
 		    $data['DateCreated'] = $this->getDateCreated();
 		    $data['DateModified'] = $this->getDateModified();
 		    $data['Category'] = $this->getCategory();
+		    $this->log->m_log('Office meta data alldata end');
 		    return $data;
 		}
 	}
