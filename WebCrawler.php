@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.1.4.4';
+    public $version = '0.1.4.5';
 
     public $html;
 
@@ -31,6 +31,7 @@ class WebCrawler
         $log = new WLog();
         $log->m_log('Load WebCrawler page');
         $this->process();
+        $this->getData();
         $this->template();
     }
 
@@ -101,6 +102,9 @@ class WebCrawler
                                 </div>
                                 </div>
                                 </form>');
+        if (isset($this->htmlResult)) {
+            $this->html .= $this->htmlResult;
+        }
         $this->html .= ('<div class="version"><p>Ver. ' . $this->version . '</p></div><script src="style/javascript.js"></script>');
         $this->html .= ('</body>');
         $this->html .= ('</html>');
@@ -144,10 +148,9 @@ class WebCrawler
         $seed_host = $seed_components['host'];
         $url_start = $seed_scheme . '://' . $seed_host;
         // Download Seed URL
-
         $parsePage = new ParsePage();
         $parsePage->target = $seed_url;
-        $parsePage->referer = "";
+        $parsePage->referer = "/";
         /*var_dump($seed_components);
         die();
         $parsePage->path = ($seed_components['path'] == '')? '/':$seed_components['path'];*/
@@ -164,19 +167,17 @@ class WebCrawler
                     $row = $mySql->getLinkRow();
                     if ($row !== false) {
                         $path = $row['path'];
-                        $referer = $row['referer'];
+                        $referer = $row['path'];
                         // Check if first character isn't a '/'
                         if ($path[0] != '/') {
                             continue;
                         }
-                       /* echo '<pre>';
-                        print_r($row);
-                        echo '</pre>';*/
-                        $path = $row['path'];
-                        $referer = $row['referer'];
+                       
+                        /*$path = $row['path'];
+                        $referer = $row['referer'];*/
                         $parsePage = new ParsePage();
                         $parsePage->target = $url_start . $path;
-                        $parsePage->referer = $referer;
+                        $parsePage->referer = $url_start . $referer;
                         $parsePage->path = $path;
 
                         if ($parsePage->parsePage()) {
@@ -193,6 +194,40 @@ class WebCrawler
             }
         }
     }
+    
+    public function getData()
+    {
+        $this->MySql = new DbMysql();
+        $this->getDownlodedPages();
+        
+    }
+    
+    public function getDownlodedPages()
+    {
+        //$this->MySql->ge
+        $this->MySql->getDownlodedPages();
+        $this->result = $this->MySql->result;
+        $this->resultTemplate();
+    }
+    
+    public function resultTemplate()
+    {
+        $this->htmlResult = '<table class="table table-striped table-dark"><thead><tr>
+        <th scope="col">PATH</th>
+        <th scope="col">REFERER</th>
+        <th scope="col">DOWNLOAD TIME</th>
+        </tr>
+        </thead><tbody>';
+        foreach ($this->result as $item){
+            $this->htmlResult .= '<tr>
+            <th scope="row">' . $item['path'] . '</th>
+            <td>' . $item['referer'] . '</td>
+            <td>' . date("Y-m-d H:i:s", $item['download_time']) . '</td>
+            </tr>';
+        }
+        $this->htmlResult .= '</tbody></table>';
+    }
+        
 }
 
 ?>

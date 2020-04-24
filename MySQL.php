@@ -20,6 +20,8 @@ class DbMysql {
     
     public $log;
     
+    public $resutl;
+    
     /**
      * Builds a connection to the mysql database
      */
@@ -88,6 +90,7 @@ class DbMysql {
             
             if ( $rowCount == 0 ) {
                 $data['referer'] = $this->referer;
+                print_r($this->referer);
                 $statement = $this->db->prepare("INSERT INTO ".PAGE_TABLE." (path, referer, download_time) VALUES(:path, :referer, NULL)");
                 if(!$statement->execute($data)){
                     $this->log->m_log('saveLinks MySql function error');
@@ -190,6 +193,16 @@ class DbMysql {
             throw new Exception("An operation failed endDownloadFile function");
         }
         return true;
+    }
+    
+    public function getDownlodedPages()
+    {
+        $statementSelect = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE 1 ");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('Get downloded pages error');
+        }
+        
+        $this->result = $statementSelect->fetchAll();
     }
     
 }

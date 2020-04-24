@@ -20,10 +20,6 @@ class ParsePage
      */
     public function parsePage()
     {
-       /* if ($_SESSION['skipped'] == $this->target) {
-            
-        }
-        $_SESSION['skipped'] = $this->target;*/
         // Create mysql
         $log = new WLog();
         $log->m_log('Targer URL start process: ' . $this->target);
