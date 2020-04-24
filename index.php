@@ -1,5 +1,6 @@
 <?php
 session_start ();
+error_reporting(E_ALL);
 header('Content-Type: text/html; charset=utf-8');
 require_once 'config.php';
 require_once 'WebCrawler.php';

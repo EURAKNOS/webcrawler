@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.1.4.3';
+    public $version = '0.1.4.4';
 
     public $html;
 
