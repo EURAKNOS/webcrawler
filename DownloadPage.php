@@ -31,29 +31,31 @@ class DownloadPage {
      */
     public function downloadData()
     {
-        $info = pathinfo($this->target);
+        $pos = strpos($this->target, 'https://www.youtube.com');
+        if ($pos !== false) {
+            $this->processYoutube();
+        } else {
+            $info = pathinfo($this->target);
+            if (isset($info["extension"])) {
 
-        if (isset($info["extension"])) {
-            /*echo '<pre>';
-            print_r($info["extension"]);
-            echo '</pre>';*/
-            if ($info["extension"] == "pdf") {
-                return $this->processPdf();
-            } elseif ($info["extension"] == "jpg") {
-                return $this->processJpg();
-            } elseif ($info["extension"] == "png") {
-                return $this->processPng();
-            } elseif ($info["extension"] == "pptx") {
-                return $this->processPptx();
-            } elseif ($info["extension"] == "docx") {
-                return $this->processDocx();
-            } elseif ($info["extension"] == "xlsx") {
-                return $this->processXlsx();
-            }  else {
+                if ($info["extension"] == "pdf") {
+                    return $this->processPdf();
+                } elseif ($info["extension"] == "jpg") {
+                    return $this->processJpg();
+                } elseif ($info["extension"] == "png") {
+                    return $this->processPng();
+                } elseif ($info["extension"] == "pptx") {
+                    return $this->processPptx();
+                } elseif ($info["extension"] == "docx") {
+                    return $this->processDocx();
+                } elseif ($info["extension"] == "xlsx") {
+                    return $this->processXlsx();
+                }  else {
+                    return $this->DownloadPage();
+                }
+            } else {
                 return $this->DownloadPage();
             }
-        } else {
-            return $this->DownloadPage();
         }
     }
     
@@ -284,6 +286,52 @@ class DownloadPage {
         return $dl->saveEnd();
         
     }
+    
+    /**
+     * Youtube metadata
+     */
+    public function processYoutube()
+    {
+        $this->log->m_log('Start youtube meta');
+        $dl = new DownloadFileExtended();
+        $dl->target = $this->target;
+        $dl->folder = '';
+        $dl->preSaveDatabaseDownlodedFile();
+        
+        preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $this->target, $match);
+        $videoId = $match[1];
+        
+        $googleApiUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' . $videoId . '&key=' . YOUTUBE_API_KEY . '&part=snippet';
+        
+        $ch = curl_init();
+        
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $googleApiUrl);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_VERBOSE, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $response = curl_exec($ch);
+        
+        curl_close($ch);
+        
+        $data = json_decode($response);
+        
+        $value = json_decode(json_encode($data), true);
+        
+        $saveData['meta_data'] = '';
+        if (isset($value) && !empty($value)) {
+            $saveData['meta_data'] = serialize($value);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'youtube_video';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        $this->log->m_log('Start youtube success');
+        return $dl->saveEnd();
+    }
 
 }
 
@@ -318,12 +366,11 @@ class DownloadFileExtended {
     
     public function __construct()
     {
-        
+        $this->log = new WLog();
     }
     
     public function downloadProcessing()
     {
-        $this->log = new WLog();
         $this->preSaveDatabaseDownlodedFile();
         $this->downloadFile();
     }

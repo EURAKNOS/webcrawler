@@ -90,7 +90,6 @@ class DbMysql {
             
             if ( $rowCount == 0 ) {
                 $data['referer'] = $this->referer;
-                print_r($this->referer);
                 $statement = $this->db->prepare("INSERT INTO ".PAGE_TABLE." (path, referer, download_time) VALUES(:path, :referer, NULL)");
                 if(!$statement->execute($data)){
                     $this->log->m_log('saveLinks MySql function error');

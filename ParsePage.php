@@ -42,7 +42,7 @@ class ParsePage
         }
         // Download Page
         
-        echo "Downloading: $this->target\n<br>";
+        //echo "Downloading: $this->target\n<br>";
 
         $dwl = new DownloadPage();
         $dwl->target = $this->target;
@@ -168,7 +168,7 @@ class ParsePage
                 }
             }
         }
-        
+
         $link_tags = $doc->getElementsByTagName('img');
         foreach ($link_tags as $tag) {
             if (($href_value = $tag->getAttribute('src'))) {
@@ -186,6 +186,16 @@ class ParsePage
             }
         }
         
+        $link_tags = $doc->getElementsByTagName('iframe');
+        foreach ($link_tags as $tag) {
+            if (($href_value = $tag->getAttribute('src'))) {
+                $links[] = htmlspecialchars($href_value, ENT_NOQUOTES, "UTF-8");
+                
+            }
+        }
+        
+        //print_r($links);
+        
         foreach ($links as $key => $string){
             $pattern = '/[a-z0-9_\-\+\.]+@[a-z0-9\-]+\.([a-z]{2,4})(?:\.[a-z]{2})?/i';
             preg_match_all($pattern, $string, $matches);
@@ -201,6 +211,8 @@ class ParsePage
         $MySql->saveLinks();
         return true;
     }
+    
+    
 
     public function relativeToAbsolute($relative, $base)
     {

@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.1.4.6';
+    public $version = '0.1.5';
 
     public $html;
 
@@ -169,16 +169,27 @@ class WebCrawler
                         $path = $row['path'];
                         $referer = $row['path'];
                         // Check if first character isn't a '/'
-                        if ($path[0] != '/') {
-                            continue;
-                        }
-                       
-                        /*$path = $row['path'];
-                        $referer = $row['referer'];*/
                         $parsePage = new ParsePage();
-                        $parsePage->target = $url_start . $path;
-                        $parsePage->referer = $url_start . $referer;
-                        $parsePage->path = $path;
+                        if ($path[0] != '/') {
+                            $pos = strpos($row['path'], 'https://www.youtube.com'); // If it contains
+                            if ($pos !== false) {
+                                $parsePage->target = $path;
+                                $parsePage->referer = $url_start . $referer;
+                                $parsePage->path = $path;
+                            } else {
+                                continue;
+                            }
+                        } else {
+                            $hostpos = strpos($row['path'], $url_start); // If it contains host
+                            if ( $hostpos === false ) {
+                                $parsePage->target = $url_start . $path;
+                            } else {
+                                $parsePage->target = $path;
+                            }
+                            $parsePage->referer = $url_start . $referer;
+                            $parsePage->path = $path;
+                        }
+                        
 
                         if ($parsePage->parsePage()) {
                             $counter ++;
