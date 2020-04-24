@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.1.4.5';
+    public $version = '0.1.4.6';
 
     public $html;
 
@@ -221,9 +221,13 @@ class WebCrawler
         foreach ($this->result as $item){
             $this->htmlResult .= '<tr>
             <th scope="row">' . $item['path'] . '</th>
-            <td>' . $item['referer'] . '</td>
-            <td>' . date("Y-m-d H:i:s", $item['download_time']) . '</td>
-            </tr>';
+            <td>' . $item['referer'] . '</td>';
+            if ($item['download_time'] && $item['download_time'] > 0) {
+                $this->htmlResult .=  '<td>' . date("Y-m-d H:i:s", $item['download_time']). '</td>';
+            } else {
+                $this->htmlResult .= '';
+            }
+            $this->htmlResult .= '</tr>';
         }
         $this->htmlResult .= '</tbody></table>';
     }
