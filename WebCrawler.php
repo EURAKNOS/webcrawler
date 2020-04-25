@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.1.5';
+    public $version = '0.1.6';
 
     public $html;
 
@@ -147,13 +147,13 @@ class WebCrawler
         $seed_scheme = $seed_components['scheme'];
         $seed_host = $seed_components['host'];
         $url_start = $seed_scheme . '://' . $seed_host;
+
         // Download Seed URL
         $parsePage = new ParsePage();
         $parsePage->target = $seed_url;
         $parsePage->referer = "/";
-        /*var_dump($seed_components);
-        die();
-        $parsePage->path = ($seed_components['path'] == '')? '/':$seed_components['path'];*/
+
+        $parsePage->path = (!isset($seed_components['path']))? '/' :$seed_components['path'];
         $parsePage->path =$seed_components['path'];
         $parsePage->parsePage();
         // Loop through all pages on site.
@@ -168,29 +168,36 @@ class WebCrawler
                     if ($row !== false) {
                         $path = $row['path'];
                         $referer = $row['path'];
-                        // Check if first character isn't a '/'
                         $parsePage = new ParsePage();
+                        //Check if first character isn't a '/'
                         if ($path[0] != '/') {
-                            $pos = strpos($row['path'], 'https://www.youtube.com'); // If it contains
-                            if ($pos !== false) {
+                            if (strpos($row['path'], 'https://www.youtube.com') !== false) {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $url_start . $referer;
                                 $parsePage->path = $path;
-                            } else {
+                            } /*elseif (strpos($row['path'], 'https://www.google.com'))
+                                $parsePage->target = $path;
+                                $parsePage->referer = $url_start . $referer;
+                                $parsePage->path = $path;
+                            }*/else {
+                                $mySql->path = $path;
+                                $mySql->statusSave();
+                                $log->m_log('Unknown URL, Failed to process: ' . $path);
                                 continue;
                             }
                         } else {
-                            $hostpos = strpos($row['path'], $url_start); // If it contains host
+                            /*$hostpos = strpos($row['path'], $seed_host); // If it contains host
                             if ( $hostpos === false ) {
                                 $parsePage->target = $url_start . $path;
                             } else {
                                 $parsePage->target = $path;
-                            }
+                            }*/
+                            $parsePage->target = $url_start . $path;
                             $parsePage->referer = $url_start . $referer;
                             $parsePage->path = $path;
                         }
                         
-
+                        
                         if ($parsePage->parsePage()) {
                             $counter ++;
                         }

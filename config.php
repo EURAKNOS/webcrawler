@@ -17,6 +17,6 @@ define('FOLDER_DOCX', 'docx');
 define('FOLDER_PPTX', 'pptx');
 define('FOLDER_XLSX', 'xlsx');
 
-set_time_limit(5000);
+set_time_limit(10000);
 
 define('YOUTUBE_API_KEY', 'AIzaSyBTQ6j6WWNPJ2uLifGuYrJELsRFjDDQWIo');

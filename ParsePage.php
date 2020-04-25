@@ -46,7 +46,6 @@ class ParsePage
 
         $dwl = new DownloadPage();
         $dwl->target = $this->target;
-
         $dwl->referer = $this->referer;
         $contents = $dwl->downloadData();
         //echo "Done\n";
@@ -78,7 +77,6 @@ class ParsePage
          * $this->result['title'] = $titleTags[0]->nodeValue;
          * }
          */
-
         // Get Description ------------------------------------------
         $metaTags = $doc->getElementsByTagName('meta');
         foreach ($metaTags as $tag) {
@@ -168,14 +166,16 @@ class ParsePage
                 }
             }
         }
-
+        
         $link_tags = $doc->getElementsByTagName('img');
         foreach ($link_tags as $tag) {
             if (($href_value = $tag->getAttribute('src'))) {
                 if (strpos($href_value, 'data:image') !== false) {
                     continue;
                 }
+              
                 $link_absolute = $this->relativeToAbsolute($href_value, $this->target);
+
                 $link_parsed = parse_url($link_absolute);
                 if ($link_parsed === null || $link_parsed === false) {
                     die('Unable to Parse Link URL');
@@ -254,6 +254,7 @@ class ParsePage
         }
         // Append Host
         $abs .= $base_parsed['host'];
+
         // If port in URL
         if (array_key_exists('port', $base_parsed)) {
             $abs .= ':' . $base_parsed['port'];
@@ -267,6 +268,13 @@ class ParsePage
         );
         for ($n = 1; $n > 0; $abs = preg_replace($regex, '/', $abs, - 1, $n)) {}
         // Return Absolute URL
+        $abs = str_replace('/' . $base_parsed['host'], '', $abs);
+        
         return $base_parsed['scheme'] . '://' . $abs;
+            
+        
+        
+        
+        
     }
 }
