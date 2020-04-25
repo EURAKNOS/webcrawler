@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.1.6';
+    public $version = '0.1.7';
 
     public $html;
 
@@ -150,11 +150,16 @@ class WebCrawler
 
         // Download Seed URL
         $parsePage = new ParsePage();
-        $parsePage->target = $seed_url;
         $parsePage->referer = "/";
 
-        $parsePage->path = (!isset($seed_components['path']))? '/' :$seed_components['path'];
-        $parsePage->path =$seed_components['path'];
+        if (!isset($seed_components['path'])) {
+            $parsePage->target = $seed_url . '/';
+            $parsePage->path = '/';
+        } else {
+            $parsePage->target = $seed_url;
+            $parsePage->path = $seed_components['path'];
+        }
+      //  $parsePage->path =$seed_components['path'];
         $parsePage->parsePage();
         // Loop through all pages on site.
 
