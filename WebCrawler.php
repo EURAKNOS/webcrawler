@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.1.7';
+    public $version = '0.2.0';
 
     public $html;
 
@@ -28,10 +28,8 @@ class WebCrawler
      */
     public function mainPage()
     {
-        $log = new WLog();
-        $log->m_log('Load WebCrawler page');
-        $this->process();
-        $this->getData();
+        //$this->process();
+        //$this->getData();
         $this->template();
     }
 
@@ -41,7 +39,7 @@ class WebCrawler
      */
     public function template()
     {   
-        $this->html .= ('<html><head><meta charset="utf-8"><title>Euraknos WebCrawler</title><link rel="stylesheet" href="style/css/bootstrap.min.css"><link rel="stylesheet" href="style/css.css"><link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css"><script src="style/js/jquery.min.js"></script><script src="style/js/bootstrap.min.js"></script></head>');
+        $this->html .= ('<html><head><meta charset="utf-8"><title>Euraknos WebCrawler</title><link rel="stylesheet" href="style/css/bootstrap.min.css"><link rel="stylesheet" href="style/css.css"><link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css"><script src="style/js/jquery.min.js"></script><script src="style/js/bootstrap.min.js"></script><script src="style/js/main.js"></script></head>');
         $this->html .= ('<body>');
         $this->html .= ('
         <form action="' . ROOT_PATH . '" method="post" name="webcrawler">
@@ -102,132 +100,25 @@ class WebCrawler
                                 </div>
                                 </div>
                                 </form>');
-        if (isset($this->htmlResult)) {
+        /*if (isset($this->htmlResult)) {
             $this->html .= $this->htmlResult;
-        }
+        }*/
+        $this->html .= ('<div class="status"></div>');
         $this->html .= ('<div class="version"><p>Ver. ' . $this->version . '</p></div><script src="style/javascript.js"></script>');
         $this->html .= ('</body>');
         $this->html .= ('</html>');
         print($this->html);
     }
     
-    /**
-     * Start
-     */
-    public function process()
-    {
-        if (isset($_POST['submit'])) {
-            /*
-             * echo '<pre>';
-             * print_r($_POST);
-             * echo '</pre>';
-             * die();
-             */
-            $this->startCrawler();
-        }
-    }
-
-    /**
-     * After receiving the starting url, it starts processing the first page. Processing the first page is also storing the found urls.
-     * In the next round, you will start queuing the urls already stored in the database.
-     */
-    private function startCrawler()
-    {
-        /*$req = new HTTP_Request("http://example.com/");
-        $req->setProxy("192.168.5.254", 3128);*/
-        $log = new WLog();
-        $log->m_log('Start WebCrawler');
-        
-        // Define Seed Settings
-        $seed_url = $_POST['url'];
-        $seed_components = parse_url($seed_url);
-        if ($seed_components === false) {
-            die('Unable to Seed Parse URL');
-        }
-        $seed_scheme = $seed_components['scheme'];
-        $seed_host = $seed_components['host'];
-        $url_start = $seed_scheme . '://' . $seed_host;
-
-        // Download Seed URL
-        $parsePage = new ParsePage();
-        $parsePage->referer = "/";
-
-        if (!isset($seed_components['path'])) {
-            $parsePage->target = $seed_url . '/';
-            $parsePage->path = '/';
-        } else {
-            $parsePage->target = $seed_url;
-            $parsePage->path = $seed_components['path'];
-        }
-      //  $parsePage->path =$seed_components['path'];
-        $parsePage->parsePage();
-        // Loop through all pages on site.
-
-        $mySql = new DbMysql();
-        while (1) {
-            $counter = 0;
-            $rowCount = $mySql->getLinks();
-            if ($rowCount) {
-                for ($i = 0; $i < $rowCount; $i ++) {
-                    $row = $mySql->getLinkRow();
-                    if ($row !== false) {
-                        $path = $row['path'];
-                        $referer = $row['path'];
-                        $parsePage = new ParsePage();
-                        //Check if first character isn't a '/'
-                        if ($path[0] != '/') {
-                            if (strpos($row['path'], 'https://www.youtube.com') !== false) {
-                                $parsePage->target = $path;
-                                $parsePage->referer = $url_start . $referer;
-                                $parsePage->path = $path;
-                            } /*elseif (strpos($row['path'], 'https://www.google.com'))
-                                $parsePage->target = $path;
-                                $parsePage->referer = $url_start . $referer;
-                                $parsePage->path = $path;
-                            }*/else {
-                                $mySql->path = $path;
-                                $mySql->statusSave();
-                                $log->m_log('Unknown URL, Failed to process: ' . $path);
-                                continue;
-                            }
-                        } else {
-                            /*$hostpos = strpos($row['path'], $seed_host); // If it contains host
-                            if ( $hostpos === false ) {
-                                $parsePage->target = $url_start . $path;
-                            } else {
-                                $parsePage->target = $path;
-                            }*/
-                            $parsePage->target = $url_start . $path;
-                            $parsePage->referer = $url_start . $referer;
-                            $parsePage->path = $path;
-                        }
-                        
-                        
-                        if ($parsePage->parsePage()) {
-                            $counter ++;
-                        }
-                        sleep(1);
-                    }
-                }
-            } else {
-                die("Unable to select un-downloaded pages\n");
-            }
-            if ($counter == 0) {
-                break;
-            }
-        }
-    }
     
     public function getData()
     {
         $this->MySql = new DbMysql();
         $this->getDownlodedPages();
-        
     }
     
     public function getDownlodedPages()
     {
-        //$this->MySql->ge
         $this->MySql->getDownlodedPages();
         $this->result = $this->MySql->result;
         $this->resultTemplate();
