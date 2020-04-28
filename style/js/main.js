@@ -8,11 +8,14 @@ var classPage = function()
    
     this.init = function() {
     	this.processStart();
-     	this.processStatusCheck();
     }
     
     this.processStart = function() {
     	$( "form" ).submit(function( event ) {
+    		  
+    		  $('#spinner').removeClass('spinner-none');
+    		  $('#error').html('').addClass('error-hidden');
+    		  self.processStatusCheck();
     		  var data = $( this ).serializeArray();
     		  event.preventDefault();
     		  $.ajax({
@@ -30,8 +33,13 @@ var classPage = function()
 	            error: function(){
 	            	console.log('error1');
 	            },
-	            success: function(response){ 
-	            	console.log(response) ;
+	            success: function(response){
+	            	if (response.status == 1) {
+	            		$('#spinner').addClass('spinner-none');
+	            	} else {
+	            		//$('#error').html('Enter a domain name').removeClass('error-hidden');
+	            		$('#spinner').addClass('spinner-none');
+	            	}
 	            }
 	        });
     	});

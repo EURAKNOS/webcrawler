@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.2.2';
+    public $version = '0.2.3';
 
     public $html;
 
@@ -52,8 +52,9 @@ class WebCrawler
         <div class="row">
         <div class="col-lg-12">
         <div class="input">
+        
         <input type="url" class="button" id="url" name="url"
-            placeholder="https://www.aki.gov.hu"> <input type="submit"
+            placeholder="https://www.aki.gov.hu" required> <input type="submit"
                 class="button" id="submit" name="submit" value="DOWNLOAD">
                 </div>
                 </div>
@@ -103,6 +104,8 @@ class WebCrawler
         /*if (isset($this->htmlResult)) {
             $this->html .= $this->htmlResult;
         }*/
+        $this->html .= ('<div id="error" class="error-hidden alert alert-danger" role="alert"></div>');
+        $this->html .= ('<div id="spinner" class="spinner-none spinner-border text-info" role="status"><span class="sr-only">Loading...</span></div>');
         $this->html .= ('<div class="status"></div>');
         $this->html .= ('<div class="version"><p>Ver. ' . $this->version . '</p></div><script src="style/javascript.js"></script>');
         $this->html .= ('</body>');

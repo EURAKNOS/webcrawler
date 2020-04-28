@@ -215,7 +215,7 @@ class DbMysql {
     
     public function countFileElement()
     {
-        $statementSelect = $this->db->prepare("SELECT COUNT(path) AS cp FROM " . PAGE_TABLE . " WHERE download_time IS NOT NULL");
+        $statementSelect = $this->db->prepare("SELECT COUNT(path) AS cp FROM " . CONTENTS_TABLE . " WHERE download_time IS NOT NULL");
         if(!$statementSelect->execute()){
             $this->log->m_log('countFileElement pages MySql function error');
         }
@@ -262,6 +262,57 @@ class DbMysql {
             $this->log->m_log('countFileElement pages MySql function error');
         }
         $this->result['youtube_video'] = $statementSelect->fetch(PDO::FETCH_OBJ)->youtube_video;
+    }
+    
+    public function percentage()
+    {
+        $statementSelect = $this->db->prepare("SELECT COUNT(path) AS cp FROM " . CONTENTS_TABLE . " WHERE content != '' AND download_time > 0");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result2['page'] = $statementSelect->fetch(PDO::FETCH_OBJ)->cp;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS pdf FROM " . FILES_TABLE . " WHERE meta_data != '' AND file_type = 'pdf' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result2['pdf'] = $statementSelect->fetch(PDO::FETCH_OBJ)->pdf;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS jpg FROM " . FILES_TABLE . " WHERE meta_data != '' AND file_type = 'jpg' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result2['jpg'] = $statementSelect->fetch(PDO::FETCH_OBJ)->jpg;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS png FROM " . FILES_TABLE . " WHERE meta_data != '' AND file_type = 'png' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result2['png'] = $statementSelect->fetch(PDO::FETCH_OBJ)->png;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS docx FROM " . FILES_TABLE . " WHERE meta_data != '' AND file_type = 'docx' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result2['docx'] = $statementSelect->fetch(PDO::FETCH_OBJ)->docx;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS xlsx FROM " . FILES_TABLE . " WHERE meta_data != '' AND file_type = 'xlsx' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result2['xlsx'] = $statementSelect->fetch(PDO::FETCH_OBJ)->xlsx;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS pptx FROM " . FILES_TABLE . " WHERE meta_data != '' AND file_type = 'pptx' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result2['pptx'] = $statementSelect->fetch(PDO::FETCH_OBJ)->pptx;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS youtube_video FROM " . FILES_TABLE . " WHERE meta_data != '' AND file_type = 'youtube_video' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result2['youtube_video'] = $statementSelect->fetch(PDO::FETCH_OBJ)->youtube_video;
     }
     
 }

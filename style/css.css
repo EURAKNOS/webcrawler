@@ -79,3 +79,6 @@ input:focus {
 }
 
 .other-element {margin-top: 20px;}
+
+.spinner-none { display: none; }
+.error-hidden { display: none; }

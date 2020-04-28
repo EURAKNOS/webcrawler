@@ -22,7 +22,11 @@ class AjaxProcess {
         $log->m_log('Load WebCrawler page');
         $this->changePost();
         $_SESSION["processing"] = 1;
-        $this->startCrawler();
+        if($this->startCrawler()) {
+            
+        } else {
+            echo json_encode(array('status' => 0) );
+        }
      }
 
      private function changePost()
@@ -64,6 +68,7 @@ class AjaxProcess {
         if ($seed_components === false) {
             die('Unable to Seed Parse URL');
         }
+        if (!isset($seed_components['scheme'])) return false;
         $seed_scheme = $seed_components['scheme'];
         $seed_host = $seed_components['host'];
         $url_start = $seed_scheme . '://' . $seed_host;
@@ -148,11 +153,15 @@ class AjaxProcess {
     private function getDownloadStatus(){
         $this->MySql->countFileElement();
         $this->downlodedResult = $this->MySql->result;
+        $this->MySql->percentage();
+        $this->percentage = $this->MySql->result2;
+        $this->calculate();
     }
         
     private function checkHtml()
     {
         $this->htmlResult = '<h2>Downloaded items</h2><table class="table table-striped table-dark"><thead><tr>
+        <th scope="col"></th>        
         <th scope="col">PAGE</th>
         <th scope="col">PDF</th>
         <th scope="col">JPG</th>
@@ -164,6 +173,7 @@ class AjaxProcess {
         </tr>
         </thead><tbody>';
         $this->htmlResult .= '<tr>
+        <td scope="row">QUANTITY</td>
         <td scope="row">' . $this->downlodedResult['page'] . '</td>
         <td scope="row">' . $this->downlodedResult['pdf'] . '</td>
         <td scope="row">' . $this->downlodedResult['jpg'] . '</td>
@@ -174,7 +184,31 @@ class AjaxProcess {
         <td scope="row">' . $this->downlodedResult['youtube_video'] . '</td>';
         $this->htmlResult .= '</tr>';
         
+        $this->htmlResult .= '<tr>
+        <td scope="row">META & CONTENT %</td>
+        <td scope="row">' . $this->calculated['page'] . '</td>
+        <td scope="row">' . $this->calculated['pdf'] . '</td>
+        <td scope="row">' . $this->calculated['jpg'] . '</td>
+        <td scope="row">' . $this->calculated['png'] . '</td>
+        <td scope="row">' . $this->calculated['docx'] . '</td>
+        <td scope="row">' . $this->calculated['xlsx'] . '</td>
+        <td scope="row">' . $this->calculated['pptx'] . '</td>
+        <td scope="row">' . $this->calculated['youtube_video'] . '</td>';
+        $this->htmlResult .= '</tr>';
+        
         $this->htmlResult .= '</tbody></table>';
+    }
+    
+    private function calculate()
+    {
+        foreach ($this->downlodedResult as $key => $value) {
+            if ($this->percentage[$key] > 0 && $value > 0) {
+                $this->calculated[$key] = round($this->percentage[$key] / $value * 100) . '%';
+            } else {
+                $this->calculated[$key] = 0;
+            }
+            
+        }
     }
 }
 
