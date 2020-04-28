@@ -8,6 +8,7 @@ var classPage = function()
    
     this.init = function() {
     	this.processStart();
+    	this.processStatusCheck();
     }
     
     this.processStart = function() {
@@ -15,7 +16,6 @@ var classPage = function()
     		  
     		  $('#spinner').removeClass('spinner-none');
     		  $('#error').html('').addClass('error-hidden');
-    		  self.processStatusCheck();
     		  var data = $( this ).serializeArray();
     		  event.preventDefault();
     		  $.ajax({
