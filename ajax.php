@@ -23,7 +23,7 @@ class AjaxProcess {
         $this->changePost();
         $_SESSION["processing"] = 1;
         if($this->startCrawler()) {
-            
+            echo json_encode(array('status' => 1) );
         } else {
             echo json_encode(array('status' => 0) );
         }
@@ -185,7 +185,7 @@ class AjaxProcess {
         $this->htmlResult .= '</tr>';
         
         $this->htmlResult .= '<tr>
-        <td scope="row">METADATA AVAILABILITY</td>
+        <td scope="row">METADATA &nbsp; AVAILABILITY</td>
         <td scope="row">' . $this->calculated['page'] . '</td>
         <td scope="row">' . $this->calculated['pdf'] . '</td>
         <td scope="row">' . $this->calculated['jpg'] . '</td>
