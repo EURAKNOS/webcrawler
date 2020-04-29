@@ -160,7 +160,7 @@ class AjaxProcess {
         
     private function checkHtml()
     {
-        $this->htmlResult = '<h2>DOWNLOAD STATISTICS</h2><table class="table table-striped table-dark"><thead><tr>
+        $this->htmlResult = '<h2>DOWNLOAD STATISTICS</h2><table class="table table-striped table-light"><thead class="thead-dark"><tr>
         <th scope="col"></th>        
         <th scope="col">PAGE</th>
         <th scope="col">PDF</th>

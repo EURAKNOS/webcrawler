@@ -76,15 +76,15 @@ class WebCrawler
         <div class="col-lg-3">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="h1" value="1" id="h1">
-                <label class="form-check-label"	for="h1"> H1</label>
+                <label class="form-check-label"	for="h1"> Heading 1</label>
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="h2" value="1" id="h2">
-                <label class="form-check-label"	for="h2"> H2</label>
+                <label class="form-check-label"	for="h2"> Heading 2</label>
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="h3" value="1" id="h3">
-                <label class="form-check-label"	for="h3"> H3</label>
+                <label class="form-check-label"	for="h3"> Heading 3</label>
             </div>
         </div>
         </div>
