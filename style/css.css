@@ -1,26 +1,23 @@
 @charset "UTF-8";
 
 body {
-  background: #07575B;
-  font-family: 'Lato', sans-serif;
-  color: #FDFCFB;
-  text-align: center;
+	font-family: 'Lato', sans-serif;
+	text-align: center;
+	background: #f2f2f2;
+	color: #0b1c26;
 }
-
 
 form {
   width: 800px;
   margin: 8% auto;
-  margin-top: 5%;
+  margin-top: 2%;
 }
-
 
 .header {
   font-size: 35px;
   text-transform: uppercase;
   letter-spacing: 5px;
 }
-
 
 .description {
   font-size: 14px;
@@ -29,56 +26,104 @@ form {
   margin: -2px 0 45px;
 }
 
-
 .input {
   display: flex;
   align-items: center;
 }
-
 
 .button {
   height: 44px;
   border: none;
 }
 
-  
+/* OLD URL DOWNLOAD
 #url {
-  width: 75%;
-  background: #FDFCFB;
-  font-family: inherit;
-  color: #737373;
-  letter-spacing: 1px;
-  text-indent: 5%;
-  border-radius: 5px 0 0 5px;
+	width: 75%;
+	font-family: inherit;
+	letter-spacing: 1px;
+	text-indent: 5%;
+	border-radius: 5px 0 0 5px;
+	background: #FFF;
+	color: #495057;
+	border: 1px solid #ced4da;
+	transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
-
 
 #submit {
-  width: 25%;
-  height: 46px;
-  background: #66A5AD;
-  font-family: inherit;
-  font-weight: bold;
-  color: inherit;
-  letter-spacing: 1px;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
-  transition: background .3s ease-in-out;
+	width: 25%;
+	height: 44px;
+	background: #60a653;
+	font-family: inherit;
+	font-weight: bold;
+	color: whitesmoke;
+	letter-spacing: 1px;
+	border-radius: 0 5px 5px 0;
+	cursor: pointer;
+	transition: background .3s ease-in-out;
 }
-  
 
 #submit:hover {
-  background: #003B46;
+	background: #4f8945;
 }
-  
+*/  
+
+/* NEW URL DOWNLOAD */
+.downloadbutton {
+	padding: .5rem 3rem;
+	font-size: 1rem;
+	font-weight: bold;
+	letter-spacing: 1px;
+	color: whitesmoke;
+	background: #60a653;
+	border-color: #60a653;
+	transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.downloadbutton:hover {
+	background: #4f8945;
+}
+/* */
+
+
 
 input:focus {
-  outline: none;
-  outline: 2px solid #E86C8D;
-  box-shadow: 0 0 2px #E86C8D;
+/*	outline: none;*/
+	outline: 2px solid #60a653;
+	box-shadow: 0 0 2px #60a653;
 }
 
-.other-element {margin-top: 20px;}
+.other-element {
+	margin-top: 40px;
+}
 
 .spinner-none { display: none; }
+
 .error-hidden { display: none; }
+
+::placeholder {
+	color: #b5b5b5 !important;
+}
+
+.form-check {
+	text-align: left;
+}
+
+.form-control:focus {
+	border-color: #60a653;
+	box-shadow: 0 0 0 .2rem rgba(96, 166, 83, .25);
+}
+
+h3 {
+	margin-bottom: 1.5rem;
+}
+
+td {
+	text-align: center;
+}
+
+td:first-child {text-align:right;}
+
+.logo {
+	width: 230px;
+	margin-bottom: .5em;
+}
