@@ -40,6 +40,26 @@ class WebCrawler
     public function template()
     {
         $this->html .= ('<html><head><meta charset="utf-8"><title>Euraknos WebCrawler</title><link rel="stylesheet" href="style/css/bootstrap.min.css"><link rel="stylesheet" href="style/css.css"><link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css"><script src="style/js/jquery.min.js"></script><script src="style/js/bootstrap.min.js"></script><script src="style/js/main.js"></script></head><body>
+        <!-- Modal -->
+        <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="WebCrawlerModalLabel">Warning!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                ...
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <form action="' . ROOT_PATH . '" method="post" name="webcrawler">
         <div class="header"><img class="logo" src="style/Logo_Euraknos_Crawler.png">
             <p>WebCrawler</p>
@@ -52,7 +72,7 @@ class WebCrawler
                 <div class="input-group input-group-lg mb-3">
                     <input type="text" class="form-control" id="url" name="url" placeholder="https://www.aki.gov.hu" aria-label="URL" aria-describedby="button-addon2" style="color: #b5b5b5;" required>
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary downloadbutton" type="button" id="submit">DOWNLOAD</button>
+                        <button class="btn btn-outline-secondary downloadbutton" type="submit" id="submit" >DOWNLOAD</button>
                     </div>
                 </div>
             </div>
