@@ -5,6 +5,7 @@ define('DB_SERVER_PASSWORD', 'test');
 define('DB_SERVER_DATABASE', 'webc');
 define('PAGE_TABLE', 'pages');
 define('FILES_TABLE', 'files');
+define('URLS_TABLE', 'urls');
 define('CONTENTS_TABLE', 'contents');
 define('ROOT_PATH', $_SERVER['REQUEST_URI']);
 

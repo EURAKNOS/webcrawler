@@ -20,6 +20,8 @@ class DownloadPage {
     
     public $log;
     
+    public $urlId;
+    
     public function __construct()
     {
         $this->log = new WLog();
@@ -116,6 +118,7 @@ class DownloadPage {
     {
         $this->log->m_log('Start download pdf');
         $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_PDF;
         $dl->downloadProcessing();
@@ -143,6 +146,7 @@ class DownloadPage {
     {
         $this->log->m_log('Start download jpg');
         $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_JPG;
         $dl->downloadProcessing();
@@ -171,6 +175,7 @@ class DownloadPage {
     {
         $this->log->m_log('Start download png');
         $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_PNG;
         $dl->downloadProcessing();
@@ -199,6 +204,7 @@ class DownloadPage {
     {
         $this->log->m_log('Start download pptx');
         $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_PPTX;
         $dl->downloadProcessing();
@@ -231,6 +237,7 @@ class DownloadPage {
     {
         $this->log->m_log('Start download Docx');
         $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_DOCX;
         $dl->downloadProcessing();
@@ -263,6 +270,7 @@ class DownloadPage {
     {
         $this->log->m_log('Start download xlsx');
         $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_XLSX;
         $dl->downloadProcessing();
@@ -294,6 +302,7 @@ class DownloadPage {
     {
         $this->log->m_log('Start youtube meta');
         $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
         $dl->target = $this->target;
         $dl->folder = '';
         $dl->preSaveDatabaseDownlodedFile();
@@ -364,6 +373,8 @@ class DownloadFileExtended {
     
     public $log;
     
+    public $urlId;
+    
     public function __construct()
     {
         $this->log = new WLog();
@@ -382,6 +393,7 @@ class DownloadFileExtended {
     {
         $this->log->m_log('Start file download presave to database');
         $this->MySql = new DbMysql();
+        $this->MySql->urlId = $this->urlId;
         $this->MySql->target = $this->target;
         $this->MySql->startDownloadFile();
         $this->id = $this->MySql->id;

@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.2.6';
+    public $version = '0.2.7';
 
     public $html;
 
@@ -47,15 +47,15 @@ class WebCrawler
               <div class="modal-header">
                 <h5 class="modal-title" id="WebCrawlerModalLabel">Warning!</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
+                  <span aria-hidden="true"></span>
                 </button>
               </div>
               <div class="modal-body">
-                ...
+                The specified website is already in the database. If you want to delete it again, the previous data will be lost.
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" id="accept-download" class="btn btn-success">Download accepted</button>
               </div>
             </div>
           </div>
@@ -74,6 +74,11 @@ class WebCrawler
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary downloadbutton" type="submit" id="submit" >DOWNLOAD</button>
                     </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="input-group input-group-lg mb-4">
+                    <input type="text" class="form-control" id="w-name" name="wname" placeholder="The name of the website" aria-label="URL" aria-describedby="button-addon2" style="color: #b5b5b5;" required>
                 </div>
             </div>
         </div>

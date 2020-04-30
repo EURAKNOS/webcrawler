@@ -9,6 +9,8 @@ class ParsePage
     public $referer;
 
     public $path;
+    
+    public $urlId;
 
     public function __construct()
     {}
@@ -18,18 +20,23 @@ class ParsePage
      *
      * @return boolean
      */
-    public function parsePage()
+    public function parsePage($first = false)
     {
         // Create mysql
         $log = new WLog();
         $log->m_log('Targer URL start process: ' . $this->target);
         $MySql = new DbMysql();
         $MySql->target = $this->target;
+        $MySql->urlId = $this->urlId;
         
         // Parse URL and get Components
         $url_components = parse_url($this->target);
         if ($url_components === false) {
             die('Unable to Parse URL');
+        }
+        if ($first) {
+            $MySql->saveUrl();
+            $this->urlId = $MySql->urlId;
         }
         $url_host = $url_components['host'];
         $url_path = '';
@@ -47,13 +54,14 @@ class ParsePage
         $dwl = new DownloadPage();
         $dwl->target = $this->target;
         $dwl->referer = $this->referer;
+        $dwl->urlId = $this->urlId;
         $contents = $dwl->downloadData();
         //echo "Done\n";
         // Check Status
         if (isset($contents['ok'])) {
             $MySql->path = $this->path;
             $MySql->endDownload();
-            return;
+            return true;
         } elseif ($contents['headers']['status_info'][1] != 200) {
             // If not ok, mark as downloaded but skip
             $MySql->path = $this->path;
@@ -140,14 +148,13 @@ class ParsePage
         $MySql->path = $url_path;
         // save page content
         if ($contents['headers']['status_info'][1] == 200) {
-            $MySqlPage = new DbMysql();
-            $MySqlPage->data['page'] = $this->referer;
-            $MySqlPage->data['path'] = $this->path;
-            $MySqlPage->data['content'] = '';
+            $MySql->data['page'] = $this->referer;
+            $MySql->data['path'] = $this->path;
+            $MySql->data['content'] = '';
             if (isset($this->result)) {
-                $MySqlPage->data['content'] = serialize($this->result);
+                $MySql->data['content'] = serialize($this->result);
             }
-            $MySqlPage->savePage();
+            $MySql->savePage();
         }
         $log->m_log('Page parser end: ' . $this->target);
         $MySql->endDownload();
@@ -271,10 +278,6 @@ class ParsePage
         $abs = str_replace('/' . $base_parsed['host'], '', $abs);
         
         return $base_parsed['scheme'] . '://' . $abs;
-            
-        
-        
-        
-        
+
     }
 }
