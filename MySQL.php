@@ -364,6 +364,20 @@ class DbMysql {
         $this->log->m_log('saveUrl MySql function success');
     }
     
+    /**
+     *
+     */
+    public function endDownloadUrl($id)
+    {
+        $data['id'] = $id;
+        $statement = $this->db->prepare("UPDATE ".URLS_TABLE." SET download = 1 WHERE id = :id");
+        if(!$statement->execute($data)){
+            $this->log->m_log('endDownloadUrl MySql function error');
+            throw new Exception("An operation failed endDownloadFile function");
+        }
+        return true;
+    }
+    
     public function exitsUrl($url)
     {
         $data['url'] = $url;

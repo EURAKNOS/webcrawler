@@ -29,6 +29,7 @@ class AjaxProcess {
         } else {
             echo json_encode(array('status' => 0) );
         }
+        $this->MySql->endDownloadUrl($this->urlId);
      }
 
      private function changePost()
@@ -175,7 +176,8 @@ class AjaxProcess {
     {
         $this->htmlResult = '<h2>DOWNLOAD STATISTICS</h2><table class="table table-striped table-light"><thead class="thead-dark"><tr>
         <th scope="col"></th>
-        <th scope="col">DOMAIN</th>        
+        <th scope="col">URL</th>
+        <th scope="col">DOMAIN</th>
         <th scope="col">PAGE</th>
         <th scope="col">PDF</th>
         <th scope="col">JPG</th>
@@ -189,7 +191,13 @@ class AjaxProcess {
         if (isset($this->downlodedResult) && !empty($this->downlodedResult)) {
             foreach ($this->downlodedResult as $key => $value) {
                 $this->htmlResult .= '<tr>
-                <td scope="row">QUANTITY</td>
+                <td scope="row">QUANTITY</td>';
+                if ($this->domainData[$key]['download'] == 0) {
+                    $dtemp = '<div class="spinner-grow spinner-grow-sm" role="status"><span class="sr-only"></span></div>(Download) ';
+                } else {
+                    $dtemp = '(Finish) ';
+                }
+                $this->htmlResult .= '<td scope="row">' . $dtemp .$this->domainData[$key]['url'] . '</td>
                 <td scope="row">' .$this->domainData[$key]['wname'] . '</td>
                 <td scope="row">' . $value['page'] . '</td>
                 <td scope="row">' . $value['pdf'] . '</td>
@@ -200,10 +208,11 @@ class AjaxProcess {
                 <td scope="row">' . $value['pptx'] . '</td>
                 <td scope="row">' . $value['youtube_video'] . '</td>';
                 $this->htmlResult .= '</tr>';
-            
-            
+                
+                
                 $this->htmlResult .= '<tr>
                 <td scope="row">METADATA &nbsp; AVAILABILITY</td>
+                <td scope="row">' . $this->domainData[$key]['url'] . '</td>
                 <td scope="row">' . $this->domainData[$key]['wname'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['page'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['pdf'] . '</td>

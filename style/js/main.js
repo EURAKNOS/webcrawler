@@ -51,7 +51,7 @@ var classPage = function() {
 			event.preventDefault();
 			var data = $(this).serializeArray(); // form data
 			console.log(data);
-			$('#spinner').removeClass('spinner-none');
+			//$('#spinner').removeClass('spinner-none');
 			$('#submit').prop("disabled", true);
 			$('#error').html('').addClass('error-hidden');
 
@@ -74,11 +74,11 @@ var classPage = function() {
 				success : function(response) {
 					$('#submit').prop("disabled", true);
 					if (response.status == 1) {
-						$('#spinner').addClass('spinner-none');
+						//$('#spinner').addClass('spinner-none');
 					} else {
 						// $('#error').html('Enter a domain
 						// name').removeClass('error-hidden');
-						$('#spinner').addClass('spinner-none');
+						//$('#spinner').addClass('spinner-none');
 					}
 				}
 			});
