@@ -193,9 +193,9 @@ class AjaxProcess {
                 $this->htmlResult .= '<tr>
                 <td scope="row">QUANTITY</td>';
                 if ($this->domainData[$key]['download'] == 0) {
-                    $dtemp = '<div class="spinner-grow spinner-grow-sm" role="status"><span class="sr-only"></span></div>(Download) ';
+                    $dtemp = '<div class="spinner-grow spinner-grow-sm" role="status"><span class="sr-only"></span></div>(Downloading) ';
                 } else {
-                    $dtemp = '(Finish) ';
+                    $dtemp = '(Finished) ';
                 }
                 $this->htmlResult .= '<td scope="row">' . $dtemp .$this->domainData[$key]['url'] . '</td>
                 <td scope="row">' .$this->domainData[$key]['wname'] . '</td>
