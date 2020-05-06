@@ -21,3 +21,7 @@ define('FOLDER_XLSX', 'xlsx');
 set_time_limit(10000);
 
 define('YOUTUBE_API_KEY', 'AIzaSyBTQ6j6WWNPJ2uLifGuYrJELsRFjDDQWIo');
+
+define('VIMEO_API_KEY', '637ecf1ffbaedf398ecff5aaa31a27c4f780204c');
+define('VIMEO_API_SECRET', 'MGdf88z3eDABtapf2uBgfG8gpK6tLsnIeGhAUkspXmiaPRg1g5oRyhCccdOWD1D6vcq8s629kDfXCbUjfEcQoaHLJh8KVWHGUrdWpx4NEUrzhpVwAP3oa1BtYHAqg9MA');
+define('VIMEO_API_TOKEN', '8a984559b52476a22658d9a8aaada3e3');

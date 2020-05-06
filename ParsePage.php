@@ -196,7 +196,7 @@ class ParsePage
         $link_tags = $doc->getElementsByTagName('iframe');
         foreach ($link_tags as $tag) {
             if (($href_value = $tag->getAttribute('src'))) {
-                $links[] = htmlspecialchars($href_value, ENT_NOQUOTES, "UTF-8");
+                $links[] = ltrim(htmlspecialchars($href_value, ENT_NOQUOTES, "UTF-8"), '//');
                 
             }
         }

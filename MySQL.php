@@ -291,6 +291,18 @@ class DbMysql {
             $this->log->m_log('countFileElement pages MySql function error');
         }
         $this->result['youtube_video'] = $statementSelect->fetch(PDO::FETCH_OBJ)->youtube_video;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS vimeo_video FROM " . FILES_TABLE . " WHERE url_id = :id AND file_type = 'vimeo_video' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute($data)){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result['vimeo_video'] = $statementSelect->fetch(PDO::FETCH_OBJ)->vimeo_video;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS google_map FROM " . FILES_TABLE . " WHERE url_id = :id AND file_type = 'google_map' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute($data)){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result['google_map'] = $statementSelect->fetch(PDO::FETCH_OBJ)->google_map;
     }
     
     public function percentage($id)
@@ -343,6 +355,18 @@ class DbMysql {
             $this->log->m_log('countFileElement pages MySql function error');
         }
         $this->result2['youtube_video'] = $statementSelect->fetch(PDO::FETCH_OBJ)->youtube_video;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS vimeo_video FROM " . FILES_TABLE . " WHERE url_id = :id AND meta_data != '' AND file_type = 'vimeo_video' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute($data)){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result2['vimeo_video'] = $statementSelect->fetch(PDO::FETCH_OBJ)->vimeo_video;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS google_map FROM " . FILES_TABLE . " WHERE url_id = :id AND meta_data != '' AND file_type = 'google_map' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute($data)){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result2['google_map'] = $statementSelect->fetch(PDO::FETCH_OBJ)->google_map;
     }
     
     /**

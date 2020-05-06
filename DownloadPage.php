@@ -3,6 +3,7 @@
 require_once 'vendor/pdfinfo.php';
 require_once 'vendor/PNGMetadata/src/PNGMetadata.php';
 require_once 'vendor/docx_metadata.php';
+require_once 'vendor/vimeo/src/Vimeo/Vimeo.php';
 
 use PNGMetadata\PNGMetadata;
 /**
@@ -34,9 +35,17 @@ class DownloadPage {
     public function downloadData()
     {
         $pos = strpos($this->target, 'https://www.youtube.com');
+        $posVimeo = strpos($this->target, '.vimeo.com');
+        $posMaps = strpos($this->target, 'www.google.com/maps');
+        $posMaps2 = strpos($this->target, 'maps.google.com');
+        
         if ($pos !== false) {
             $this->processYoutube();
-        } else {
+        } elseif ($posVimeo !== false) {
+            $this->processVimeo();
+        } elseif ($posMaps !== false || $posMaps2 !== false) {
+            $this->processMaps();
+        }else {
             $info = pathinfo($this->target);
             if (isset($info["extension"])) {
 
@@ -339,6 +348,63 @@ class DownloadPage {
         // File data Save Database
         $dl->saveData = $saveData;
         $this->log->m_log('Start youtube success');
+        return $dl->saveEnd();
+    }
+    
+    private function processVimeo()
+    {
+        $this->log->m_log('Start Vimeo meta');
+        $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
+        $dl->target = $this->target;
+        $dl->folder = '';
+        $dl->preSaveDatabaseDownlodedFile();
+        
+        if(preg_match("/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/", $this->target, $match)) {
+            //echo "Vimeo ID: $match[5]";
+        }
+        $path = $match[5];
+        $vimeo = new Vimeo(VIMEO_API_KEY, VIMEO_API_SECRET, VIMEO_API_TOKEN);
+        
+        //Get a video - https://developer.vimeo.com/api/playground/videos/{video_id}
+        $result = $vimeo->request("/videos/$path", array(
+            'fields' =>     'uri,name,description,duration,width,height,privacy,pictures.sizes'
+        ));
+        
+        $saveData['meta_data'] = '';
+        if (isset($result) && !empty($result)) {
+            $saveData['meta_data'] = serialize($result);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = ''; //$dl->localfile;
+        $saveData['file_type'] = 'vimeo_video';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        $this->log->m_log('Start Vimeo success');
+        return $dl->saveEnd();
+        
+    }
+    
+    private function processMaps()
+    {
+        $this->log->m_log('Start google map');
+        $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
+        $dl->target = $this->target;
+        $dl->folder = '';
+        $dl->preSaveDatabaseDownlodedFile();
+        
+        $saveData['meta_data'] = '';
+        $saveData['meta_data'] = serialize($this->target);
+        
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = ''; //$dl->localfile;
+        $saveData['file_type'] = 'google_map';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        $this->log->m_log('Start google map');
         return $dl->saveEnd();
     }
 

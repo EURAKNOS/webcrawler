@@ -113,7 +113,19 @@ class AjaxProcess {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $url_start . $referer;
                                 $parsePage->path = $path;
-                            } /*elseif (strpos($row['path'], 'https://www.google.com'))
+                            } elseif (strpos($row['path'], 'https://www.youtu.be') !== false) {
+                                $parsePage->target = $path;
+                                $parsePage->referer = $url_start . $referer;
+                                $parsePage->path = $path;
+                            } elseif (strpos($row['path'], '.vimeo.com') !== false) {
+                                $parsePage->target = $path;
+                                $parsePage->referer = $url_start . $referer;
+                                $parsePage->path = $path;
+                            } elseif (strpos($row['path'], 'www.google.com/maps') !== false || strpos($row['path'], 'maps.google.com') !== false) {
+                                $parsePage->target = $path;
+                                $parsePage->referer = $url_start . $referer;
+                                $parsePage->path = $path;
+                            }/*elseif (strpos($row['path'], 'https://www.google.com'))
                             $parsePage->target = $path;
                             $parsePage->referer = $url_start . $referer;
                             $parsePage->path = $path;
@@ -186,6 +198,8 @@ class AjaxProcess {
         <th scope="col">EXCEL</th>
         <th scope="col">POWERPOINT</th>
         <th scope="col">YOUTUBE</th>
+        <th scope="col">VIMEO</th>
+        <th scope="col">GOOGLE MAPS</th>
         </tr>
         </thead><tbody>';
         if (isset($this->downlodedResult) && !empty($this->downlodedResult)) {
@@ -206,7 +220,9 @@ class AjaxProcess {
                 <td scope="row">' . $value['docx'] . '</td>
                 <td scope="row">' . $value['xlsx'] . '</td>
                 <td scope="row">' . $value['pptx'] . '</td>
-                <td scope="row">' . $value['youtube_video'] . '</td>';
+                <td scope="row">' . $value['youtube_video'] . '</td>
+                <td scope="row">' . $value['vimeo_video'] . '</td>
+                <td scope="row">' . $value['google_map'] . '</td>';
                 $this->htmlResult .= '</tr>';
                 
                 
@@ -221,7 +237,9 @@ class AjaxProcess {
                 <td scope="row">' . $this->calculated[$key]['docx'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['xlsx'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['pptx'] . '</td>
-                <td scope="row">' . $this->calculated[$key]['youtube_video'] . '</td>';
+                <td scope="row">' . $this->calculated[$key]['youtube_video'] . '</td>
+                <td scope="row">' . $this->calculated[$key]['vimeo_video'] . '</td>
+                <td scope="row">' . $this->calculated[$key]['google_map'] . '<br>(link only)</td>';
                 $this->htmlResult .= '</tr>';
             }
         }
