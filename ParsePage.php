@@ -161,8 +161,10 @@ class ParsePage
         // Get Links
         $links = Array();
         $link_tags = $doc->getElementsByTagName('a');
+        
         foreach ($link_tags as $tag) {
             if (($href_value = $tag->getAttribute('href'))) {
+                
                 $link_absolute = $this->relativeToAbsolute($href_value, $this->target);
                 $link_parsed = parse_url($link_absolute);
                 if ($link_parsed === null || $link_parsed === false) {
@@ -170,6 +172,8 @@ class ParsePage
                 }
                 if ((! array_key_exists('host', $link_parsed) || $link_parsed['host'] == "" || $link_parsed['host'] == $url_host) && array_key_exists('path', $link_parsed) && $link_parsed['path'] != "" && array_search($link_parsed['path'], $links) === false) {
                     $links[] = htmlspecialchars($link_parsed['path'], ENT_NOQUOTES, "UTF-8");
+                } else {
+                    $links[] = htmlspecialchars($link_absolute, ENT_NOQUOTES, "UTF-8");
                 }
             }
         }
@@ -223,6 +227,9 @@ class ParsePage
 
     public function relativeToAbsolute($relative, $base)
     {
+        
+        //$relative = ltrim($relative, '//');
+        
         if ($relative == "" || $base == "")
             return "";
         // Check Base
@@ -237,15 +244,21 @@ class ParsePage
         if (array_key_exists('scheme', $relative_parsed) && $relative_parsed['scheme'] != '') {
             return $relative;
         }
+        
         // If only a query or a fragment, return base (without any fragment or query) + relative
         if (! array_key_exists('scheme', $relative_parsed) && ! array_key_exists('host', $relative_parsed) && ! array_key_exists('path', $relative_parsed)) {
             return $base_parsed['scheme'] . '://' . $base_parsed['host'] . $base_parsed['path'] . $relative;
         }
+
         // Remove non-directory portion from path
         $path = preg_replace('#/[^/]*$#', '', $base_parsed['path']);
         // If relative path already points to root, remove base return absolute path
+       
         if ($relative[0] == '/') {
             $path = '';
+        } elseif (strpos($relative_parsed['path'], $base_parsed['host']) !== false) {
+            $tmp = str_replace($base_parsed['host'], '', $relative_parsed['path']);
+            $relative = $tmp;
         }
         // Working Absolute URL
         $abs = '';

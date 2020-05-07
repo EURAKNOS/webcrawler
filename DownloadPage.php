@@ -35,11 +35,12 @@ class DownloadPage {
     public function downloadData()
     {
         $pos = strpos($this->target, 'https://www.youtube.com');
+        $posYoutube2 = strpos($this->target, 'youtu.be');
         $posVimeo = strpos($this->target, '.vimeo.com');
         $posMaps = strpos($this->target, 'www.google.com/maps');
         $posMaps2 = strpos($this->target, 'maps.google.com');
         
-        if ($pos !== false) {
+        if ($pos !== false || $posYoutube2 !== false) {
             $this->processYoutube();
         } elseif ($posVimeo !== false) {
             $this->processVimeo();

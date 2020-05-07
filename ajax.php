@@ -113,7 +113,7 @@ class AjaxProcess {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $url_start . $referer;
                                 $parsePage->path = $path;
-                            } elseif (strpos($row['path'], 'https://www.youtu.be') !== false) {
+                            } elseif (strpos($row['path'], 'youtu.be') !== false) {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $url_start . $referer;
                                 $parsePage->path = $path;

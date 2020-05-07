@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.3.0';
+    public $version = '0.3.1';
 
     public $html;
 
@@ -32,7 +32,7 @@ class WebCrawler
         // $this->getData();
         $this->template();
     }
-
+    
     /**
      * Preparation of the frontend surface.
      * (Due to the minimal frontend part, I don't create a separate file for it or use a temaplet manager.)
