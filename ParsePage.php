@@ -171,9 +171,9 @@ class ParsePage
                     die('Unable to Parse Link URL');
                 }
                 if ((! array_key_exists('host', $link_parsed) || $link_parsed['host'] == "" || $link_parsed['host'] == $url_host) && array_key_exists('path', $link_parsed) && $link_parsed['path'] != "" && array_search($link_parsed['path'], $links) === false) {
-                    $links[] = htmlspecialchars($link_parsed['path'], ENT_NOQUOTES, "UTF-8");
-                } else {
-                    $links[] = htmlspecialchars($link_absolute, ENT_NOQUOTES, "UTF-8");
+                    $links[] = $this->urlClear($link_parsed['path']);
+                } elseif ($link_absolute != $this->referer) {
+                    $links[] = $this->urlClear($link_absolute);
                 }
             }
         }
@@ -192,7 +192,7 @@ class ParsePage
                     die('Unable to Parse Link URL');
                 }
                 if ((! array_key_exists('host', $link_parsed) || $link_parsed['host'] == "" || $link_parsed['host'] == $url_host) && array_key_exists('path', $link_parsed) && $link_parsed['path'] != "" && array_search($link_parsed['path'], $links) === false) {
-                    $links[] = htmlspecialchars($link_parsed['path'], ENT_NOQUOTES, "UTF-8");
+                    $links[] = $this->urlClear($link_parsed['path']);
                 }
             }
         }
@@ -200,7 +200,7 @@ class ParsePage
         $link_tags = $doc->getElementsByTagName('iframe');
         foreach ($link_tags as $tag) {
             if (($href_value = $tag->getAttribute('src'))) {
-                $links[] = ltrim(htmlspecialchars($href_value, ENT_NOQUOTES, "UTF-8"), '//');
+                $links[] = ltrim($this->urlClear($href_value), '//');
                 
             }
         }
@@ -223,6 +223,9 @@ class ParsePage
         return true;
     }
     
+    public function urlClear($str) {
+         return str_replace(' ', '%20', htmlspecialchars($str, ENT_NOQUOTES, "UTF-8"));
+    }
     
 
     public function relativeToAbsolute($relative, $base)
