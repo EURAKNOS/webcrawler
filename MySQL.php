@@ -303,6 +303,12 @@ class DbMysql {
             $this->log->m_log('countFileElement pages MySql function error');
         }
         $this->result['google_map'] = $statementSelect->fetch(PDO::FETCH_OBJ)->google_map;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS epub FROM " . FILES_TABLE . " WHERE url_id = :id AND file_type = 'epub' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute($data)){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result['epub'] = $statementSelect->fetch(PDO::FETCH_OBJ)->epub;
     }
     
     public function percentage($id)
@@ -367,6 +373,12 @@ class DbMysql {
             $this->log->m_log('countFileElement pages MySql function error');
         }
         $this->result2['google_map'] = $statementSelect->fetch(PDO::FETCH_OBJ)->google_map;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS epub FROM " . FILES_TABLE . " WHERE url_id = :id AND meta_data != '' AND file_type = 'epub' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute($data)){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result2['epub'] = $statementSelect->fetch(PDO::FETCH_OBJ)->epub;
     }
     
     /**

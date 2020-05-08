@@ -198,6 +198,7 @@ class AjaxProcess {
         <th scope="col">DOCX</th>
         <th scope="col">XLSX</th>
         <th scope="col">PPTX</th>
+        <th scope="col">EPUB</th>
         <th scope="col">YOUTUBE</th>
         <th scope="col">VIMEO</th>
         <th scope="col">GOOGLE MAPS</th>
@@ -221,6 +222,7 @@ class AjaxProcess {
                 <td scope="row">' . $value['docx'] . '</td>
                 <td scope="row">' . $value['xlsx'] . '</td>
                 <td scope="row">' . $value['pptx'] . '</td>
+                <td scope="row">' . $value['epub'] . '</td>
                 <td scope="row">' . $value['youtube_video'] . '</td>
                 <td scope="row">' . $value['vimeo_video'] . '</td>
                 <td scope="row">' . $value['google_map'] . '</td>';
@@ -238,6 +240,7 @@ class AjaxProcess {
                 <td scope="row">' . $this->calculated[$key]['docx'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['xlsx'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['pptx'] . '</td>
+                <td scope="row">' . $this->calculated[$key]['epub'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['youtube_video'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['vimeo_video'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['google_map'] . '<br>(link only)</td>';

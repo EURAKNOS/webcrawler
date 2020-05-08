@@ -311,6 +311,7 @@ class EPub {
                 // remember path for save action
                 $this->imagetoadd = $path;
             }
+
             $this->reparse();
         }
 
