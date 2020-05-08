@@ -4,6 +4,7 @@ require_once 'vendor/pdfinfo.php';
 require_once 'vendor/PNGMetadata/src/PNGMetadata.php';
 require_once 'vendor/docx_metadata.php';
 require_once 'vendor/vimeo/src/Vimeo/Vimeo.php';
+require_once 'vendor/php-epub-meta/epub.php';
 
 use PNGMetadata\PNGMetadata;
 /**
@@ -62,7 +63,9 @@ class DownloadPage {
                     return $this->processDocx();
                 } elseif ($info["extension"] == "xlsx") {
                     return $this->processXlsx();
-                }  else {
+                } elseif ($info["extension"] == "epub") {
+                    return $this->processEpub();
+                } else {
                     return $this->DownloadPage();
                 }
             } else {
@@ -409,6 +412,45 @@ class DownloadPage {
         return $dl->saveEnd();
     }
 
+     /**
+     * Epub metadata
+     */
+    private function processEpub()
+    {
+        $this->log->m_log('Start download epub');
+        $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_EPUB;
+        $dl->downloadProcessing();
+        
+        $epub = new EPub($dl->localfile);
+        
+        $result['Authors'] = $epub->Authors();
+        $result['Title'] = $epub->Title();
+        $result['Language'] = $epub->Language();
+        $result['Publisher'] = $epub->Publisher();
+        $result['Copyright'] = $epub->Copyright();
+        $result['Description'] = $epub->Description();
+        $result['ISBN'] = $epub->ISBN();
+        $result['Google'] = $epub->Google();
+        $result['Amazon'] = $epub->Amazon();
+        $result['Subjects'] = $epub->Subjects();
+        
+        $this->log->m_log('EPUB metadata Ok');
+        $saveData['meta_data'] = '';
+        if (isset($result) && !empty($result)) {
+            $saveData['meta_data'] = serialize($result);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'epub';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
+    }
+    
 }
 
 /**

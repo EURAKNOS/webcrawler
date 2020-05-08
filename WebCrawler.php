@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.3.3';
+    public $version = '0.3.4';
 
     public $html;
 
@@ -28,7 +28,7 @@ class WebCrawler
      */
     public function mainPage()
     {
-        // $this->process();
+        // $this->process();(Finished) https://eurodairy.eu/resources/two-webinars-on-the-principles-of-biodiversity/	
         // $this->getData();
         $this->template();
     }
