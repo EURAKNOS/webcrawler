@@ -47,8 +47,9 @@ var classPage = function() {
 	}
 	this.processDownloadStart = function() {
 		
-		$("form").submit(function(event) {
+		$("form").unbind().submit(function(event) {
 			event.preventDefault();
+			$( this ).unbind( event );
 			var data = $(this).serializeArray(); // form data
 			console.log(data);
 			//$('#spinner').removeClass('spinner-none');
@@ -82,6 +83,7 @@ var classPage = function() {
 					}
 				}
 			});
+			//$("form").remove(); //Remove the form
 		});
 		$('form').trigger('submit');
 		return false;

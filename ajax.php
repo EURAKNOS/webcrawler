@@ -101,6 +101,7 @@ class AjaxProcess {
             $rowCount = $this->MySql->getLinks();
             if ($rowCount) {
                 for ($i = 0; $i < $rowCount; $i ++) {
+                    $this->MySql->urlId = $this->urlId;
                     $row = $this->MySql->getLinkRow();
                     if ($row !== false) {
                         $path = $row['path'];
@@ -194,9 +195,9 @@ class AjaxProcess {
         <th scope="col">PDF</th>
         <th scope="col">JPG</th>
         <th scope="col">PNG</th>
-        <th scope="col">WORD</th>
-        <th scope="col">EXCEL</th>
-        <th scope="col">POWERPOINT</th>
+        <th scope="col">DOCX</th>
+        <th scope="col">XLSX</th>
+        <th scope="col">PPTX</th>
         <th scope="col">YOUTUBE</th>
         <th scope="col">VIMEO</th>
         <th scope="col">GOOGLE MAPS</th>
