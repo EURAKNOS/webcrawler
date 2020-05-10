@@ -18,6 +18,7 @@ define('FOLDER_DOCX', 'docx');
 define('FOLDER_PPTX', 'pptx');
 define('FOLDER_XLSX', 'xlsx');
 define('FOLDER_EPUB', 'epub');
+define('FOLDER_SWF', 'swf');
 
 
 set_time_limit(10000);

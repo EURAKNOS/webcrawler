@@ -195,6 +195,7 @@ class AjaxProcess {
         <th scope="col">PDF</th>
         <th scope="col">JPG</th>
         <th scope="col">PNG</th>
+        <th scope="col">SWF</th>
         <th scope="col">DOCX</th>
         <th scope="col">XLSX</th>
         <th scope="col">PPTX</th>
@@ -219,6 +220,7 @@ class AjaxProcess {
                 <td scope="row">' . $value['pdf'] . '</td>
                 <td scope="row">' . $value['jpg'] . '</td>
                 <td scope="row">' . $value['png'] . '</td>
+                <td scope="row">' . $value['swf'] . '</td>
                 <td scope="row">' . $value['docx'] . '</td>
                 <td scope="row">' . $value['xlsx'] . '</td>
                 <td scope="row">' . $value['pptx'] . '</td>
@@ -237,6 +239,7 @@ class AjaxProcess {
                 <td scope="row">' . $this->calculated[$key]['pdf'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['jpg'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['png'] . '</td>
+                <td scope="row">' . $this->calculated[$key]['swf'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['docx'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['xlsx'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['pptx'] . '</td>

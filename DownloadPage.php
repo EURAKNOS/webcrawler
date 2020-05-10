@@ -1,10 +1,10 @@
 <?php
-// import the Joserick PNGMetadata
 require_once 'vendor/pdfinfo.php';
 require_once 'vendor/PNGMetadata/src/PNGMetadata.php';
 require_once 'vendor/docx_metadata.php';
 require_once 'vendor/vimeo/src/Vimeo/Vimeo.php';
 require_once 'vendor/php-epub-meta/epub.php';
+require_once 'vendor/swfheader/swfheader.class.php';
 
 use PNGMetadata\PNGMetadata;
 /**
@@ -65,6 +65,8 @@ class DownloadPage {
                     return $this->processXlsx();
                 } elseif ($info["extension"] == "epub") {
                     return $this->processEpub();
+                } elseif ($info["extension"] == "swf") {
+                    return $this->processSwf();
                 } else {
                     return $this->DownloadPage();
                 }
@@ -445,6 +447,44 @@ class DownloadPage {
         $saveData['id'] = $dl->id;
         $saveData['local_location'] = $dl->localfile;
         $saveData['file_type'] = 'epub';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
+    }
+    
+    private function processSwf()
+    {        
+        $this->log->m_log('Start download swf');
+        $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_SWF;
+        $dl->downloadProcessing();
+        
+        $swf = new swfheader();
+        $swf->swfheader();
+        $swf->loadswf($dl->localfile);
+
+        $result['fname'] = $swf->fname ;				// SWF file analyzed
+        $result['magic'] = $swf->magic ;				// Magic in a SWF file (FWS or CWS)
+        $result['compressed'] = $swf->compressed ;		// Flag to indicate a compressed file (CWS)
+        $result['version'] = $swf->version ;			// Flash version
+        $result['size'] = $swf->size ;					// Uncompressed file size (in bytes)
+        $result['width'] = $swf->width ;				// Flash movie native width
+        $result['height'] = $swf->height ;				// Flash movie native height
+        $result['valid'] = $swf->valid ;				// Valid SWF file
+        $result['fps'] = $swf->fps ;					// Flash movie native frame-rate
+        $result['frames'] = $swf->frames ;
+        
+        $this->log->m_log('SWF metadata Ok');
+        $saveData['meta_data'] = '';
+        if (isset($result) && !empty($result)) {
+            $saveData['meta_data'] = serialize($result);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'swf';
         
         // File data Save Database
         $dl->saveData = $saveData;

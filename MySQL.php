@@ -309,6 +309,12 @@ class DbMysql {
             $this->log->m_log('countFileElement pages MySql function error');
         }
         $this->result['epub'] = $statementSelect->fetch(PDO::FETCH_OBJ)->epub;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS swf FROM " . FILES_TABLE . " WHERE url_id = :id AND file_type = 'swf' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute($data)){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result['swf'] = $statementSelect->fetch(PDO::FETCH_OBJ)->swf;
     }
     
     public function percentage($id)
@@ -379,6 +385,12 @@ class DbMysql {
             $this->log->m_log('countFileElement pages MySql function error');
         }
         $this->result2['epub'] = $statementSelect->fetch(PDO::FETCH_OBJ)->epub;
+        
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS swf FROM " . FILES_TABLE . " WHERE url_id = :id AND meta_data != '' AND file_type = 'swf' AND downloaded_time IS NOT NULL");
+        if(!$statementSelect->execute($data)){
+            $this->log->m_log('countFileElement pages MySql function error');
+        }
+        $this->result2['swf'] = $statementSelect->fetch(PDO::FETCH_OBJ)->swf;
     }
     
     /**
