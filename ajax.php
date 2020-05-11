@@ -16,8 +16,6 @@ class AjaxProcess {
     public function __construct()
     {
         $this->MySql = new DbMysql();
-        
-        $this->fileTypes = array('page','jpg','png','pdf','docx','xlsx','pptx','epub','swf','youtube_video','vimeo_video','google_map');
     }
     
     public function process()
@@ -207,7 +205,6 @@ class AjaxProcess {
         <th scope="col">GOOGLE MAPS</th>
         </tr>
         </thead><tbody>';
-        //print_r($this->downlodedResult);
         if (isset($this->downlodedResult) && !empty($this->downlodedResult)) {
             foreach ($this->downlodedResult as $key => $value) {
                 $this->htmlResult .= '<tr>
@@ -258,19 +255,15 @@ class AjaxProcess {
     
     private function calculate($id)
     {
-        foreach ($this->fileTypes as $item) {
-            if (array_key_exists($item, $this->downlodedResult[$id]) === false) {
-                $this->downlodedResult[$id][$item] = 0;
-                $this->percentage[$id][$item] = 0;
-            }
-        }
         
         foreach ($this->downlodedResult[$id] as $key => $value) {
+            // test
             if ($this->percentage[$id][$key] > 0 && $value > 0) {
                 $this->calculated[$id][$key] = round($this->percentage[$id][$key] / $value * 100) . '%';
             } else {
                 $this->calculated[$id][$key] = 0;
-            }    
+            }
+            
         }
     }
     
