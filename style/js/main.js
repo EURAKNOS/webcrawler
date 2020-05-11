@@ -110,7 +110,7 @@ var classPage = function() {
 			}
 		}).then(function() { // on completion, restart
 
-			setTimeout(self.processStatusCheck, 1000); // function refers to
+			setTimeout(self.processStatusCheck, 10000); // function refers to
 														// itself
 
 		});
