@@ -5,6 +5,7 @@ require_once 'vendor/docx_metadata.php';
 require_once 'vendor/vimeo/src/Vimeo/Vimeo.php';
 require_once 'vendor/php-epub-meta/epub.php';
 require_once 'vendor/swfheader/swfheader.class.php';
+require_once 'vendor/pdfparser-master/vendor/autoload.php';
 
 use PNGMetadata\PNGMetadata;
 /**
@@ -129,7 +130,7 @@ class DownloadPage {
     /**
      * Download PDF file and get info
      */
-    public function processPdf()
+    /*public function processPdf()
     {
         $this->log->m_log('Start download pdf');
         $dl = new DownloadFileExtended();
@@ -151,6 +152,37 @@ class DownloadPage {
         // File data Save Database
         $dl->saveData = $saveData;
         return $dl->saveEnd();
+    }*/
+    
+    
+    public function processPdf()
+    {
+        $this->log->m_log('Start download pdf');
+        $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_PDF;
+        $dl->downloadProcessing();
+        // Parse pdf file and build necessary objects.
+        $parser = new \Smalot\PdfParser\Parser();
+        $pdf    = $parser->parseFile($dl->localfile);
+        
+        // Retrieve all details from the pdf file.
+        $details  = $pdf->getDetails();
+       
+        $result = $details;
+        $saveData['meta_data'] = '';
+        if (isset($result) && !empty($result)) {
+            $saveData['meta_data'] = serialize($result);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'pdf';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
+        
     }
     
     /**

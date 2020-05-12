@@ -264,8 +264,8 @@ class AjaxProcess {
                 $this->percentage[$id][$item] = 0;
             }
         }
-        
         foreach ($this->downlodedResult[$id] as $key => $value) {
+            
             if ($this->percentage[$id][$key] > 0 && $value > 0) {
                 $this->calculated[$id][$key] = round($this->percentage[$id][$key] / $value * 100) . '%';
             } else {
