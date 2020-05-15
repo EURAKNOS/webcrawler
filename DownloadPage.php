@@ -6,13 +6,10 @@ require_once 'vendor/vimeo/src/Vimeo/Vimeo.php';
 require_once 'vendor/php-epub-meta/epub.php';
 require_once 'vendor/swfheader/swfheader.class.php';
 require_once 'vendor/pdfparser-master/vendor/autoload.php';
-require_once 'vendor/autoload.php';
+require_once 'vendor/getID3-master/getid3/getid3.php';
 
-use Nesk\Puphpeteer\Puppeteer;
+
 use Nesk\Rialto\Data\JsFunction;
-use Nesk\Puphpeteer\Resources\ElementHandle;
-use Sunra\PhpSimple\HtmlDomParser;
-
 use PNGMetadata\PNGMetadata;
 /**
  * Download Actual URL
@@ -30,6 +27,8 @@ class DownloadPage {
     public $log;
     
     public $urlId;
+    
+    public $browser;
     
     public function __construct()
     {
@@ -85,6 +84,10 @@ class DownloadPage {
                     return $this->processEpub();
                 } elseif ($info["extension"] == "swf") {
                     return $this->processSwf();
+                } elseif ($info["extension"] == "mp4") {
+                    return $this->processMp4();
+                } elseif ($info["extension"] == "zip") {
+                    return $this->processZip();
                 } elseif (isset($file_headers['3']) && $file_headers['3'] == 'Content-Type: application/octet-stream') {
                 } else {
                     return $this->dinamicDownloadPage();
@@ -150,21 +153,14 @@ class DownloadPage {
     public function dinamicDownloadPage()
     {
         $this->log->m_log('Start download (DinamicDownloadPage) content');
-        $puppeteer = new Puppeteer;
-        $browser = $puppeteer->launch([
-            'args' => [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-            ]
-        ]);
+        
         //$browser = $puppeteer->launch();
         
-        $page = $browser->newPage();
+        $page = $this->browser->newPage();
         $page->goto($this->target, [ 'waitUntil' => 'networkidle0' ]);
         $page->goto($this->target);
         //$page->waitFor(10000);
         $data = $page->evaluate(JsFunction::createWithBody('return document.documentElement.outerHTML'));
-        $browser->close();
         $this->log->m_log('End download (DownloadPage) content');
         if ($data != '') {
             $headers['status_info'][1] = 200;
@@ -564,6 +560,77 @@ class DownloadPage {
         $saveData['id'] = $dl->id;
         $saveData['local_location'] = $dl->localfile;
         $saveData['file_type'] = 'swf';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
+    }
+    
+    private function processMp4()
+    {
+        $this->log->m_log('Start download mp4');
+        $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_MP4;
+        $dl->downloadProcessing();
+        
+        $getID3 = new getID3;
+        $result = $getID3->analyze($dl->localfile);
+        
+        $this->log->m_log('MP4 metadata Ok');
+        $saveData['meta_data'] = '';
+        if (isset($result) && !empty($result)) {
+            $saveData['meta_data'] = serialize($result);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'mp4';
+       
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
+    }
+    
+    private function processZip()
+    {
+        $this->log->m_log('Start download zip');
+        $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_ZIP;
+        $dl->downloadProcessing();
+        
+        $za = new ZipArchive();
+        
+        $za->open($dl->localfile);
+        $result['zip'] = $za;
+        
+        
+        
+        $zip = zip_open($dl->localfile);
+        $cnt = 1;
+        if ($zip) {
+            while ($zip_entry = zip_read($zip)) {
+                $result['files'][$cnt]["Name"] = zip_entry_name($zip_entry);
+                $result['files'][$cnt]["Actual Filesize"] = zip_entry_filesize($zip_entry);
+                $result['files'][$cnt]["Compressed Size"] = zip_entry_compressedsize($zip_entry);
+                $result['files'][$cnt]["Compression Method"] = zip_entry_compressionmethod($zip_entry);
+                $cnt++;
+            }
+            zip_close($zip);
+        }
+        
+        $this->log->m_log('ZIP metadata Ok');
+        $saveData['meta_data'] = '';
+        if (isset($result) && !empty($result)) {
+            $saveData['meta_data'] = serialize($result);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'zip';
+        
         
         // File data Save Database
         $dl->saveData = $saveData;

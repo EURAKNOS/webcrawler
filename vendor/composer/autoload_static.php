@@ -7,6 +7,13 @@ namespace Composer\Autoload;
 class ComposerStaticInit1d8a0a8efd145837b0c7ebd9d4db8126
 {
     public static $prefixLengthsPsr4 = array (
+        'w' => 
+        array (
+            'wapmorgan\\Mp3Info\\' => 18,
+            'wapmorgan\\MediaFile\\' => 20,
+            'wapmorgan\\FileTypeDetector\\' => 27,
+            'wapmorgan\\BinaryStream\\' => 23,
+        ),
         'S' => 
         array (
             'Symfony\\Component\\Process\\' => 26,
@@ -24,6 +31,22 @@ class ComposerStaticInit1d8a0a8efd145837b0c7ebd9d4db8126
     );
 
     public static $prefixDirsPsr4 = array (
+        'wapmorgan\\Mp3Info\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wapmorgan/mp3info/src',
+        ),
+        'wapmorgan\\MediaFile\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wapmorgan/media-file/src',
+        ),
+        'wapmorgan\\FileTypeDetector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wapmorgan/file-type-detector/src',
+        ),
+        'wapmorgan\\BinaryStream\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wapmorgan/binary-stream/src',
+        ),
         'Symfony\\Component\\Process\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/process',
@@ -68,6 +91,7 @@ class ComposerStaticInit1d8a0a8efd145837b0c7ebd9d4db8126
     );
 
     public static $classMap = array (
+        'Flac' => __DIR__ . '/..' . '/bluemoehre/flac-php/flac.class.php',
         'vierbergenlars\\SemVer\\Internal\\Comparator' => __DIR__ . '/..' . '/vierbergenlars/php-semver/src/vierbergenlars/SemVer/internal.php',
         'vierbergenlars\\SemVer\\Internal\\Exports' => __DIR__ . '/..' . '/vierbergenlars/php-semver/src/vierbergenlars/SemVer/internal.php',
         'vierbergenlars\\SemVer\\Internal\\G' => __DIR__ . '/..' . '/vierbergenlars/php-semver/src/vierbergenlars/SemVer/internal.php',

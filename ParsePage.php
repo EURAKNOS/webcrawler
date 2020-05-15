@@ -11,6 +11,8 @@ class ParsePage
     public $path;
     
     public $urlId;
+    
+    public $browser;
 
     public function __construct()
     {}
@@ -55,6 +57,7 @@ class ParsePage
         $dwl->target = $this->target;
         $dwl->referer = $this->referer;
         $dwl->urlId = $this->urlId;
+        $dwl->browser = $this->browser;
         $contents = $dwl->downloadData();
         //echo "Done\n";
         // Check Status

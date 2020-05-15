@@ -6,6 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'wapmorgan\\Mp3Info\\' => array($vendorDir . '/wapmorgan/mp3info/src'),
+    'wapmorgan\\MediaFile\\' => array($vendorDir . '/wapmorgan/media-file/src'),
+    'wapmorgan\\FileTypeDetector\\' => array($vendorDir . '/wapmorgan/file-type-detector/src'),
+    'wapmorgan\\BinaryStream\\' => array($vendorDir . '/wapmorgan/binary-stream/src'),
     'Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'Socket\\Raw\\' => array($vendorDir . '/clue/socket-raw/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
