@@ -73,10 +73,15 @@ class AjaxProcess {
         if ($seed_components === false) {
             die('Unable to Seed Parse URL');
         }
+
         if (!isset($seed_components['scheme'])) return false;
         $seed_scheme = $seed_components['scheme'];
         $seed_host = $seed_components['host'];
-        $url_start = $seed_scheme . '://' . $seed_host;
+        if (isset($_POST['starturl']) && $_POST['starturl'] != '') {
+            $url_start = $_POST['starturl'];
+        } else {
+            $url_start = $seed_scheme . '://' . $seed_host;
+        }
         
         // Download Seed URL
         $parsePage = new ParsePage();
@@ -127,6 +132,18 @@ class AjaxProcess {
                             } elseif (strpos($row['path'], 'www.google.com/maps') !== false || strpos($row['path'], 'maps.google.com') !== false) {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $url_start . $referer;
+                                $parsePage->path = $path;
+                            } elseif (strpos($row['path'], 'https://smart-akis.com/SFCPPortal') !== false ) {
+                                $parsePage->target = $path;
+                                $parsePage->referer = $referer;
+                                $parsePage->path = $path;
+                            } elseif (substr($row['path'], 0, 3) === 'app') {
+                                $parsePage->target = 'https://smart-akis.com/SFCPPortal/' . $row['path'];
+                                $parsePage->referer = 'https://smart-akis.com/SFCPPortal/#/app-h' . $referer;
+                                $parsePage->path = $path;
+                            } elseif (strpos($row['path'], 'https://www.smart-akis.com/wp-content/uploads/') !== false ) {
+                                $parsePage->target = $path;
+                                $parsePage->referer = $referer;
                                 $parsePage->path = $path;
                             }/*elseif (strpos($row['path'], 'https://www.google.com'))
                             $parsePage->target = $path;
@@ -265,12 +282,11 @@ class AjaxProcess {
             }
         }
         foreach ($this->downlodedResult[$id] as $key => $value) {
-            
-            if ($this->percentage[$id][$key] > 0 && $value > 0) {
+            if (isset($this->percentage[$id][$key]) && $this->percentage[$id][$key] > 0 && $value > 0) {
                 $this->calculated[$id][$key] = round($this->percentage[$id][$key] / $value * 100) . '%';
             } else {
                 $this->calculated[$id][$key] = 0;
-            }    
+            }
         }
     }
     
@@ -298,4 +314,3 @@ if (isset($_POST['processFunction']) && $_POST['processFunction'] == 'startcrawl
 } elseif (isset($_POST['processFunction']) && $_POST['processFunction'] == 'checkUrl') {
     $ajaxProcess->checkUrl();
 }
-

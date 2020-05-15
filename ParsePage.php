@@ -62,13 +62,13 @@ class ParsePage
             $MySql->path = $this->path;
             $MySql->endDownload();
             return true;
-        } elseif ($contents['headers']['status_info'][1] != 200) {
+        } elseif (!isset($contents['headers']['status_info'][1]) || $contents['headers']['status_info'][1] != 200) {
             // If not ok, mark as downloaded but skip
             $MySql->path = $this->path;
             $MySql->statusSave();
-            return false;
-        }
-
+            return true;
+        } 
+       //print_r($contents);
         $MySql->target = $this->target;
         // Parse Contents
         $doc = new DOMDocument();
@@ -138,10 +138,12 @@ class ParsePage
                 $classname = $item['name'];
                 $nodes = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
                 if (count($nodes) > 0){
-                    $this->result[$item['name']] = array(
-                        'data' => $nodes->item(0)->nodeValue,
-                        'title' => $item['title']
-                    );
+                    for ($i = 0; $i < $nodes->length; $i++ ) {
+                        $this->result[$item['name']][$i] = array(
+                            'data' => $nodes->item($i)->nodeValue,
+                            'title' => $item['title']
+                        );
+                    }
                 }
             }
         }
@@ -156,7 +158,9 @@ class ParsePage
             }
             $MySql->savePage();
         }
+        
         $log->m_log('Page parser end: ' . $this->target);
+        $MySql->path = $this->path;
         $MySql->endDownload();
         // Get Links
         $links = Array();
@@ -173,26 +177,32 @@ class ParsePage
                 if ((! array_key_exists('host', $link_parsed) || $link_parsed['host'] == "" || $link_parsed['host'] == $url_host) && array_key_exists('path', $link_parsed) && $link_parsed['path'] != "" && array_search($link_parsed['path'], $links) === false) {
                     $links[] = $this->urlClear($link_parsed['path']);
                 } elseif ($link_absolute != $this->referer) {
+                    //echo $link_absolute . '  -  ';
                     $links[] = $this->urlClear($link_absolute);
                 }
             }
         }
-        
+       
         $link_tags = $doc->getElementsByTagName('img');
         foreach ($link_tags as $tag) {
             if (($href_value = $tag->getAttribute('src'))) {
                 if (strpos($href_value, 'data:image') !== false) {
                     continue;
                 }
-              
-                $link_absolute = $this->relativeToAbsolute($href_value, $this->target);
-
-                $link_parsed = parse_url($link_absolute);
-                if ($link_parsed === null || $link_parsed === false) {
-                    die('Unable to Parse Link URL');
-                }
-                if ((! array_key_exists('host', $link_parsed) || $link_parsed['host'] == "" || $link_parsed['host'] == $url_host) && array_key_exists('path', $link_parsed) && $link_parsed['path'] != "" && array_search($link_parsed['path'], $links) === false) {
-                    $links[] = $this->urlClear($link_parsed['path']);
+                
+                if (substr($href_value, 0, 3) === 'app') { //  angular JS (smarty-aki app)
+                    $links[] = $this->urlClear($href_value);
+                } else {
+                
+                    $link_absolute = $this->relativeToAbsolute($href_value, $this->target);
+    
+                    $link_parsed = parse_url($link_absolute);
+                    if ($link_parsed === null || $link_parsed === false) {
+                        die('Unable to Parse Link URL');
+                    }
+                    if ((! array_key_exists('host', $link_parsed) || $link_parsed['host'] == "" || $link_parsed['host'] == $url_host) && array_key_exists('path', $link_parsed) && $link_parsed['path'] != "" && array_search($link_parsed['path'], $links) === false) {
+                        $links[] = $this->urlClear($link_parsed['path']);
+                    }
                 }
             }
         }

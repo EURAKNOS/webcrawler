@@ -1,8 +1,6 @@
 {
-	"name" : "Euraknos-WebCrawler",
-	"authors" : [{
-			"name" : "Zoltan Szabo",
-			"email" : "szabo.zoltan@naik.gov.hu"
-		}
-	]
+    "require": {
+        "nesk/puphpeteer": "^1.6",
+        "sunra/php-simple-html-dom-parser": "^1.5"
+    }
 }

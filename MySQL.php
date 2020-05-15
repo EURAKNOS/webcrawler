@@ -141,7 +141,7 @@ class DbMysql {
             $this->log->m_log('endDownload MySql function error');
             throw new Exception("An operation failed endDownload function");
         }
-        $this->log->m_log('endDownload MySql function success');
+        $this->log->m_log('endDownload MySql function success: "UPDATE pages SET download_time = ' . $data['download_time'] . ' WHERE path = '.$data['path'].'"');
         
     }
     

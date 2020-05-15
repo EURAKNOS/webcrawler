@@ -6,6 +6,12 @@ require_once 'vendor/vimeo/src/Vimeo/Vimeo.php';
 require_once 'vendor/php-epub-meta/epub.php';
 require_once 'vendor/swfheader/swfheader.class.php';
 require_once 'vendor/pdfparser-master/vendor/autoload.php';
+require_once 'vendor/autoload.php';
+
+use Nesk\Puphpeteer\Puppeteer;
+use Nesk\Rialto\Data\JsFunction;
+use Nesk\Puphpeteer\Resources\ElementHandle;
+use Sunra\PhpSimple\HtmlDomParser;
 
 use PNGMetadata\PNGMetadata;
 /**
@@ -36,11 +42,22 @@ class DownloadPage {
      */
     public function downloadData()
     {
+        $file_headers = @get_headers($this->target);
+        if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
+            return;
+        }
+        
+        
+        
         $pos = strpos($this->target, 'https://www.youtube.com');
         $posYoutube2 = strpos($this->target, 'youtu.be');
         $posVimeo = strpos($this->target, '.vimeo.com');
         $posMaps = strpos($this->target, 'www.google.com/maps');
         $posMaps2 = strpos($this->target, 'maps.google.com');
+        
+        
+        $file_headers = @get_headers($this->target);
+        
         
         if ($pos !== false || $posYoutube2 !== false) {
             $this->processYoutube();
@@ -68,11 +85,14 @@ class DownloadPage {
                     return $this->processEpub();
                 } elseif ($info["extension"] == "swf") {
                     return $this->processSwf();
+                } elseif (isset($file_headers['3']) && $file_headers['3'] == 'Content-Type: application/octet-stream') {
                 } else {
-                    return $this->DownloadPage();
+                    return $this->dinamicDownloadPage();
                 }
+            } elseif ($file_headers['3'] == 'Content-Type: application/octet-stream') { 
+                
             } else {
-                return $this->DownloadPage();
+                return $this->dinamicDownloadPage();
             }
         }
     }
@@ -83,7 +103,7 @@ class DownloadPage {
      */
     public function DownloadPage()
     {
-        $this->log->m_log('Start download (downloadFile) content');
+        $this->log->m_log('Start download (DownloadPage) content');
         $handle = curl_init();
         //Define Settings Curl
         
@@ -123,8 +143,35 @@ class DownloadPage {
         }
         //Form Return Structure
         $ret = Array("headers" => $header_array, "body" => $body );
-        $this->log->m_log('End download (downloadFile) content');
+        $this->log->m_log('End download (DownloadPage) content');
         return $ret;
+    }	
+    
+    public function dinamicDownloadPage()
+    {
+        $this->log->m_log('Start download (DinamicDownloadPage) content');
+        $puppeteer = new Puppeteer;
+        $browser = $puppeteer->launch([
+            'args' => [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+            ]
+        ]);
+        //$browser = $puppeteer->launch();
+        
+        $page = $browser->newPage();
+        $page->goto($this->target, [ 'waitUntil' => 'networkidle0' ]);
+        $page->goto($this->target);
+        //$page->waitFor(10000);
+        $data = $page->evaluate(JsFunction::createWithBody('return document.documentElement.outerHTML'));
+        $browser->close();
+        $this->log->m_log('End download (DownloadPage) content');
+        if ($data != '') {
+            $headers['status_info'][1] = 200;
+        } else {
+            $headers['status_info'][1] = 0;
+        }
+        return array("headers" => $headers, "body" => $data);
     }
     
     /**
