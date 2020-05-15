@@ -151,13 +151,12 @@ class DownloadPage {
     {
         $this->log->m_log('Start download (DinamicDownloadPage) content');
         $puppeteer = new Puppeteer;
-        /*$browser = $puppeteer->launch([
+        $browser = $puppeteer->launch([
             'args' => [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
             ]
-        ]);*/
-        $browser = $puppeteer->launch();
+        ]);
         //$browser = $puppeteer->launch();
         
         $page = $browser->newPage();
