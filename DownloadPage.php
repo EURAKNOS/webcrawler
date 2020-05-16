@@ -158,9 +158,10 @@ class DownloadPage {
         
         $page = $this->browser->newPage();
         $page->goto($this->target, [ 'waitUntil' => 'networkidle0' ]);
-        $page->goto($this->target);
+        //  $page->goto($this->target);
         //$page->waitFor(10000);
         $data = $page->evaluate(JsFunction::createWithBody('return document.documentElement.outerHTML'));
+        $page->close();
         $this->log->m_log('End download (DownloadPage) content');
         if ($data != '') {
             $headers['status_info'][1] = 200;
