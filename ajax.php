@@ -82,12 +82,12 @@ class AjaxProcess {
         if (!isset($seed_components['scheme'])) return false;
         $seed_scheme = $seed_components['scheme'];
         $seed_host = $seed_components['host'];
-        if (isset($_POST['starturl']) && $_POST['starturl'] != '') {
+        /*if (isset($_POST['starturl']) && $_POST['starturl'] != '') {
             $url_start = $_POST['starturl'];
         } else {
             $url_start = $seed_scheme . '://' . $seed_host;
-        }
-        
+        }*/
+        $url_start = $_POST['url'];
         // Download Seed URL
         $parsePage = new ParsePage();
         $parsePage->referer = "/";
@@ -166,7 +166,7 @@ class AjaxProcess {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $referer;
                                 $parsePage->path = $path;
-                            }/*elseif (strpos($row['path'], 'https://www.google.com'))
+                            } /*elseif (strpos($row['path'], 'https://www.google.com'))
                             $parsePage->target = $path;
                             $parsePage->referer = $url_start . $referer;
                             $parsePage->path = $path;

@@ -261,6 +261,10 @@ class ParsePage
             return $relative;
         }
         
+        if (substr($relative, 0, 4) === 'www.') {
+            return 'http://' . $relative;
+        }
+        
         // If only a query or a fragment, return base (without any fragment or query) + relative
         if (! array_key_exists('scheme', $relative_parsed) && ! array_key_exists('host', $relative_parsed) && ! array_key_exists('path', $relative_parsed)) {
             return $base_parsed['scheme'] . '://' . $base_parsed['host'] . $base_parsed['path'] . $relative;

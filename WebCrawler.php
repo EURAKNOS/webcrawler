@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.4.2';
+    public $version = '0.4.3';
 
     public $html;
 
@@ -79,13 +79,6 @@ class WebCrawler
             <div class="col-lg-12">
                 <div class="input-group input-group-lg mb-4">
                     <input type="text" class="form-control" id="w-name" name="wname" placeholder="The name of the website" aria-label="URL" aria-describedby="button-addon2" style="color: #b5b5b5;" required>
-                </div>
-            </div>
-            <div class="col-lg-12">
-                <h3 class="other-element">Assistant url</h4>
-                <p class="text-info">Custom assistant start URL. It is needed in case you do not need to download a generic domain.</p>
-                <div class="input-group input-group-lg mb-4">
-                    <input type="text" class="form-control" id="starturl" name="starturl" placeholder="https://smart-akis.com/SFCPPortal/#/app-h" aria-label="URL" aria-describedby="button-addon2" style="color: #b5b5b5;">
                 </div>
             </div>
         </div>
