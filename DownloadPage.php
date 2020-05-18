@@ -44,9 +44,11 @@ class DownloadPage {
         $file_headers = @get_headers($this->target);
         if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
             return;
+        } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.1 301 Moved Permanently') {
+            $this->target = ltrim($file_headers[12], 'Location: ');
         }
         
-        
+        $file_headers = @get_headers($this->target);
         
         $pos = strpos($this->target, 'https://www.youtube.com');
         $posYoutube2 = strpos($this->target, 'youtu.be');
@@ -54,8 +56,6 @@ class DownloadPage {
         $posMaps = strpos($this->target, 'www.google.com/maps');
         $posMaps2 = strpos($this->target, 'maps.google.com');
         
-        
-        $file_headers = @get_headers($this->target);
         
         
         if ($pos !== false || $posYoutube2 !== false) {
