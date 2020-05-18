@@ -20,6 +20,7 @@ define('FOLDER_XLSX', 'xlsx');
 define('FOLDER_EPUB', 'epub');
 define('FOLDER_SWF', 'swf');
 define('FOLDER_ZIP', 'zip');
+define('FOLDER_SVG', 'jpg');
 
 
 set_time_limit(10000);

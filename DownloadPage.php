@@ -88,6 +88,8 @@ class DownloadPage {
                     return $this->processMp4();
                 } elseif ($info["extension"] == "zip") {
                     return $this->processZip();
+                } elseif ($info["extension"] == "svg") {
+                    return $this->processSvg();
                 } elseif (isset($file_headers['3']) && $file_headers['3'] == 'Content-Type: application/octet-stream') {
                 } else {
                     return $this->dinamicDownloadPage();
@@ -636,6 +638,30 @@ class DownloadPage {
         // File data Save Database
         $dl->saveData = $saveData;
         return $dl->saveEnd();
+    }
+    
+    /**
+     * Download and store jpg metadata and file
+     * @return array
+     */
+    public function processSvg()
+    {
+        $this->log->m_log('Start download svg');
+        $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_SVG;
+        $dl->downloadProcessing();
+        
+        $saveData['meta_data'] = '';
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'svg';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
+        
     }
     
 }
