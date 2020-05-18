@@ -101,7 +101,9 @@ class TCPDF_PARSER {
 	 */
 	public function __construct($data, $cfg=array()) {
 		if (empty($data)) {
-			$this->Error('Empty PDF data.');
+			//$this->Error('Empty PDF data.');
+			$this->pdfdata = '';
+			return;
 		}
 		// find the pdf header starting position
 		if (($trimpos = strpos($data, '%PDF-')) === FALSE) {

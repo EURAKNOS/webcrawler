@@ -87,7 +87,7 @@ class AjaxProcess {
         } else {
             $url_start = $seed_scheme . '://' . $seed_host;
         }*/
-        $url_start = $_POST['url'];
+        $url_start = rtrim($_POST['url'], "/");
         // Download Seed URL
         $parsePage = new ParsePage();
         $parsePage->referer = "/";
