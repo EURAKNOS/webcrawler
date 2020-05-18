@@ -76,6 +76,8 @@ class DownloadPage {
                     return $this->processPng();
                 } elseif ($info["extension"] == "pptx") {
                     return $this->processPptx();
+                } elseif ($info["extension"] == "ppt") {
+                    return $this->processPpt();
                 } elseif ($info["extension"] == "docx") {
                     return $this->processDocx();
                 } elseif ($info["extension"] == "xlsx") {
@@ -315,6 +317,31 @@ class DownloadPage {
         $saveData['id'] = $dl->id;
         $saveData['local_location'] = $dl->localfile;
         $saveData['file_type'] = 'pptx';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
+        
+    }
+    
+    /**
+     * Download and store pptx metadata and file
+     * @return array
+     */
+    public function processPpt()
+    {
+        $this->log->m_log('Start download ppt');
+        $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_PPT;
+        $dl->downloadProcessing();
+        
+        $this->log->m_log('PPT metadata Ok');
+        $saveData['meta_data'] = '';
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'ppt';
         
         // File data Save Database
         $dl->saveData = $saveData;
