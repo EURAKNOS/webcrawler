@@ -108,8 +108,10 @@ class AjaxProcess {
         
         //dinamic
         $puppeteer = new Puppeteer([
+            'idle_timeout' => 240,
+            'read_timeout' => 240,
             'args' => ['--disable-dev-shm-usage']
-        ]);;
+        ]);
         $browser = $puppeteer->launch([
             'args' => [
                 '--no-sandbox',
