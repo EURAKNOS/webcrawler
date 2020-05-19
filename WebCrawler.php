@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.4.4.5';
+    public $version = '0.4.4.6';
 
     public $html;
 
@@ -70,10 +70,13 @@ class WebCrawler
         <div class="row" style="/* border: 1px solid red; */">
             <div class="col-lg-12">
                 <div class="input-group input-group-lg mb-3">
-                    <input type="text" class="form-control" id="url" name="url" placeholder="https://www.aki.gov.hu" aria-label="URL" aria-describedby="button-addon2" style="color: #b5b5b5;" required>
+                    <input type="text" class="form-control" id="url" name="url" placeholder="Starting URL" aria-label="URL" aria-describedby="button-addon2" style="color: #b5b5b5;" required>
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary downloadbutton" type="submit" id="submit" >DOWNLOAD</button>
                     </div>
+                </div>
+                <div class="input-group input-group-lg mb-3">
+                    <input type="text" class="form-control" id="match_url" name="match_url" placeholder="Matching URL (Optional)" aria-label="URL" aria-describedby="button-addon2" style="color: #b5b5b5;" required>
                 </div>
             </div>
             <div class="col-lg-12">
