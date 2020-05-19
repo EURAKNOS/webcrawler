@@ -10,6 +10,7 @@ require_once 'vendor/getID3-master/getid3/getid3.php';
 
 
 use Nesk\Rialto\Data\JsFunction;
+use Nesk\Rialto\Exceptions\IdleTimeoutException;
 use PNGMetadata\PNGMetadata;
 /**
  * Download Actual URL
@@ -174,19 +175,19 @@ class DownloadPage {
         $this->log->m_log('End download (DownloadPage) content');
         return $ret;
     }	
-    
+        
     public function dinamicDownloadPage()
     {
         $this->log->m_log('Start download (DinamicDownloadPage) content');
         
-        //$browser = $puppeteer->launch();
-        
-        $page = $this->browser->newPage();
-        $page->goto($this->target, [ 'waitUntil' => 'networkidle0' ]);
-        //  $page->goto($this->target);
-        //$page->waitFor(10000);
-        $data = $page->evaluate(JsFunction::createWithBody('return document.documentElement.outerHTML'));
-        $page->close();
+        $cnt = 0;
+        $ddps = 0;
+        while ($cnt < 3 && $ddps < 2) {
+            $res = $this->dinamicDownloadPageProcess();
+            $ddps = $res['status'];
+            $cnt++;
+        }        
+        $data = $res['data'];
         $this->log->m_log('End download (DownloadPage) content');
         if ($data != '') {
             $headers['status_info'][1] = 200;
@@ -194,6 +195,27 @@ class DownloadPage {
             $headers['status_info'][1] = 0;
         }
         return array("headers" => $headers, "body" => $data);
+    }
+    
+    private function dinamicDownloadPageProcess(){
+        try {
+            //$browser = $puppeteer->launch();
+            $page = $this->browser->newPage();
+            $page->goto($this->target, [ 'waitUntil' => 'networkidle0' ]);
+            //  $page->goto($this->target);
+            //$page->waitFor(10000);
+            $data = $page->evaluate(JsFunction::createWithBody('return document.documentElement.outerHTML'));
+            $page->close();
+            return array('data' => $data, 'status' => 2);
+        } catch (IdleTimeoutException $e) {
+            $this->log->m_log('IdleTimeoutException:' . $this->target);
+            $page->close();
+            return array('data' => '', 'status' => 1);
+        } catch (Exception $e) {
+            $this->log->m_log('Unknown exception:' . $this->target);
+            $page->close();
+            return array('data' => '', 'status' => 2);
+        }
     }
     
     /**
