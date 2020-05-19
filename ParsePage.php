@@ -70,7 +70,12 @@ class ParsePage
             $MySql->path = $this->path;
             $MySql->statusSave();
             return true;
-        } 
+        } elseif (isset($contents['error_page']) && $contents['error_page'] == 1) {
+            $MySql->path = $this->path;
+            $MySql->statusSave();
+            $log->m_log('Targer URL is bad: ' . $this->target);
+            return true;
+        }
        //print_r($contents);
         $MySql->target = $this->target;
         // Parse Contents

@@ -41,11 +41,16 @@ class DownloadPage {
      */
     public function downloadData()
     {
-        $file_headers = @get_headers($this->target);
-        if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
-            return;
-        } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.1 301 Moved Permanently') {
-            $this->target = ltrim($file_headers[12], 'Location: ');
+        $cnt = 0;
+        $err_c = 1;
+        while ($cnt < 3 && $err_c == 1) {
+            $err_c = $this->urlCheck();
+            $cnt++;
+        }
+        
+        if ($err_c != 2) {
+            $contents['error_page'] = 1;
+            return $contents;
         }
         
         $file_headers = @get_headers($this->target);
@@ -101,6 +106,22 @@ class DownloadPage {
             } else {
                 return $this->dinamicDownloadPage();
             }
+        }
+    }
+    
+    /**
+     * Check 301 and 404 urls
+     */
+    private function urlCheck()
+    {
+        $file_headers = @get_headers($this->target);
+        if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
+            return 0;
+        } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.1 301 Moved Permanently') {
+            $this->target = ltrim($file_headers[12], 'Location: ');
+            return 1;
+        } else {
+            return 2;
         }
     }
     
@@ -212,17 +233,22 @@ class DownloadPage {
         $dl->folder = FOLDER_PDF;
         $dl->downloadProcessing();
         // Parse pdf file and build necessary objects.
-        $parser = new \Smalot\PdfParser\Parser();
-        $pdf    = $parser->parseFile($dl->localfile);
-        
-        // Retrieve all details from the pdf file.
-        $details  = $pdf->getDetails();
-       
-        $result = $details;
         $saveData['meta_data'] = '';
+        $parser = new \Smalot\PdfParser\Parser();
+        try {
+            $pdf    = $parser->parseFile($dl->localfile);
+            
+            // Retrieve all details from the pdf file.
+            $details  = $pdf->getDetails();
+            
+            $result = $details;
+        } catch (Exception $e) {
+            $this->log->m_log($e);
+        }
         if (isset($result) && !empty($result)) {
             $saveData['meta_data'] = serialize($result);
         }
+        
         $saveData['id'] = $dl->id;
         $saveData['local_location'] = $dl->localfile;
         $saveData['file_type'] = 'pdf';
