@@ -107,7 +107,8 @@ class DbMysql {
         foreach($this->links as $link) {
             $data = array();
             $data['path'] = $link;
-            $statementSelect = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE path = :path ");
+            $data['url_id'] = $this->urlId;
+            $statementSelect = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE path = :path AND url_id = :url_id");
             if(!$statementSelect->execute($data)){
                 $this->log->m_log('saveLinks first MySql function error');
             }
