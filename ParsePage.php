@@ -242,7 +242,7 @@ class ParsePage
     }
     
     public function urlClear($str) {
-         return str_replace(' ', '%20', htmlspecialchars($str, ENT_NOQUOTES, "UTF-8"));
+         return rtrim(str_replace(' ', '%20', htmlspecialchars($str, ENT_NOQUOTES, "UTF-8")), '#');
     }
     
 

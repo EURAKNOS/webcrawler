@@ -73,7 +73,7 @@ class AjaxProcess {
         $log->m_log('Start WebCrawler');
         
         // Define Seed Settings
-        $seed_url = $_POST['url'];
+        $seed_url = trim($_POST['url']);
         $seed_components = parse_url($seed_url);
         if ($seed_components === false) {
             die('Unable to Seed Parse URL');
@@ -83,7 +83,7 @@ class AjaxProcess {
         $seed_scheme = $seed_components['scheme'];
         $seed_host = $seed_components['host'];
         if (isset($_POST['match_url']) && $_POST['match_url'] != '') {
-            $url_start = $_POST['match_url'];
+            $url_start = trim($_POST['match_url']);
         } else {
             $url_start = $seed_scheme . '://' . $seed_host;
         }
@@ -169,11 +169,11 @@ class AjaxProcess {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $referer;
                                 $parsePage->path = $path;
-                            } elseif (strpos($row['path'], 'https://orgprints.org/') !== false ) {
+                            } /*elseif (strpos($row['path'], 'orgprints.org/') !== false ) {
                                 $parsePage->target = $path;
-                                $parsePage->referer = $referer;
+                                $parsePage->referer = $url_start . $referer;;
                                 $parsePage->path = $path;
-                            } 
+                            } */
                             /*elseif (strpos($row['path'], 'https://www.google.com'))
                             $parsePage->target = $path;
                             $parsePage->referer = $url_start . $referer;
@@ -206,7 +206,6 @@ class AjaxProcess {
             }
             $_SESSION['processing'] = 0;
         }
-        $browser->close();
     }
     
     public function status()

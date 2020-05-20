@@ -204,15 +204,22 @@ class DownloadPage {
             $page->goto($this->target, [ 'waitUntil' => 'networkidle0' ]);
             //  $page->goto($this->target);
             //$page->waitFor(10000);
+            //$page->waitForNavigation();
             $data = $page->evaluate(JsFunction::createWithBody('return document.documentElement.outerHTML'));
             $page->close();
             return array('data' => $data, 'status' => 2);
         } catch (IdleTimeoutException $e) {
             $this->log->m_log('IdleTimeoutException:' . $this->target);
+            $this->log->m_log($e);
             return array('data' => '', 'status' => 1);
+        } catch (Throwable $t) {
+            $this->log->m_log('Unknown exception:' . $this->target);
+            $this->log->m_log($t);
+            return array('data' => '', 'status' => 2);
         } catch (Exception $e) {
             $this->log->m_log('Unknown exception:' . $this->target);
-            return array('data' => '', 'status' => 2);
+            $this->log->m_log($e);
+            return array('data' => '', 'status' => 2); // Executed only in PHP 5.x, will not be reached in PHP 7
         }
     }
     
