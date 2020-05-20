@@ -169,7 +169,12 @@ class AjaxProcess {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $referer;
                                 $parsePage->path = $path;
-                            } /*elseif (strpos($row['path'], 'https://www.google.com'))
+                            } elseif (strpos($row['path'], 'https://orgprints.org/') !== false ) {
+                                $parsePage->target = $path;
+                                $parsePage->referer = $referer;
+                                $parsePage->path = $path;
+                            } 
+                            /*elseif (strpos($row['path'], 'https://www.google.com'))
                             $parsePage->target = $path;
                             $parsePage->referer = $url_start . $referer;
                             $parsePage->path = $path;
