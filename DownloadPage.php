@@ -72,6 +72,7 @@ class DownloadPage {
             $this->processMaps();
         }else {
             $info = pathinfo($this->target);
+            $info["extension"] = strtolower($info["extension"]);
             if (isset($info["extension"])) {
 
                 if ($info["extension"] == "pdf") {
