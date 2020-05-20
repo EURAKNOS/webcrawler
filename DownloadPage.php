@@ -209,11 +209,9 @@ class DownloadPage {
             return array('data' => $data, 'status' => 2);
         } catch (IdleTimeoutException $e) {
             $this->log->m_log('IdleTimeoutException:' . $this->target);
-            $page->close();
             return array('data' => '', 'status' => 1);
         } catch (Exception $e) {
             $this->log->m_log('Unknown exception:' . $this->target);
-            $page->close();
             return array('data' => '', 'status' => 2);
         }
     }
