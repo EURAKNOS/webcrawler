@@ -197,7 +197,6 @@ class AjaxProcess {
             }
             if ($counter == 0) {
                 $_SESSION['processing'] = 0;
-                $browser->close();
                 break;
             }
             $_SESSION['processing'] = 0;
