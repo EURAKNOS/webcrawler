@@ -72,9 +72,9 @@ class DownloadPage {
             $this->processMaps();
         }else {
             $info = pathinfo($this->target);
-            $info["extension"] = strtolower($info["extension"]);
+            
             if (isset($info["extension"])) {
-
+                $info["extension"] = strtolower($info["extension"]);
                 if ($info["extension"] == "pdf") {
                     return $this->processPdf();
                 } elseif ($info["extension"] == "jpg") {
@@ -301,7 +301,7 @@ class DownloadPage {
         $dl->downloadProcessing();
         
         
-        $result = exif_read_data($dl->localfile);
+        $result = @exif_read_data($dl->localfile);
         $saveData['meta_data'] = '';
         if (isset($result) && !empty($result)) {
             $saveData['meta_data'] = serialize($result);
