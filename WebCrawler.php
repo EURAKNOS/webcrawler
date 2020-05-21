@@ -15,7 +15,7 @@
 class WebCrawler
 {
 
-    public $version = '0.4.5.5';
+    public $version = '0.5.0';
 
     public $html;
 
@@ -28,19 +28,37 @@ class WebCrawler
      */
     public function mainPage()
     {
-        // $this->process();(Finished) https://eurodairy.eu/resources/two-webinars-on-the-principles-of-biodiversity/	
+        // $this->process();(Finished) https://eurodairy.eu/resources/two-webinars-on-the-principles-of-biodiversity/
         // $this->getData();
         $this->template();
     }
-    
+
     /**
      * Preparation of the frontend surface.
      * (Due to the minimal frontend part, I don't create a separate file for it or use a temaplet manager.)
      */
     public function template()
     {
-        $this->html .= ('<html><head><meta charset="utf-8"><title>Euraknos WebCrawler</title><link rel="stylesheet" href="style/css/bootstrap.min.css"><link rel="stylesheet" href="style/css.css"><link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css"><script src="style/js/jquery.min.js"></script><script src="style/js/bootstrap.min.js"></script><script src="style/js/main.js"></script></head><body>
-        <!-- Modal -->
+        $this->html .= ('<!doctype html>
+            <html>
+            <head>
+            	<meta charset="utf-8">
+                <title>Euraknos WebCrawler</title>
+                <link rel="stylesheet" href="style/css/bootstrap.min.css">
+                <link rel="stylesheet" href="style/css/css.css">
+                <link rel="stylesheet" href="style/css/all.min.css"> <!-- Font Awesome -->
+                <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
+            	<script src="style/js/jquery.min.js"></script>
+            	<script src="style/js/bootstrap.min.js"></script>
+            	<script src="style/js/main.js"></script>
+            
+            	<script src="style/js/Chart/Chart.min.js"></script>
+            	<script src="style/js/chartjs-plugin-datalabels.min.js"></script>
+            
+            </head>
+            <body>
+
+                   <!-- Modal -->
         <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -60,10 +78,29 @@ class WebCrawler
             </div>
           </div>
         </div>
+
+            <div class="navbar navbar-expand-lg navbar-dark">
+            	<a class="navbar-brand" href="#">
+                    <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
+                    EURAKNOS WEBCRAWLER
+            	</a>
+            	<ul class="navbar-nav">
+            		<li class="nav-item active">
+                    	<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                  	</li>
+                  	<li class="nav-item">
+                    	<a class="nav-link" href="new.php">Add Crawler</a>
+                  	</li>
+                </ul>
+            </div>
+            
+            <div class="container-fluid">
+            	<!-- Modal -->
+            
+                <div class="row justify-content-center">
+         
         <form action="' . ROOT_PATH . '" method="post" name="webcrawler">
-        <div class="header"><img class="logo" src="style/Logo_Euraknos_Crawler.png">
-            <p>WebCrawler</p>
-        </div>
+       
         <div class="description">
         <p>Please enter the URL of the webpage you want to save</p>
         </div>
@@ -124,18 +161,17 @@ class WebCrawler
         <button id="addRow" type="button" class="btn btn-info">Add Row</button>
                         </div>
                         </div>
-                        </form>');
-        /*
-         * if (isset($this->htmlResult)) {
-         * $this->html .= $this->htmlResult;
-         * }
-         */
-        $this->html .= ('<div id="error" class="error-hidden alert alert-danger" role="alert"></div>');
-        $this->html .= ('<div id="spinner" class="spinner-none spinner-border text-info" role="status"><span class="sr-only">Loading...</span></div>');
-        $this->html .= ('<div class="status col-md-10 offset-md-1"></div>');
-        $this->html .= ('<div class="version"><p>Ver. ' . $this->version . '</p></div><script src="style/javascript.js"></script>');
-        $this->html .= ('</body>');
-        $this->html .= ('</html>');
+                        </form>
+     
+                </div>
+          	</div>
+            
+          	<script src="style/js/chartdata.js"></script>
+           	<script src="style/js/javascript.js"></script>
+            
+            <div class="version"><p>Ver. ' . $this->version . '</p></div>
+            </body>
+            </html>');
         print($this->html);
     }
 

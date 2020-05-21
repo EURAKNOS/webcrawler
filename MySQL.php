@@ -47,6 +47,12 @@ class DbMysql {
     public $urlId;
     
     /**
+     * 
+     * @var array
+     */
+    public $resultUrls;
+    
+    /**
      * Builds a connection to the mysql database
      */
     public function __construct()
@@ -253,13 +259,17 @@ class DbMysql {
         }
         $this->result['page'] = $statementSelect->fetch(PDO::FETCH_OBJ)->cp;
         
+        $this->allCount = $this->result['page'];
+        
         $statementSelect = $this->db->prepare("SELECT COUNT(id) AS cid, file_type FROM " . FILES_TABLE . " WHERE url_id = :id AND downloaded_time IS NOT NULL GROUP BY file_type");
         if(!$statementSelect->execute($data)){
             $this->log->m_log('countFileElement pages MySql function error');
         }
         $tmp = $statementSelect->fetchAll();
+        
         foreach ($tmp as $item) {
             $this->result[$item['file_type']] = $item['cid'];
+            $this->allCount += $item['cid'];
         }
     }
     
@@ -273,6 +283,8 @@ class DbMysql {
         }
         $this->result2['page'] = $statementSelect->fetch(PDO::FETCH_OBJ)->cp;
         
+        $this->allCount2 = $this->result2['page'];
+        
         $statementSelect = $this->db->prepare("SELECT COUNT(id) AS cid, file_type FROM " . FILES_TABLE . " WHERE url_id = :id AND meta_data != '' AND downloaded_time IS NOT NULL GROUP BY file_type");
         if(!$statementSelect->execute($data)){
             $this->log->m_log('countFileElement pages MySql function error');
@@ -281,6 +293,7 @@ class DbMysql {
         
         foreach ($tmp as $item) {
             $this->result2[$item['file_type']] = $item['cid'];
+            $this->allCount2 += $item['cid'];
         }
         
         
@@ -295,7 +308,8 @@ class DbMysql {
         $data['url'] = $_POST['url'];
         $data['wname'] = $_POST['wname'];
         $data['download_time'] = time();
-        $statement = $this->db->prepare("INSERT INTO ".URLS_TABLE." (id, url, wname, download_time) VALUES(NULL, :url, :wname, :download_time)");
+        $data['post_data'] = serialize($_POST);
+        $statement = $this->db->prepare("INSERT INTO ".URLS_TABLE." (id, url, wname, download_time, post_data) VALUES(NULL, :url, :wname, :download_time, :post_data)");
         
         if(!$statement->execute($data)){
             $this->log->m_log('saveUrl MySql function error');
@@ -311,7 +325,8 @@ class DbMysql {
     public function endDownloadUrl($id)
     {
         $data['id'] = $id;
-        $statement = $this->db->prepare("UPDATE ".URLS_TABLE." SET download = 1 WHERE id = :id");
+        $data['end_time'] = time();
+        $statement = $this->db->prepare("UPDATE ".URLS_TABLE." SET download = 1, end_time = :end_time WHERE id = :id");
         if(!$statement->execute($data)){
             $this->log->m_log('endDownloadUrl MySql function error');
             throw new Exception("An operation failed endDownloadFile function");
@@ -323,6 +338,16 @@ class DbMysql {
     {
         $data['url'] = $url;
         $statementSelect = $this->db->prepare("SELECT * FROM " . URLS_TABLE . " WHERE url = :url AND deleted = 0");
+        if(!$statementSelect->execute($data)){
+            $this->log->m_log('exitsUrl pages MySql function error');
+        }
+        $this->result = $statementSelect->fetch();
+    }
+    
+    public function getCrawlingData($id)
+    {
+        $data['id'] = $id;
+        $statementSelect = $this->db->prepare("SELECT * FROM " . URLS_TABLE . " WHERE id = :id AND deleted = 0");
         if(!$statementSelect->execute($data)){
             $this->log->m_log('exitsUrl pages MySql function error');
         }
@@ -359,19 +384,64 @@ class DbMysql {
                 throw new Exception("An operation failed endDownloadFile function");
             }
             return true;
-            
-            
-      /*  }
-        //Our catch block will handle any exceptions that are thrown.
-        catch(Exception $e){
-            //An exception has occured, which means that one of our database queries
-            //failed.
-            //Print out the error message.
-            echo $e->getMessage();
-            $this->log->m_log($e->getMessage());
-            //Rollback the transaction.
-            $this->db->rollBack();
-        }*/
+          
+    }
+    
+    /**
+     * All page content
+     */
+    public function getAllContent()
+    {
+        $this->result = array();
+        $statementSelect = $this->db->prepare("SELECT COUNT(path) AS cp FROM " . CONTENTS_TABLE . " WHERE download_time IS NOT NULL");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('getAllContent pages MySql function error');
+        }
+        $this->result['content'] = $statementSelect->fetch(PDO::FETCH_OBJ)->cp;
+    }
+    
+    public function getAllContentWithMeta()
+    {
+        $this->result2 = array();
+        $statementSelect = $this->db->prepare("SELECT COUNT(path) AS cp FROM " . CONTENTS_TABLE . " WHERE content != '' AND download_time > 0");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('getAllContentWithMeta pages MySql function error');
+        }
+        $this->result2['content'] = $statementSelect->fetch(PDO::FETCH_OBJ)->cp;
+    }
+    
+    public function countByTypeAllPage()
+    {
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS cid, file_type FROM " . FILES_TABLE . " WHERE downloaded_time IS NOT NULL GROUP BY file_type");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('countByTypeAllPage MySql function error');
+        }
+        $tmp = $statementSelect->fetchAll();
+        foreach ($tmp as $item) {
+            $this->result[$item['file_type']] = $item['cid'];
+        }
+    }
+    
+    public function countByTypeAllPageWithMeta()
+    {
+        $statementSelect = $this->db->prepare("SELECT COUNT(id) AS cid, file_type FROM " . FILES_TABLE . " WHERE meta_data != '' AND downloaded_time IS NOT NULL GROUP BY file_type");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('countByTypeAllPageWithMeta MySql function error');
+        }
+        $tmp = $statementSelect->fetchAll();
+        
+        foreach ($tmp as $item) {
+            $this->result2[$item['file_type']] = $item['cid'];
+        }
+    }
+    
+    public function getAllUrlWithoutDelete()
+    {
+        $statementSelect = $this->db->prepare("SELECT * FROM " . URLS_TABLE . " WHERE deleted = 0");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('getAllUrlWithoutDelete MySql function error');
+        }
+        $this->resultUrls = $statementSelect->fetchAll();
     }
     
 }
