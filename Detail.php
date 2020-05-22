@@ -94,8 +94,11 @@ class Detail
         $this->html .= ('<!doctype html>
             <html>
             <head>
-            	<meta charset="utf-8">
-                <title>Euraknos WebCrawler</title>
+            	<meta charset="utf-8">');
+        if ($this->mainData['download'] == 0) {
+            $this->html .= ('<meta http-equiv="refresh" content="60" />');
+        }
+                $this->html .= ('<title>Euraknos WebCrawler</title>
                 <link rel="stylesheet" href="style/css/bootstrap.min.css">
                 <link rel="stylesheet" href="style/css/css.css">
                 <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
@@ -132,10 +135,9 @@ class Detail
                         $this->html .= ('<p> <span class="working">Working</span></p>');
                     }
             
-                    /*$this->html .= ('<div class="col-md-12">
-                            <button id="editcrawler" type="button" class="btn btn-warning">Edit Crawler</button>
-                        	<button id="runcrawler" type="button" class="btn btn-success" style="margin-left: 3rem;">Run Crawler</button>
-            			</div>');*/
+                    $this->html .= ('<div class="col-md-12">
+                            <a href="export_details.php?id='.$this->mainData['id'].'"><button id="editcrawler" type="button" class="btn btn-warning">Export Data</button></a>
+            			</div>');
                     $this->html .= ('
                     </div>
                 </div>

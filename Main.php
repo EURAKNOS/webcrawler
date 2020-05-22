@@ -38,6 +38,7 @@ class MainPage
             <html>
             <head>
             	<meta charset="utf-8">
+                <meta http-equiv="refresh" content="30" />
                 <title>Euraknos WebCrawler</title>
                 <link rel="stylesheet" href="style/css/bootstrap.min.css">
                 <link rel="stylesheet" href="style/css/css.css">
