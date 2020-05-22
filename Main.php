@@ -142,7 +142,7 @@ class MainPage
             $this->html .= ('<td class="dashboard-table-runtime">' . $item['run'] . '</td>');
             $this->html .= ('<td class="dashboard-table-objects">' . $item['objectc'] . '</td>');
             $this->html .= ('<td class="dashboard-table-meta">' . $item['metadata'] . '%</td>');
-            $this->html .= ('<td class="dashboard-table-details"><a href="Detail.php?id='. $item['id'] .'"><span class="btn btn-sm btn-info">Details</span></a></td>');
+            $this->html .= ('<td class="dashboard-table-details"><a href="details.php?id='. $item['id'] .'"><span class="btn btn-sm btn-info">Details</span></a></td>');
             $this->html .= ('</tr>');
         }
                           
@@ -241,7 +241,7 @@ class MainPage
                 $this->tableData[$value['id']]['status'] = ($value['download'] != 1) ? 'Working' : 'Finished';
                 $this->tableData[$value['id']]['status_class'] = ($value['download'] != 1) ? ' working' : '';
                 $this->tableData[$value['id']]['last_run'] = date("Y. M d", $value['download_time']);
-                $this->tableData[$value['id']]['run'] = $this->hourAndMinConverter($value['end_time'] - $value['download_time']);
+                $this->tableData[$value['id']]['run'] = ($value['end_time'] > 0)?$this->hourAndMinConverter($value['end_time'] - $value['download_time']): '';
                 $this->tableData[$value['id']]['objectc'] = $this->data1;
                 $this->tableData[$value['id']]['metadata'] = $this->percentageAllPage($this->data1, $this->data2);
                 $this->tableData[$value['id']]['id'] = $value['id'];
@@ -254,7 +254,7 @@ class MainPage
     {
         $hours = floor($time / 60);
         $minutes = ($time % 60);
-        return date('H:i:s', $time);
+        return date('G\h i\m\i\n', $time);
         return $hours."h ".$minutes."min ";
     }
     

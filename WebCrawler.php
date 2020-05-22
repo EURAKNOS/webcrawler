@@ -109,7 +109,7 @@ class WebCrawler
                 <div class="input-group input-group-lg mb-3">
                     <input type="text" class="form-control" id="url" name="url" placeholder="Starting URL" aria-label="URL" aria-describedby="button-addon2" style="color: #b5b5b5;" required>
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary downloadbutton" type="submit" id="submit" >DOWNLOAD</button>
+                        <button class="btn btn-outline-secondary downloadbutton" type="submit" id="submit" >START</button>
                     </div>
                 </div>
                 <div class="input-group input-group-lg mb-3">
@@ -156,17 +156,17 @@ class WebCrawler
         
         <h3 class="other-element">Other searching elements</h3>
         <div class="row">
-        <div class="col-lg-12">
-        <div id="newRow"></div>
-        <button id="addRow" type="button" class="btn btn-info">Add Row</button>
-                        </div>
-                        </div>
-                        </form>
+            <div class="col-lg-12">
+                <div id="newRow"></div>
+                <button id="addRow" type="button" class="btn btn-info">Add Row</button>
+            </div>
+        </div>
+    </form>
      
-                </div>
+</div>
+<div id="status" class="status"></div>
           	</div>
-            
-          	<script src="style/js/chartdata.js"></script>
+           
            	<script src="style/js/javascript.js"></script>
             
             <div class="version"><p>Ver. ' . $this->version . '</p></div>

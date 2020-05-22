@@ -39,6 +39,9 @@ class ParsePage
         if ($first) {
             $MySql->saveUrl();
             $this->urlId = $MySql->urlId;
+            session_start();
+            $_SESSION['urlid'] = $this->urlId;
+            session_write_close();
         }
         $url_host = $url_components['host'];
         $url_path = '';

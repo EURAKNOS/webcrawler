@@ -1,6 +1,22 @@
 <?php
-session_start ();
-session_write_close();
+session_name('crawler');
+/*session_start ();
+session_write_close();*/
+
+ini_set('session.use_only_cookies', false);
+ini_set('session.use_cookies', false);
+ini_set('session.use_trans_sid', false);
+ini_set('session.cache_limiter', null);
+
+if(array_key_exists('PHPSESSID', $_COOKIE))
+    session_id($_COOKIE['PHPSESSID']);
+    else {
+        session_start();
+        setcookie('PHPSESSID', session_id());
+        session_write_close();
+    }
+    
+
 require_once 'vendor/autoload.php';
 require_once 'config.php';
 require_once 'WebCrawler.php';
@@ -205,7 +221,8 @@ class AjaxProcess {
     }
     
     public function status()
-    {   $this->getDownloadStatus();
+    {   
+        $this->getDownloadStatus();
         $this->checkHtml();
         if (isset($_SESSION['processing']) && $_SESSION['processing'] === 1) {
             echo json_encode(array('status' => 1, 'html' => $this->htmlResult) );

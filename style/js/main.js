@@ -70,20 +70,15 @@ var classPage = function() {
 				timeout : 900000,
 				error : function() {
 					console.log('error2');
-					$('#submit').prop("disabled", false);
 				},
 				success : function(response) {
+					$('#url').prop("disabled", true);
+					$('#match_url').prop("disabled", true);
+					$('#w-name').prop("disabled", true);
 					$('#submit').prop("disabled", true);
-					if (response.status == 1) {
-						//$('#spinner').addClass('spinner-none');
-					} else {
-						// $('#error').html('Enter a domain
-						// name').removeClass('error-hidden');
-						//$('#spinner').addClass('spinner-none');
-					}
 				}
 			});
-			//$("form").remove(); //Remove the form
+			
 		});
 		$('form').trigger('submit');
 		return false;
@@ -92,9 +87,9 @@ var classPage = function() {
 
 	this.processStatusCheck = function() {
 		$.ajax({
-			url : "ajax.php",
+			url : "ajaxcheck.php",
 			type : "POST",
-			dataType : "json",
+			dataType : "html",
 			data : {
 				processFunction : 'status',
 				status : 1
@@ -106,7 +101,9 @@ var classPage = function() {
 				console.log('error1');
 			},
 			success : function(response) {
-				$('.status').html(response.html);
+				console.log(response);
+				$('.status').html(response);
+				eval(document.getElementById("status").innerHTML);
 			}
 		}).then(function() { // on completion, restart
 
