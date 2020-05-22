@@ -132,10 +132,11 @@ class Detail
                         $this->html .= ('<p> <span class="working">Working</span></p>');
                     }
             
-                    $this->html .= ('<div class="col-md-12">
+                    /*$this->html .= ('<div class="col-md-12">
                             <button id="editcrawler" type="button" class="btn btn-warning">Edit Crawler</button>
                         	<button id="runcrawler" type="button" class="btn btn-success" style="margin-left: 3rem;">Run Crawler</button>
-            			</div>
+            			</div>');*/
+                    $this->html .= ('
                     </div>
                 </div>
             	
