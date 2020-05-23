@@ -255,7 +255,9 @@ class Detail
 
         foreach ($this->MySql->result as $key => $item) {
             $this->statistics[$key]['all'] = $item;
-            $this->statistics[$key]['meta'] = $this->MySql->result2[$key];
+            if(isset($this->MySql->result2[$key])) {
+                $this->statistics[$key]['meta'] = $this->MySql->result2[$key];
+            }
             $this->statistics[$key]['percentage'] = $this->percentageAllPage($item, $this->MySql->result2[$key]);
         }
 
@@ -372,7 +374,7 @@ class Detail
     				},
     				ticks: {
     					display: false,	// Y tengely feliratok elrejtése
-    					fontFamily: 'Lato',
+    					fontFamily: 'Lato'
     				},
     			}],
     			xAxes: [{
@@ -381,6 +383,8 @@ class Detail
     					callback: function(value, index, values) {
     						return value+'%';
     					},
+                        beginAtZero: true,
+                        max: 100 
     				},
     			}],
     		},
