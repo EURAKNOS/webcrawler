@@ -444,4 +444,30 @@ class DbMysql {
         $this->resultUrls = $statementSelect->fetchAll();
     }
     
+    public function stopStatus()
+    {
+        $data['id'] = $_POST['data'];
+        $data['end_time'] = time();
+        $statement = $this->db->prepare("UPDATE ".URLS_TABLE." SET download = 2, stop = 1, end_time = :end_time WHERE id = :id");
+        if(!$statement->execute($data)){
+            $this->log->m_log('stopStatus MySql function error');
+            throw new Exception("An operation failed stopStatus function");
+        }
+        return true;
+    }
+    
+    public function checkStop()
+    {
+        $data['id'] = $this->urlId;
+        $statementSelect = $this->db->prepare("SELECT * FROM " . URLS_TABLE . " WHERE id = :id AND deleted = 0 AND stop = 1");
+        if(!$statementSelect->execute($data)){
+            $this->log->m_log('checkStop pages MySql function error');
+        }
+        $result = $statementSelect->fetchAll();
+       
+        if(!empty($result)) return true; 
+        else return false;
+            
+    }
+    
 }

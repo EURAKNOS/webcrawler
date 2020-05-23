@@ -149,6 +149,7 @@ class AjaxProcess {
             if ($rowCount) {
                 for ($i = 0; $i < $rowCount; $i ++) {
                     $this->MySql->urlId = $this->urlId;
+                    if($this->MySql->checkStop() === true)  break;
                     $row = $this->MySql->getLinkRow();
                     if ($row !== false) {
                         $path = $row['path'];

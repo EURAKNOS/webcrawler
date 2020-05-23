@@ -103,7 +103,7 @@ var classPage = function() {
 			success : function(response) {
 				console.log(response);
 				$('.status').html(response);
-				eval(document.getElementById("status").innerHTML);
+				//eval(document.getElementById("status").innerHTML);
 			}
 		}).then(function() { // on completion, restart
 

@@ -20,7 +20,10 @@ class Detail
 
     public $statHtml;
 
+    public $mainData;
+    
     private $types;
+    
 
     public function __construct()
     {
@@ -52,7 +55,7 @@ class Detail
         );
 
         $this->javascriptPlus = array(
-            'page' => 'PAGE',
+            'page' => 'HTML',
             'pdf' => 'PDF',
             'docx' => 'DOCX',
             'xlsx' => 'XLSX',
@@ -111,16 +114,16 @@ class Detail
             </head>
             <body>
             <div class="navbar navbar-expand-lg navbar-dark">
-            	<a class="navbar-brand" href="#">
+            	<a class="navbar-brand" href="/">
                     <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
                     EURAKNOS WEBCRAWLER
             	</a>
             	<ul class="navbar-nav">
-            		<li class="nav-item active">
-                    	<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                  	</li>
                   	<li class="nav-item">
                     	<a class="nav-link" href="new.php">Add Crawler</a>
+                  	</li>
+                    <li class="nav-item">
+                    	<a class="nav-link" href="export_details.php?id='.$this->mainData['id'].'">Export details</a>
                   	</li>
             </ul>
             </div>
@@ -129,15 +132,21 @@ class Detail
             	<div class="row justify-content-center">
                     <div class="col-md-10">
                         <h2 style="font-weight: bold;">' . $this->mainData['wname'] . '</h2>');
+                
                     if ($this->mainData['download'] == 1) {
-                        $this->html .= ('<p>Last run: ' . date("Y. M d", $this->mainData['download_time']) . ' (Runtime: ' . $this->mainData['run'] . ')</p>');
+                        $status = 'Finished';
+                    } elseif ($this->mainData['download'] == 2) {
+                        $status = 'Stopped';
                     } else {
-                        $this->html .= ('<p> <span class="working">Working</span></p>');
+                        $status = 'Working';
+                    }
+                
+                    if ($this->mainData['download'] != 0) {
+                        $this->html .= ('<p>('.$status.') Last run: ' . date("Y. M d", $this->mainData['download_time']) . ' (Runtime: ' . $this->mainData['run'] . ')</p>');
+                    } else {
+                        $this->html .= ('<p> <span class="working">'.$status.'</span></p>');
                     }
             
-                    $this->html .= ('<div class="col-md-12">
-                            <a href="export_details.php?id='.$this->mainData['id'].'"><button id="editcrawler" type="button" class="btn btn-warning">Export Data</button></a>
-            			</div>');
                     $this->html .= ('
                     </div>
                 </div>
@@ -157,37 +166,38 @@ class Detail
                         	<div class="row justify-content-center">
                                 <div class="col-sm-5">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="meta-title" value="1" id="meta-title"' . $mtitle . '>
+                                        <input class="form-check-input" type="checkbox" name="meta-title" value="1" id="meta-title"' . $mtitle . ' disabled>
                                         <label class="form-check-label" for="meta-title"> META Title</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="meta-keywords" value="1" id="meta-keywords"' . $mkeyw . '>
+                                        <input class="form-check-input" type="checkbox" name="meta-keywords" value="1" id="meta-keywords"' . $mkeyw . ' disabled>
                                         <label class="form-check-label" for="meta-keywords"> META Keywords</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="meta-description" value="1" id="meta-description"' . $mdesc . '>
+                                        <input class="form-check-input" type="checkbox" name="meta-description" value="1" id="meta-description"' . $mdesc . ' disabled>
                                         <label class="form-check-label" for="meta-description"> META Description</label>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="h1" value="1" id="h1"' . $h1check . '>
+                                        <input class="form-check-input" type="checkbox" name="h1" value="1" id="h1"' . $h1check . ' disabled>
                                         <label class="form-check-label" for="h1"> Heading 1</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="h2" value="1" id="h2"' . $h2check . '>
+                                        <input class="form-check-input" type="checkbox" name="h2" value="1" id="h2"' . $h2check . ' disabled>
                                         <label class="form-check-label" for="h2"> Heading 2</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="h3" value="1" id="h3"' . $h3check . '>
+                                        <input class="form-check-input" type="checkbox" name="h3" value="1" id="h3"' . $h3check . ' disabled>
                                         <label class="form-check-label" for="h3"> Heading 3</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row justify-content-center" style="margin-top:2rem;">
-            	        <div class="col-md-6">
+                    </div>');
+                    if (isset($this->mainData['post']['class']) && !empty($this->mainData['post']['class'])) {
+                    $this->html .= ('<div class="row justify-content-center" style="margin-top:2rem;">
+            	    <div class="col-md-6">
                         	<h5>Other searching elements</h5>');
                     foreach ($this->mainData['post']['class'] as $item) {
             
@@ -198,8 +208,9 @@ class Detail
                             </div>');
                     }
                     $this->html .= ('</div>
-                    </div>
-                </form>
+                    </div>');
+                    }
+                    $this->html .= ('</form>
             
                 <div class="row justify-content-center" style="margin-top:2rem;">
                     <div class="col-md-8 dashboardittem">
@@ -216,6 +227,7 @@ class Detail
                 </div>
             </div>
             
+        <div class="version"><p>Ver. ' . VERSION . '</p></div>
     	<script>' . $this->statHtml . '</script>
     	<script src="style/js/javascript.js"></script>
             
@@ -230,13 +242,13 @@ class Detail
 
     private function getData()
     {
-        $this->getDataByUrlId();
+        $this->getDataByUrlId($_GET['id']);
         $this->getDownloadStatisticsByUrlId($_GET['id']);
     }
 
-    private function getDataByUrlId()
+    private function getDataByUrlId($id)
     {
-        $this->MySql->getCrawlingData($_GET['id']);
+        $this->MySql->getCrawlingData($id);
         $this->mainData = $this->MySql->result;
         $this->mainData['post'] = unserialize($this->mainData['post_data']);
         $this->mainData['run'] = $this->hourAndMinConverter($this->mainData['end_time'] - $this->mainData['download_time']);
@@ -250,6 +262,7 @@ class Detail
 
     public function getDownloadStatisticsByUrlId($id)
     {
+        $this->getDataByUrlId($id);
         $this->MySql->countFileElement($id);
         $this->MySql->percentage($id);
 
@@ -258,7 +271,9 @@ class Detail
             if(isset($this->MySql->result2[$key])) {
                 $this->statistics[$key]['meta'] = $this->MySql->result2[$key];
             }
-            $this->statistics[$key]['percentage'] = $this->percentageAllPage($item, $this->MySql->result2[$key]);
+            if (isset($this->MySql->result2[$key])) {
+                $this->statistics[$key]['percentage'] = $this->percentageAllPage($item, $this->MySql->result2[$key]);
+            }
         }
 
         foreach ($this->javascriptPlus as $key => $value) {
@@ -285,14 +300,12 @@ class Detail
 
     private function hourAndMinConverter($time)
     {
-        $hours = floor($time / 60);
-        $minutes = ($time % 60);
-
-        return $hours . "h " . $minutes . "min ";
+        return gmdate('G\h i\m\i\n', $time);
     }
 
     private function statisticsJavaScript()
     {
+        if (isset($this->statistics1)) {
         $this->statHtml = ("// DOUGHNUT
     		new Chart(document.getElementById('chartjs-4'),{
     			type:'doughnut',
@@ -373,8 +386,8 @@ class Detail
     					display: false,
     				},
     				ticks: {
-    					display: false,	// Y tengely feliratok elrejtése
-    					fontFamily: 'Lato'
+    					display: true,	// Y tengely feliratok elrejtése
+    					fontFamily: 'Lato'       
     				},
     			}],
     			xAxes: [{
@@ -389,13 +402,19 @@ class Detail
     			}],
     		},
     		tooltips: {
-    			callback: {
-    				label: function(tooltipItem, data) {
-    						return data + '%';
-    					},
-    			},
-    		},
-    	},
+              callbacks: {
+                title: function(tooltipItem, data) {
+                  return data['labels'][tooltipItem[0]['index']];
+                },
+                label: function(tooltipItem, data) {
+                  return data['datasets'][0]['data'][tooltipItem['index']] + '%';
+                }
+              },
+    	   },
+}
     });");
+        } else {
+            $this->statHtml = '';
+        }
     }
 }

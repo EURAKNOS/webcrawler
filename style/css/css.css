@@ -264,4 +264,18 @@ td:first-child {text-align:right;}
         font-size:14px
     }
 }
-
+ 
+.btn-orange-warning {
+    color: #fff;
+    background-color: #FF6C00;
+    border-color: #FF6C00;
+}
+.btn-orange-warning:hover {
+    color: #fff;
+    background-color: #FF5900;
+    border-color: #FF5900;
+}
+.version { 
+	margin-top: 50px;
+}
+.version p {text-align: center;}

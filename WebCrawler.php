@@ -14,9 +14,6 @@
  */
 class WebCrawler
 {
-
-    public $version = '0.5.0';
-
     public $html;
 
     public function __construct()
@@ -80,14 +77,11 @@ class WebCrawler
         </div>
 
             <div class="navbar navbar-expand-lg navbar-dark">
-            	<a class="navbar-brand" href="#">
+            	<a class="navbar-brand" href="/">
                     <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
                     EURAKNOS WEBCRAWLER
             	</a>
             	<ul class="navbar-nav">
-            		<li class="nav-item active">
-                    	<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                  	</li>
                   	<li class="nav-item">
                     	<a class="nav-link" href="new.php">Add Crawler</a>
                   	</li>
@@ -167,9 +161,10 @@ class WebCrawler
 <div id="status" class="status"></div>
           	</div>
            
-           	<script src="style/js/javascript.js"></script>
+           	
             
-            <div class="version"><p>Ver. ' . $this->version . '</p></div>
+            <div class="version"><p>Ver. ' . VERSION . '</p></div>
+            <script src="style/js/javascript.js"></script>
             </body>
             </html>');
         print($this->html);

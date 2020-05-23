@@ -46,7 +46,6 @@ class MainPage
                 <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
             	<script src="style/js/jquery.min.js"></script>
             	<script src="style/js/bootstrap.min.js"></script>
-            	<script src="style/js/main.js"></script>
             
             	<script src="style/js/Chart/Chart.min.js"></script>
             	<script src="style/js/chartjs-plugin-datalabels.min.js"></script>
@@ -54,14 +53,11 @@ class MainPage
             </head>
             <body>
             <div class="navbar navbar-expand-lg navbar-dark">
-            	<a class="navbar-brand" href="#">
+            	<a class="navbar-brand" href="/">
                     <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
                     EURAKNOS WEBCRAWLER
             	</a>
             	<ul class="navbar-nav">
-            		<li class="nav-item active">
-                    	<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                  	</li>
                   	<li class="nav-item">
                     	<a class="nav-link" href="new.php">Add Crawler</a>
                   	</li>
@@ -123,6 +119,7 @@ class MainPage
                         <table class="table table-striped table-light dashboard-table">
                         	<thead class="thead-dark">
                             	<tr>
+                                    <th></th>
                                 	<th>name</th>
                                 	<th>url</th>
                                 	<th>status</th>
@@ -135,7 +132,14 @@ class MainPage
                             </thead>
                             <tbody>');
         foreach($this->tableData as $item) {
-            $this->html .= ('<tr>');
+            $this->html .= ('<tr class="w-row">');
+            $this->html .= ('<td class="fbuttons dashboard-table-details">');
+            if ( $item['status_n'] == 0 ) {
+                $this->html .= ('<span class="stop-button btn btn-sm btn-orange-warning" data-id="' . $item['id'] . '">Stop</span>');
+            } else {
+                $this->html .= ('<span class="delete-button btn btn-sm btn-danger" data-id="' . $item['id'] . '">Delete</span>');
+            }
+            $this->html .= ('</td>');
             $this->html .= ('<td class="dashboard-table-name">' . $item['wname'] . '</td>');
             $this->html .= ('<td class="dashboard-table-url">' . $item['url'] . '</td>');
             $this->html .= ('<td class="dashboard-table-status' . $item['status_class'] . '">' . $item['status'] . '</td>');
@@ -154,9 +158,10 @@ class MainPage
             		</div>
             	</div>
             </div>
-            
+                <div class="version"><p>Ver. ' . VERSION . '</p></div>
             	<script src="style/js/chartdata.js"></script>
             	<script src="style/js/javascript.js"></script>
+                <script src="style/js/buttons.js"></script>
             
             
             </div>
@@ -239,9 +244,16 @@ class MainPage
                 
                 $this->tableData[$value['id']]['wname'] = $value['wname'];
                 $this->tableData[$value['id']]['url'] = $value['url'];
-                $this->tableData[$value['id']]['status'] = ($value['download'] != 1) ? 'Working' : 'Finished';
-                $this->tableData[$value['id']]['status_class'] = ($value['download'] != 1) ? ' working' : '';
-                $this->tableData[$value['id']]['last_run'] = date("Y. M d", $value['download_time']);
+                $this->tableData[$value['id']]['status_n'] = $value['download'];
+                if ($value['download'] == 1) {
+                    $this->tableData[$value['id']]['status'] = 'Finished';  
+                } elseif ($value['download'] == 2) {
+                    $this->tableData[$value['id']]['status'] = 'Stopped';
+                } else {
+                    $this->tableData[$value['id']]['status'] = 'Working';
+                }
+                $this->tableData[$value['id']]['status_class'] = ($value['download'] == 0) ? ' working' : '';
+                $this->tableData[$value['id']]['last_run'] = date("M d, Y", $value['download_time']);
                 $this->tableData[$value['id']]['run'] = ($value['end_time'] > 0)?$this->hourAndMinConverter($value['end_time'] - $value['download_time']): '';
                 $this->tableData[$value['id']]['objectc'] = $this->data1;
                 $this->tableData[$value['id']]['metadata'] = $this->percentageAllPage($this->data1, $this->data2);
@@ -253,10 +265,7 @@ class MainPage
     
     private function hourAndMinConverter($time)
     {
-        $hours = floor($time / 60);
-        $minutes = ($time % 60);
-        return date('G\h i\m\i\n', $time);
-        return $hours."h ".$minutes."min ";
+        return gmdate('G\h i\m\i\n', $time);
     }
     
     

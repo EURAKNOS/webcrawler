@@ -20,9 +20,9 @@ class AjaxCheck {
     public function status()
     {  
         if(isset($_SESSION['urlid']) && $_SESSION['urlid']) {
-            $details = new Detail();
-            $details->getDownloadStatisticsByUrlId($_SESSION['urlid']);
-            $this->statHtml = $details->statHtml;
+            $this->details = new Detail();
+            $this->details->getDownloadStatisticsByUrlId($_SESSION['urlid']);
+            $this->statHtml = $this->details->statHtml;
             $this->statTemplate();
             //$this->getDownloadStatus();
             //$this->checkHtml();
@@ -34,7 +34,16 @@ class AjaxCheck {
     }
     
     public function statTemplate() {
-        $this->htmlResult = ('<div class="row justify-content-center" style="margin-top:2rem;">
+        if ($this->details->mainData['download'] == 1) {
+            $status = '<p>Finished</p>';
+        } elseif ($this->details->mainData['download'] == 2) {
+            $status = '<p>Stopped</p>';
+        } else {
+            $status = '<p><span class="working">Working</span></p>';
+        }
+        
+        $this->htmlResult = ('<div style="margin: 10px;">'.$status.'</div>');
+        $this->htmlResult .= ('<div class="row justify-content-center" style="margin-top:2rem;">
         <div class="col-md-8 dashboardittem">
         <h3>DOWNLOAD STATISTICS</h3>
         <div class="row">
