@@ -107,7 +107,7 @@ class Detail
                 <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
             	<script src="style/js/jquery.min.js"></script>
             	<script src="style/js/bootstrap.min.js"></script>
-            	<script src="style/js/main.js"></script>
+            	<script src="style/js/detailpage.js"></script>
             
             	<script src="style/js/Chart/Chart.min.js"></script>
             
@@ -128,7 +128,7 @@ class Detail
             </ul>
             </div>
             
-           <div class="container-fluid">
+           <div class="container-fluid" data-id="'.$this->mainData['id'].'" data-status="'.$this->mainData['download'].'">
             	<div class="row justify-content-center">
                     <div class="col-md-10">
                         <h2 style="font-weight: bold;">' . $this->mainData['wname'] . '</h2>');
@@ -140,12 +140,13 @@ class Detail
                     } else {
                         $status = 'Working';
                     }
-                
+                    $this->html .= ('<div class="status-data">');
                     if ($this->mainData['download'] != 0) {
                         $this->html .= ('<p>('.$status.') Last run: ' . date("Y. M d", $this->mainData['download_time']) . ' (Runtime: ' . $this->mainData['run'] . ')</p>');
                     } else {
                         $this->html .= ('<p> <span class="working">'.$status.'</span></p>');
                     }
+                    $this->html .= ('</div>');
             
                     $this->html .= ('
                     </div>
@@ -212,7 +213,7 @@ class Detail
                     }
                     $this->html .= ('</form>
             
-                <div class="row justify-content-center" style="margin-top:2rem;">
+                <div class="stat row justify-content-center" style="margin-top:2rem;">
                     <div class="col-md-8 dashboardittem">
                         <h3>DOWNLOAD STATISTICS</h3>
                         <div class="row">
@@ -416,5 +417,10 @@ class Detail
         } else {
             $this->statHtml = '';
         }
+    }
+    
+    public function getStatus($id)
+    {
+        $this->getDataByUrlId($id);
     }
 }

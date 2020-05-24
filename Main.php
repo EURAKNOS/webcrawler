@@ -14,6 +14,8 @@ class MainPage
 {
     public $html;
     
+    public $ctemplate;
+    
     private $types;
     
     public function __construct()
@@ -23,10 +25,15 @@ class MainPage
         $this->types['image'] = array('jpg', 'png', 'swf', 'svg');
         $this->types['video'] = array('youtube_video', 'vimeo_video', 'mp4');
         $this->types['other'] = array('google_map', 'zip');
-        
+    }
+    
+    public function getPage()
+    {
         $this->getData();
+        $this->contentTemplate();
         $this->template();
     }
+    
     
     /**
      * Preparation of the frontend surface.
@@ -38,7 +45,6 @@ class MainPage
             <html>
             <head>
             	<meta charset="utf-8">
-                <meta http-equiv="refresh" content="30" />
                 <title>Euraknos WebCrawler</title>
                 <link rel="stylesheet" href="style/css/bootstrap.min.css">
                 <link rel="stylesheet" href="style/css/css.css">
@@ -49,6 +55,7 @@ class MainPage
             
             	<script src="style/js/Chart/Chart.min.js"></script>
             	<script src="style/js/chartjs-plugin-datalabels.min.js"></script>
+                <script src="style/js/mainpage.js"></script>
             
             </head>
             <body>
@@ -61,10 +68,24 @@ class MainPage
                   	<li class="nav-item">
                     	<a class="nav-link" href="new.php">Add Crawler</a>
                   	</li>
+                    <li class="nav-item">
+                    	<a class="nav-link" href="export_details.php">Export all</a>
+                  	</li>
             </ul>
             </div>
-            
-            <div class="container-fluid">
+            <div class="container-fluid">');
+            $this->html .= $this->ctemplate;
+            $this->html .= ('</div>
+            </body>
+            </html>
+
+');
+        print($this->html);
+    }
+    
+    private function contentTemplate()
+    {
+        $this->ctemplate = ('
             	<!-- Modal -->
             
             <div class="row justify-content-center">
@@ -132,28 +153,28 @@ class MainPage
                             </thead>
                             <tbody>');
         foreach($this->tableData as $item) {
-            $this->html .= ('<tr class="w-row">');
-            $this->html .= ('<td class="fbuttons dashboard-table-details">');
+            $this->ctemplate .= ('<tr class="w-row">');
+            $this->ctemplate .= ('<td class="fbuttons dashboard-table-details">');
             if ( $item['status_n'] == 0 ) {
-                $this->html .= ('<span class="stop-button btn btn-sm btn-orange-warning" data-id="' . $item['id'] . '">Stop</span>');
+                $this->ctemplate .= ('<span class="stop-button btn btn-sm btn-orange-warning" data-id="' . $item['id'] . '">Stop</span>');
             } else {
-                $this->html .= ('<span class="delete-button btn btn-sm btn-danger" data-id="' . $item['id'] . '">Delete</span>');
+                $this->ctemplate .= ('<span class="delete-button btn btn-sm btn-danger" data-id="' . $item['id'] . '">Delete</span>');
             }
-            $this->html .= ('</td>');
-            $this->html .= ('<td class="dashboard-table-name">' . $item['wname'] . '</td>');
-            $this->html .= ('<td class="dashboard-table-url">' . $item['url'] . '</td>');
-            $this->html .= ('<td class="dashboard-table-status' . $item['status_class'] . '">' . $item['status'] . '</td>');
-            $this->html .= ('<td class="dashboard-table-lastrun">' . $item['last_run'] . '</td>');
-            $this->html .= ('<td class="dashboard-table-runtime">' . $item['run'] . '</td>');
-            $this->html .= ('<td class="dashboard-table-objects">' . $item['objectc'] . '</td>');
-            $this->html .= ('<td class="dashboard-table-meta">' . $item['metadata'] . '%</td>');
-            $this->html .= ('<td class="dashboard-table-details"><a href="details.php?id='. $item['id'] .'"><span class="btn btn-sm btn-info">Details</span></a></td>');
-            $this->html .= ('</tr>');
+            $this->ctemplate .= ('</td>');
+            $this->ctemplate .= ('<td class="dashboard-table-name">' . $item['wname'] . '</td>');
+            $this->ctemplate .= ('<td class="dashboard-table-url">' . $item['url'] . '</td>');
+            $this->ctemplate .= ('<td class="dashboard-table-status' . $item['status_class'] . '">' . $item['status'] . '</td>');
+            $this->ctemplate .= ('<td class="dashboard-table-lastrun">' . $item['last_run'] . '</td>');
+            $this->ctemplate .= ('<td class="dashboard-table-runtime">' . $item['run'] . '</td>');
+            $this->ctemplate .= ('<td class="dashboard-table-objects">' . $item['objectc'] . '</td>');
+            $this->ctemplate .= ('<td class="dashboard-table-meta">' . $item['metadata'] . '%</td>');
+            $this->ctemplate .= ('<td class="dashboard-table-details"><a href="details.php?id='. $item['id'] .'"><span class="btn btn-sm btn-info">Details</span></a></td>');
+            $this->ctemplate .= ('</tr>');
         }
                           
                           //      	<td class="working">Working</td>
             
-        $this->html .= ('</tbody>
+        $this->ctemplate .= ('</tbody>
                         </table>
             		</div>
             	</div>
@@ -161,15 +182,7 @@ class MainPage
                 <div class="version"><p>Ver. ' . VERSION . '</p></div>
             	<script src="style/js/chartdata.js"></script>
             	<script src="style/js/javascript.js"></script>
-                <script src="style/js/buttons.js"></script>
-            
-            
-            </div>
-            </body>
-            </html>
-
-');
-        print($this->html);
+                <script src="style/js/buttons.js"></script>');
     }
     
     private function getData()
@@ -266,6 +279,12 @@ class MainPage
     private function hourAndMinConverter($time)
     {
         return gmdate('G\h i\m\i\n', $time);
+    }
+    
+    public function getMainContentAjax()
+    {
+        $this->getData();
+        $this->contentTemplate();
     }
     
     

@@ -13,3 +13,4 @@ require_once 'Main.php';
 set_time_limit (500000);
 
 $Mainpage = new MainPage();
+$Mainpage->getPage();

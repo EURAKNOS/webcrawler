@@ -354,6 +354,17 @@ class DbMysql {
         $this->result = $statementSelect->fetch();
     }
     
+    public function getAllFilesByUrlId($id)
+    {
+        $data['url_id'] = $id;
+        $statementSelect = $this->db->prepare("SELECT id, file_type FROM " . FILES_TABLE . " WHERE url_id = :url_id ");
+        if(!$statementSelect->execute($data)){
+            $this->log->m_log('getAllFilesByUrlId MySql function error');
+        }
+        return $statementSelect->fetchAll();
+    }
+    
+    
     public function deleteWebPageData($id)
     {
         $data['url_id'] = $id;

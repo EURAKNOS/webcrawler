@@ -98,6 +98,7 @@ $(document).ready(function() {
 		},
 
 		options: {
+			animation: false,
 			legend: {
 				display: false,
 			},
@@ -155,6 +156,7 @@ $(document).ready(function() {
 		},
 
 		options: {
+			animation: false,
 			legend: {
 				display: false,
 			},
@@ -212,6 +214,7 @@ $(document).ready(function() {
 		},
 
 		options: {
+			animation: false,
 			legend: {
 				display: false,
 			},
@@ -269,6 +272,7 @@ $(document).ready(function() {
 		},
 
 		options: {
+			animation: false,
 			legend: {
 				display: false,
 			},
@@ -326,6 +330,7 @@ $(document).ready(function() {
 		},
 
 		options: {
+			animation: false,
 			legend: {
 				display: false,
 			},

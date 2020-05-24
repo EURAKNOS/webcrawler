@@ -31,7 +31,30 @@ class ButtonsAjax {
     
     public function deleteCrawler()
     {
+        $this->deleteFiles();
         $this->deleteStatusDb();
+    }
+    
+    private function deleteFiles()
+    {
+        $result = $this->MySql->getAllFilesByUrlId($_POST['data']);
+        
+        foreach ($result as $value) {
+            $dir = FOLDER_DEFAULT . DIRECTORY_SEPARATOR . $value['file_type'] . DIRECTORY_SEPARATOR . $value['id'];
+            if (!is_dir($dir)) continue;
+            $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+            $files = new RecursiveIteratorIterator($it,
+                RecursiveIteratorIterator::CHILD_FIRST);
+            foreach($files as $file) {
+                if ($file->isDir()){
+                    rmdir($file->getRealPath());
+                } else {
+                    unlink($file->getRealPath());
+                }
+            }
+            rmdir($dir);;
+        }
+        
     }
     
     private function deleteStatusDb()
@@ -41,10 +64,6 @@ class ButtonsAjax {
         }
         
     }
-    
-    
-    
-    
     
 }
 

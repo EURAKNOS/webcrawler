@@ -42,20 +42,34 @@ class DetailsExport {
   
     public function exportProcess()
     {
-        $this->getDataById();
-    }
-    
-    private function getDataById()
-    {
-        $this->getDataByUrlId();
-        $this->getDownloadStatisticsByUrlId($_GET['id']);
-        $this->prepareData();
+        $this->cnt = 0;
+        if (isset($_GET['id'])) {
+            $this->getDataById($_GET['id']);
+        } else {
+            $this->createAllPage();
+        }
         $this->createExcel();
     }
-        
-    private function getDataByUrlId()
+    
+    private function createAllPage()
     {
-        $this->MySql->getCrawlingData($_GET['id']);
+        $this->MySql->getAllUrlWithoutDelete();
+        foreach ($this->MySql->resultUrls as $item) {
+            $this->getDataById($item['id']);
+            $this->cnt++;
+        }
+    }
+    
+    private function getDataById($id)
+    {
+        $this->getDataByUrlId($id);
+        $this->getDownloadStatisticsByUrlId($id);
+        $this->prepareData();
+    }
+        
+    private function getDataByUrlId($id)
+    {
+        $this->MySql->getCrawlingData($id);
         $this->mainData = $this->MySql->result;
         $this->mainData['post'] = unserialize($this->mainData['post_data']);
         $this->mainData['run'] = $this->hourAndMinConverter($this->mainData['end_time'] - $this->mainData['download_time']);
@@ -70,8 +84,16 @@ class DetailsExport {
 
         foreach ($this->MySql->result as $key => $item) {
             $this->statistics[$key]['all'] = $item;
-            $this->statistics[$key]['meta'] = $this->MySql->result2[$key];
-            $this->statistics[$key]['percentage'] = $this->percentageAllPage($item, $this->MySql->result2[$key]);
+            if (isset( $this->MySql->result2[$key])) {
+                $this->statistics[$key]['meta'] = $this->MySql->result2[$key];
+            } else {
+                $this->statistics[$key]['meta'] = 0;
+            }
+            if (isset($this->MySql->result2[$key])) {
+                $this->statistics[$key]['percentage'] = $this->percentageAllPage($item, $this->MySql->result2[$key]);
+            } else {
+                $this->statistics[$key]['percentage'] = 0;
+            }
         }
         
         foreach ($this->javascriptPlus as $key => $value) {
@@ -106,24 +128,24 @@ class DetailsExport {
     
     private function prepareData()
     {
-        $this->edata[0] = array('webpage_data' => 'QUANTITY', 'url' => $this->cleanData($this->mainData['url']), 
+        $this->edata[$this->cnt] = array('webpage_data' => 'QUANTITY', 'url' => $this->cleanData($this->mainData['url']), 
             'domain' => $this->cleanData($this->mainData['wname']));
         foreach ($this->javascriptPlus as $key => $value) {
             
             if (isset($this->statistics1[$key]['all'])) {
-                $this->edata[0][$key] = $this->statistics1[$key]['all'];
+                $this->edata[$this->cnt][$key] = $this->statistics1[$key]['all'];
             } else {
-                $this->edata[0][$key] = 0;
+                $this->edata[$this->cnt][$key] = 0;
             }
         }
-        
-        $this->edata[1] = array('webpage_data' => 'METADATA AVAILABILITY','url' => '',
+        $this->cnt++;
+        $this->edata[$this->cnt] = array('webpage_data' => 'METADATA AVAILABILITY','url' => '',
             'domain' => '');
         foreach ($this->javascriptPlus as $key => $value) {
             if (isset($this->statistics2[$key]['percentage'])) {
-                $this->edata[1][$key] = $this->statistics2[$key]['percentage'];
+                $this->edata[$this->cnt][$key] = $this->statistics2[$key]['percentage'] . '%';
             } else {
-                $this->edata[1][$key] = 0;
+                $this->edata[$this->cnt][$key] = 0;
             }
         }
         
