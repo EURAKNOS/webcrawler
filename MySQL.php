@@ -142,7 +142,7 @@ class DbMysql {
     {
         $data['path'] = $this->path;
         $data['download_time'] = time();
-        $statement = $this->db->prepare("UPDATE ".PAGE_TABLE." SET download_time = :download_time WHERE path = :path");
+        $statement = $this->db->prepare("UPDATE ".PAGE_TABLE." SET download_time = :download_time, success = 1 WHERE path = :path");
 
         if(!$statement->execute($data)){
             $this->log->m_log('endDownload MySql function error');
