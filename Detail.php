@@ -98,9 +98,6 @@ class Detail
             <html>
             <head>
             	<meta charset="utf-8">');
-        if ($this->mainData['download'] == 0) {
-            $this->html .= ('<meta http-equiv="refresh" content="60" />');
-        }
                 $this->html .= ('<title>Euraknos WebCrawler</title>
                 <link rel="stylesheet" href="style/css/bootstrap.min.css">
                 <link rel="stylesheet" href="style/css/css.css">
