@@ -69,6 +69,7 @@ class DetailsExport {
         
     private function getDataByUrlId($id)
     {
+        $this->mainData = array();
         $this->MySql->getCrawlingData($id);
         $this->mainData = $this->MySql->result;
         $this->mainData['post'] = unserialize($this->mainData['post_data']);
@@ -79,6 +80,10 @@ class DetailsExport {
     
     public function getDownloadStatisticsByUrlId($id)
     {
+        $this->statistics = array();
+        $this->statistics1 = array();
+        $this->statistics2 = array();
+        
         $this->MySql->countFileElement($id);
         $this->MySql->percentage($id);
 
