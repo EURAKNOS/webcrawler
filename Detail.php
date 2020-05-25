@@ -49,6 +49,9 @@ class Detail
             'vimeo_video',
             'mp4'
         );
+        $this->types['audio'] = array(
+            'spotify'
+        );
         $this->types['other'] = array(
             'google_map',
             'zip'
@@ -67,6 +70,7 @@ class Detail
             'svg' => 'SVG',
             'youtube_video' => 'YOUTUBE',
             'vimeo_video' => 'VIMEO',
+            'spotify' => 'SPOTIFY',
             'mp4' => 'MP4',
             'google_map' => 'GOOGLE MAPS',
             'zip' => 'ZIP'
@@ -289,23 +293,27 @@ class Detail
         $this->getDataByUrlId($id);
         $this->MySql->countFileElement($id);
         $this->MySql->percentage($id);
-
+        
         foreach ($this->MySql->result as $key => $item) {
             $this->statistics[$key]['all'] = $item;
             if(isset($this->MySql->result2[$key])) {
                 $this->statistics[$key]['meta'] = $this->MySql->result2[$key];
+            } else {
+                $this->statistics[$key]['meta'] = 0;
             }
             if (isset($this->MySql->result2[$key])) {
                 $this->statistics[$key]['percentage'] = $this->percentageAllPage($item, $this->MySql->result2[$key]);
+            } else {
+                $this->statistics[$key]['percentage'] = 0;
             }
         }
-
+        
         foreach ($this->javascriptPlus as $key => $value) {
             if (isset($this->statistics[$key]['all']) && $this->statistics[$key]['all']) {
                 $this->statistics1[$key]['all'] = $this->statistics[$key]['all'];
                 $this->statistics1[$key]['name'] = $value;
             }
-            if (isset($this->statistics[$key]['meta']) && $this->statistics[$key]['meta'] != 0) {
+            if (isset($this->statistics[$key]['meta'])) {
                 $this->statistics2[$key]['percentage'] = $this->statistics[$key]['percentage'];
                 $this->statistics2[$key]['name'] = $value;
             }

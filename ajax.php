@@ -176,6 +176,10 @@ class AjaxProcess {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $url_start . $referer;
                                 $parsePage->path = $path;
+                            } elseif (strpos($row['path'], '.spotify.com') !== false) {
+                                $parsePage->target = $path;
+                                $parsePage->referer = $url_start . $referer;
+                                $parsePage->path = $path;
                             } elseif (strpos($row['path'], 'www.google.com/maps') !== false || strpos($row['path'], 'maps.google.com') !== false) {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $url_start . $referer;

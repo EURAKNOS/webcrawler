@@ -59,6 +59,7 @@ class DownloadPage {
         $pos = strpos($this->target, 'https://www.youtube.com');
         $posYoutube2 = strpos($this->target, 'youtu.be');
         $posVimeo = strpos($this->target, '.vimeo.com');
+        $posSpotify = strpos($this->target, '.spotify.com');
         $posMaps = strpos($this->target, 'www.google.com/maps');
         $posMaps2 = strpos($this->target, 'maps.google.com');
         
@@ -68,6 +69,8 @@ class DownloadPage {
             $this->processYoutube();
         } elseif ($posVimeo !== false) {
             $this->processVimeo();
+        } elseif ($posSpotify !== false) {
+            $this->processSpotify();
         } elseif ($posMaps !== false || $posMaps2 !== false) {
             $this->processMaps();
         }else {
@@ -558,6 +561,35 @@ class DownloadPage {
         $this->log->m_log('Start Vimeo success');
         return $dl->saveEnd();
         
+    }
+    
+    private function processSpotify()
+    {
+        $this->log->m_log('Start Spotify meta');
+        $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
+        $dl->target = $this->target;
+        $dl->folder = '';
+        $dl->preSaveDatabaseDownlodedFile();
+        
+        if(preg_match("/(https?:\/\/)?(www\.)?(open\.)?spotify\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/", $this->target, $match)) {
+            //echo "Vimeo ID: $match[5]";
+        }
+        $path = $match[5];
+        
+        
+        $saveData['meta_data'] = '';
+        if (isset($result) && !empty($result)) {
+            $saveData['meta_data'] = serialize($result);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = ''; //$dl->localfile;
+        $saveData['file_type'] = 'spotify';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        $this->log->m_log('Start sporify success');
+        return $dl->saveEnd();
     }
     
     private function processMaps()

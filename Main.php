@@ -24,6 +24,7 @@ class MainPage
         $this->types['presentation'] = array('pptx', 'ppt');
         $this->types['image'] = array('jpg', 'png', 'swf', 'svg');
         $this->types['video'] = array('youtube_video', 'vimeo_video', 'mp4');
+        $this->types['audio'] = array('spotify');
         $this->types['other'] = array('google_map', 'zip');
     }
     
@@ -153,6 +154,14 @@ class MainPage
                         <p style="font-size:3rem;margin:0;padding:0;">' . $this->resultAllOutput['video']['all'] . '</p>
             			<p style="margin-bottom:0;">metadata availability</p>
                         <canvas id="stat-video" class="chartjs" data-percentage="' . $this->resultAllOutput['video']['percentage'] . '" style="display: inline-block;height: 20px;width:100%;background-color:#e5e5e5;"></canvas>
+                    </div>
+            	</div>
+                <div class="col-md-2">
+                	<div class="dashboardittem">
+                        <p class="sitename">AUDIO</p>
+                        <p style="font-size:3rem;margin:0;padding:0;">' . $this->resultAllOutput['audio']['all'] . '</p>
+            			<p style="margin-bottom:0;">metadata availability</p>
+                        <canvas id="stat-video" class="chartjs" data-percentage="' . $this->resultAllOutput['audio']['percentage'] . '" style="display: inline-block;height: 20px;width:100%;background-color:#e5e5e5;"></canvas>
                     </div>
             	</div>	
             	<div class="col-md-2">

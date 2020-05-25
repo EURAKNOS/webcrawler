@@ -33,6 +33,7 @@ class DetailsExport {
             'svg' => 'SVG',
             'youtube_video' => 'YOUTUBE',
             'vimeo_video' => 'VIMEO',
+            'spotify' => 'SPOTIFY',
             'mp4' => 'MP4',
             'google_map' => 'GOOGLE MAPS',
             'zip' => 'ZIP'
