@@ -59,6 +59,27 @@ class MainPage
             
             </head>
             <body>
+            
+            <!-- Load an icon library to show a hamburger menu (bars) on small screens -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            
+            <!-- Top Navigation Menu -->
+            <div class="topnav">
+              <a class="active navbar-brand" href="/">
+                    <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
+                    EURAKNOS WEBCRAWLER
+            	</a>
+              <!-- Navigation links (hidden by default) -->
+              <div id="myLinks">
+                <a class="nav-link" href="new.php">Add Crawler</a>
+                <a class="nav-link" href="export_details.php">Export all</a>
+              </div>
+              <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+              <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                <i class="fa fa-bars"></i>
+              </a>
+            </div>
+
             <div class="navbar navbar-expand-lg navbar-dark">
             	<a class="navbar-brand" href="/">
                     <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
@@ -76,6 +97,17 @@ class MainPage
             <div class="container-fluid">');
             $this->html .= $this->ctemplate;
             $this->html .= ('</div>
+            <script>
+            /* Toggle between showing and hiding the navigation menu links when the user clicks on the hamburger menu / bar icon */
+            function myFunction() {
+              var x = document.getElementById("myLinks");
+              if (x.style.display === "block") {
+                x.style.display = "none";
+              } else {
+                x.style.display = "block";
+              }
+            }    
+            </script>
             </body>
             </html>
 
@@ -278,7 +310,14 @@ class MainPage
     
     private function hourAndMinConverter($time)
     {
-        return gmdate('G\h i\m\i\n', $time);
+        $s = $time%60;
+        $m = floor(($time%3600)/60);
+        $h = floor(($time%86400)/3600);
+        $d = floor(($time%2592000)/86400);
+        
+        return "$d days, $h h $m min";
+        
+        return gmdate('j\d\a\y G\h i\m\i\n', $time);
     }
     
     public function getMainContentAjax()

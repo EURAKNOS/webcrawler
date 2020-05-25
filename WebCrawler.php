@@ -75,7 +75,21 @@ class WebCrawler
             </div>
           </div>
         </div>
-
+              <!-- Top Navigation Menu -->
+            <div class="topnav">
+              <a class="active navbar-brand" href="/">
+                    <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
+                    EURAKNOS WEBCRAWLER
+            	</a>
+              <!-- Navigation links (hidden by default) -->
+              <div id="myLinks">
+                <a class="nav-link" href="new.php">Add Crawler</a>
+              </div>
+              <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+              <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                <i class="fa fa-bars"></i>
+              </a>
+            </div>
             <div class="navbar navbar-expand-lg navbar-dark">
             	<a class="navbar-brand" href="/">
                     <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
@@ -165,6 +179,17 @@ class WebCrawler
             
             <div class="version"><p>Ver. ' . VERSION . '</p></div>
             <script src="style/js/javascript.js"></script>
+            <script>
+            /* Toggle between showing and hiding the navigation menu links when the user clicks on the hamburger menu / bar icon */
+            function myFunction() {
+              var x = document.getElementById("myLinks");
+              if (x.style.display === "block") {
+                x.style.display = "none";
+              } else {
+                x.style.display = "block";
+              }
+            }    
+            </script>
             </body>
             </html>');
         print($this->html);
