@@ -95,7 +95,25 @@ class DbMysql {
     {
         $data['path'] = $this->path;
         $data['download_time'] = time();
-        $statement = $this->db->prepare("UPDATE ".PAGE_TABLE." SET download_time = :download_time WHERE path = :path");
+        $data['url_id'] = $this->urlId;
+        $statement = $this->db->prepare("UPDATE ".PAGE_TABLE." SET download_time = :download_time WHERE path = :path AND url_id = :url_id");
+        
+        if(!$statement->execute($data)){
+            $this->log->m_log('statusSave MySql function error');
+            throw new Exception("An operation failed endDownload function");
+        }
+        $this->log->m_log('statusSave MySql function success');
+    }
+    
+    /**
+     * Stores a status
+     */
+    public function statusSaveResearch()
+    {
+        $data['path'] = $this->path;
+        $data['url_id'] = $this->urlId;
+        $data['download_time'] = time();
+        $statement = $this->db->prepare("UPDATE ".PAGE_TABLE." SET download_time = :download_time, success = 1 WHERE path = :path AND url_id = :url_id");
         
         if(!$statement->execute($data)){
             $this->log->m_log('statusSave MySql function error');
@@ -178,6 +196,19 @@ class DbMysql {
         
     }
     
+    public function getLinksUnSuccess()
+    {
+        $data['url_id'] = $this->urlId;
+        $statement = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE path != '' AND success = 0 AND url_id = :url_id");
+        $statement->execute($data);
+        $rowCount = $statement->rowCount();
+        if ( $rowCount > 0 ) {
+            return $rowCount;
+        }
+        return false;
+        
+    }
+    
     public function getLinkRow()
     {
         $statement = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE path != '' AND url_id = :url_id AND download_time IS NULL ");
@@ -186,6 +217,17 @@ class DbMysql {
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         return $result;
        
+    }
+    
+    public function getLinkRowUnSuccess()
+    {
+        $data['url_id'] = $this->urlId;
+        $statement = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE path != '' AND url_id = :url_id AND success = 0");
+        $statement->execute(array('url_id' => $this->urlId));
+        
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result;
+        
     }
     
     /**

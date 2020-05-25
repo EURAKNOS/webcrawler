@@ -24,6 +24,7 @@ require_once 'ParsePage.php';
 require_once 'DownloadPage.php';
 require_once 'MySQL.php';
 require_once 'Log.php';
+require_once 'research.php';
 set_time_limit (10000);
 
 use Nesk\Puphpeteer\Puppeteer;
@@ -51,6 +52,11 @@ class AjaxProcess {
             echo json_encode(array('status' => 1) );
         } else {
             echo json_encode(array('status' => 0) );
+        }
+        if (isset($_POST['external'])) {
+            $researchProcess = new ResearchProcess();
+            $researchProcess->urlId = $this->urlId;
+            $researchProcess->process();
         }
         $this->MySql->endDownloadUrl($this->urlId);
      }

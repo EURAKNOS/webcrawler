@@ -22,7 +22,7 @@ class ParsePage
      *
      * @return boolean
      */
-    public function parsePage($first = false)
+    public function parsePage($first = false, $reSearch = false)
     {
         // Create mysql
         $log = new WLog();
@@ -43,14 +43,18 @@ class ParsePage
             $_SESSION['urlid'] = $this->urlId;
             session_write_close();
         }
-        $url_host = $url_components['host'];
-        $url_path = '';
-        if (array_key_exists('path', $url_components) == false) {
-            // If not a valid path, mark as done
-            $MySql->startDownload();
-            return false;
+        if ($reSearch === false) {
+            $url_host = $url_components['host'];
+            $url_path = '';
+            if (array_key_exists('path', $url_components) == false) {
+                // If not a valid path, mark as done
+                $MySql->startDownload();
+                return false;
+            } else {
+                $url_path = $url_components['path'];
+            }
         } else {
-            $url_path = $url_components['path'];
+            $url_path = $this->target;
         }
         // Download Page
         
@@ -71,11 +75,19 @@ class ParsePage
         } elseif (!isset($contents['headers']['status_info'][1]) || $contents['headers']['status_info'][1] != 200) {
             // If not ok, mark as downloaded but skip
             $MySql->path = $this->path;
-            $MySql->statusSave();
+            if ($reSearch === true) {
+                $MySql->statusSaveResearch();
+            } else {
+                $MySql->statusSave();
+            }
             return true;
         } elseif (isset($contents['error_page']) && $contents['error_page'] == 1) {
             $MySql->path = $this->path;
-            $MySql->statusSave();
+            if ($reSearch === true) {
+                $MySql->statusSaveResearch();
+            } else {
+                $MySql->statusSave();
+            }
             $log->m_log('Targer URL is bad: ' . $this->target);
             return true;
         }
@@ -174,6 +186,9 @@ class ParsePage
         $MySql->path = $this->path;
         $MySql->endDownload();
         // Get Links
+        if ($reSearch === true) {
+            return true;
+        }
         $links = Array();
         $link_tags = $doc->getElementsByTagName('a');
         

@@ -129,6 +129,12 @@ class WebCrawler
                     <input type="text" class="form-control" id="w-name" name="wname" placeholder="The name of the website" aria-label="URL" aria-describedby="button-addon2" style="color: #b5b5b5;" required>
                 </div>
             </div>
+            <div class="col-lg-12">
+            <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="external" value="1" id="external" checked>
+                    <label class="form-check-label"	for="meta-title"> Download external contents</label>
+                </div>
+            </div>
         </div>
         <h3 class="other-element">General elements</h3>
         <div class="row">
