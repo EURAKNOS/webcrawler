@@ -185,14 +185,14 @@ class ParsePage
             try {
                 $MySql->savePage();
             } catch (PDOException $e) {
-                $this->log->m_log('Content save error PDOException exception:' . $this->target);
-                $this->log->m_log($e);
+                $log->m_log('Content save error PDOException exception:' . $this->target);
+                $log->m_log($e);
             } catch (Throwable $t) {
-                $this->log->m_log('Content save error Throwable exception:' . $this->target);
-                $this->log->m_log($t);
+                $log->m_log('Content save error Throwable exception:' . $this->target);
+                $log->m_log($t);
             } catch (Exception $e) {
-                $this->log->m_log('Content save error Exception exception:' . $this->target);
-                $this->log->m_log($e);
+                $log->m_log('Content save error Exception exception:' . $this->target);
+                $log->m_log($e);
             }
         }
         
