@@ -41,5 +41,5 @@ $ajaxProcess = new ButtonsAjax();
 
 
 $researchProcess = new ResearchProcess();
-$researchProcess->urlId = 8;
+$researchProcess->urlId = $_GET['id'];
 $researchProcess->process();
