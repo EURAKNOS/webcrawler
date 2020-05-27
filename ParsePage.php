@@ -35,6 +35,8 @@ class ParsePage
         $url_components = parse_url($this->target);
         if ($url_components === false) {
             $log->m_log('Target error (url_compnents): ' . $this->target);
+            $MySql->path = $this->path;
+            $MySql->endDownload();
             return false;
         }
         if ($first) {
