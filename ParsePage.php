@@ -34,7 +34,8 @@ class ParsePage
         // Parse URL and get Components
         $url_components = parse_url($this->target);
         if ($url_components === false) {
-            die('Unable to Parse URL');
+            $log->m_log('Target error (url_compnents): ' . $this->target);
+            return false;
         }
         if ($first) {
             $MySql->saveUrl();
