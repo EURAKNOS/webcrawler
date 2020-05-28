@@ -141,4 +141,4 @@ function check($url, $ignore = '')
         );
     }
 }
-check('http://www.ns.nl');
+print_r(check('http://www.ns.nl'));
