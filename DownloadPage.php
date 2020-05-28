@@ -44,11 +44,12 @@ class DownloadPage {
     {
         $cnt = 0;
         $err_c = 1;
+        $this->log->m_log($this->target . '------1');
         while ($cnt < 3 && $err_c == 1) {
             $err_c = $this->urlCheck();
             $cnt++;
         }
-        $this->log->m_log($this->target);
+        $this->log->m_log($this->target . '------2');
         if ($err_c != 2) {
             $contents['error_page'] = 1;
             return $contents;
@@ -118,6 +119,7 @@ class DownloadPage {
      */
     private function urlCheck()
     {
+        $this->log->m_log($this->target . '------3');
         $file_headers = @get_headers($this->target);
         if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
             $this->log->m_log('HTTP/1.1 404 Not Found:' . $this->target);
