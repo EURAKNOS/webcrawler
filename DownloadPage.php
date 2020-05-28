@@ -131,6 +131,7 @@ class DownloadPage {
             $this->log->m_log('HTTP/1.1 403 Forbidden:' . $this->target);
             return 0;
         } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.0 301 Moved Permanently') {
+            $this->log->m_log('HTTP/1.0 301 Moved Permanently:' . $this->target . ' changeto: ' . $file_headers[5]);
             $this->target = ltrim($file_headers[5], 'Location: ');
             return 1;
         } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.1 301 Moved Permanently') {
