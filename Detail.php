@@ -137,7 +137,7 @@ class Detail
             	</a>
             	<ul class="navbar-nav">
                   	<li class="nav-item">
-                    	<a class="nav-link" href="new.php">Add Crawler</a>
+                    	<a class="nav-link" href="new.php">Add crawler</a>
                   	</li>
                     <li class="nav-item">
                     	<a class="nav-link" href="export_details.php?id='.$this->mainData['id'].'">Export details</a>

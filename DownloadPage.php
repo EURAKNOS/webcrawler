@@ -121,8 +121,13 @@ class DownloadPage {
     {
         $file_headers = @get_headers($this->target);
         if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
+            $this->log->m_log('HTTP/1.1 404 Not Found:' . $this->target);
             return 0;
         } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.1 401 Unauthorized') {
+            $this->log->m_log('HTTP/1.1 401 Unauthorized:' . $this->target);
+            return 0;
+        } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.1 403 Forbidden') {
+            $this->log->m_log('HTTP/1.1 403 Forbidden:' . $this->target);
             return 0;
         } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.1 301 Moved Permanently') {
             $this->target = ltrim($file_headers[12], 'Location: ');
@@ -430,8 +435,9 @@ class DownloadPage {
         
         
         $docxmeta = new docxmetadata();
-        $docxmeta->setDocument($dl->localfile);
-        $result = $docxmeta->allData();
+        if($docxmeta->setDocument($dl->localfile)) {
+            $result = $docxmeta->allData();
+        }
         
         $this->log->m_log('DOCX metadata Ok');
         $saveData['meta_data'] = '';
@@ -565,30 +571,23 @@ class DownloadPage {
     
     private function processSpotify()
     {
-        $this->log->m_log('Start Spotify meta');
+        $this->log->m_log('Start spotify');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
         $dl->target = $this->target;
         $dl->folder = '';
         $dl->preSaveDatabaseDownlodedFile();
         
-        if(preg_match("/(https?:\/\/)?(www\.)?(open\.)?spotify\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/", $this->target, $match)) {
-            //echo "Vimeo ID: $match[5]";
-        }
-        $path = $match[5];
-        
-        
         $saveData['meta_data'] = '';
-        if (isset($result) && !empty($result)) {
-            $saveData['meta_data'] = serialize($result);
-        }
+        $saveData['meta_data'] = serialize($this->target);
+        
         $saveData['id'] = $dl->id;
         $saveData['local_location'] = ''; //$dl->localfile;
         $saveData['file_type'] = 'spotify';
         
         // File data Save Database
         $dl->saveData = $saveData;
-        $this->log->m_log('Start sporify success');
+        $this->log->m_log('Start spotify');
         return $dl->saveEnd();
     }
     

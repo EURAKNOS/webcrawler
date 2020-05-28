@@ -50,35 +50,40 @@ var classButtons = function() {
 
 	this.deleteButton = function() {
 		$( ".delete-button" ).click(function(event) {
+			
 			var button = $(this);
 			var data = $(this).data("id"); // form data
-			var buttonTd = button.closest('.fbuttons');
-			var buttonTr = button.closest('.w-row');
-			event.preventDefault();
-			
-			
-
-			$.ajax({
-				url : "buttons-ajax.php",
-				type : "POST",
-				dataType : "json",
-				data : {
-					processFunction : 'delete',
-					data : data
-				},
-				async : true,
-				cache : false,
-				timeout : 10000,
-				error : function() {
-					console.log('error stopButton');
-				},
-				success : function(response) {
-					if (response.status == 1) {
-						buttonTr.remove();
+			$('#deleteModal').modal('show');
+			$('#deleteModal').attr( "data-id", data );
+			$("#accept-delete").click(function() {
+				
+				var id = $('#deleteModal').attr( "data-id");
+				var buttonTd = $('[data-id="' + id + '"]').closest('.fbuttons');
+				var buttonTr = $('[data-id="' + id + '"]').closest('.w-row');
+				$('#deleteModal').modal('hide')
+				event.preventDefault();
+				
+				$.ajax({
+					url : "buttons-ajax.php",
+					type : "POST",
+					dataType : "json",
+					data : {
+						processFunction : 'delete',
+						data : id
+					},
+					async : true,
+					cache : false,
+					timeout : 10000,
+					error : function() {
+						//console.log('error stopButton');
+					},
+					success : function(response) {
+						if (response.status == 1) {
+							buttonTr.remove();
+						}
 					}
-				}
+				});
 			});
-
 		});
 		return false;
 	}

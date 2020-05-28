@@ -64,6 +64,28 @@ class MainPage
             <!-- Load an icon library to show a hamburger menu (bars) on small screens -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
             
+            <!-- Modal -->
+            <div class="modal fade" id="deleteModal" data-id="" tabindex="-1" role="dialog" aria-labelledby="deleteModal" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="WebCrawlerModalLabel">Warning!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true"></span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure to delete this crawler and all of its data?<br>
+                    This will also delete the crawler-related results in the database and on the server!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="accept-delete" class="btn btn-danger">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Top Navigation Menu -->
             <div class="topnav">
               <a class="active navbar-brand" href="/">
@@ -88,7 +110,7 @@ class MainPage
             	</a>
             	<ul class="navbar-nav">
                   	<li class="nav-item">
-                    	<a class="nav-link" href="new.php">Add Crawler</a>
+                    	<a class="nav-link" href="new.php">Add crawler</a>
                   	</li>
                     <li class="nav-item">
                     	<a class="nav-link" href="export_details.php">Export all</a>
@@ -119,8 +141,6 @@ class MainPage
     private function contentTemplate()
     {
         $this->ctemplate = ('
-            	<!-- Modal -->
-            
             <div class="row justify-content-center">
             
             	<div class="col-md-2">
@@ -177,7 +197,7 @@ class MainPage
             <div class="row justify-content-center">
             	<div class="col-md-10">
             		<div class="dashboardittem">
-            			<p class="stattitle" style="font-size: 1.5rem;font-weight:bold;">list of Crawlers</p>
+            			<p class="stattitle" style="font-size: 1.5rem;font-weight:bold;">Crawler(s)</p>
                         <table class="table table-striped table-light dashboard-table">
                         	<thead class="thead-dark">
                             	<tr>

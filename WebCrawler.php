@@ -55,26 +55,26 @@ class WebCrawler
             </head>
             <body>
 
-                   <!-- Modal -->
-        <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="WebCrawlerModalLabel">Warning!</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true"></span>
-                </button>
-              </div>
-              <div class="modal-body">
-                The specified website is already in the database. If you want to delete it again, the previous data will be lost.
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="accept-download" class="btn btn-success">Download accepted</button>
+            <!-- Modal -->
+            <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="WebCrawlerModalLabel">Warning!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true"></span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    The specified website is already in the database. If you want to delete it again, the previous data will be lost.
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="accept-download" class="btn btn-success">Download accepted</button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
               <!-- Top Navigation Menu -->
             <div class="topnav">
               <a class="active navbar-brand" href="/">
@@ -83,7 +83,7 @@ class WebCrawler
             	</a>
               <!-- Navigation links (hidden by default) -->
               <div id="myLinks">
-                <a class="nav-link" href="new.php">Add Crawler</a>
+                <a class="nav-link" href="new.php">Add crawler</a>
               </div>
               <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
               <a href="javascript:void(0);" class="icon" onclick="myFunction()">
