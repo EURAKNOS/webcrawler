@@ -42,18 +42,19 @@ class DownloadPage {
      */
     public function downloadData()
     {
+        $this->log->m_log('1');
         $cnt = 0;
         $err_c = 1;
         while ($cnt < 3 && $err_c == 1) {
             $err_c = $this->urlCheck();
             $cnt++;
         }
-        
+        $this->log->m_log('2');
         if ($err_c != 2) {
             $contents['error_page'] = 1;
             return $contents;
         }
-        
+        $this->log->m_log('3');
         $file_headers = @get_headers($this->target);
         
         $pos = strpos($this->target, 'https://www.youtube.com');
@@ -64,7 +65,7 @@ class DownloadPage {
         $posMaps2 = strpos($this->target, 'maps.google.com');
         
         
-        
+        $this->log->m_log('4');
         if ($pos !== false || $posYoutube2 !== false) {
             $this->processYoutube();
         } elseif ($posVimeo !== false) {
