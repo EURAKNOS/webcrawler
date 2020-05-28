@@ -20,11 +20,14 @@ $str = ltrim($str, '//');
 
 echo $str; */
 echo '<pre>';
-$file_headers = @get_headers('http://www.ns.nl');
+$file_headers = @get_headers('https://www.aki.gov.hu/');
+var_dump($file_headers);
+echo 'ok';
+/*$file_headers = @get_headers('http://www.ns.nl');
 var_dump($file_headers);
 echo 'ok';
 $tmp = parse_url('http://www.ns.nl');
 $target = $tmp['scheme'] .'://'. $tmp['host'] . ltrim($file_headers[3], 'Location: ');
 echo $target;
 $file_headers2 = @get_headers($target);
-var_dump($file_headers2);
+var_dump($file_headers2);*/
