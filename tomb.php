@@ -32,7 +32,7 @@ echo $target;
 $file_headers2 = @get_headers($target);
 var_dump($file_headers2);*/
 
-$curl = curl_init();
+/*$curl = curl_init();
 curl_setopt_array($curl, array(
     CURLOPT_URL => 'http://www.ns.nl',
     CURLOPT_HEADER => true,
@@ -42,4 +42,103 @@ curl_setopt_array($curl, array(
 $header = explode("\n", curl_exec($curl));
 curl_close($curl);
 
-print_r($header);
+print_r($header);*/
+
+
+function check($url, $ignore = '')
+{
+    $agent = "Mozilla/4.0 (B*U*S)";
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_USERAGENT, $agent);
+    
+    curl_setopt($ch, CURLOPT_VERBOSE, false);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 45);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 45);
+    
+    curl_setopt($ch, CURLOPT_HEADER, true);
+    curl_setopt($ch, CURLOPT_NOBODY, true);
+    
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_MAXREDIRS, 5); //follow up to 10 redirections - avoids loops
+    
+    
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); //fix for certificate issue
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); //fix for certificate issue
+    
+    
+    $page = curl_exec($ch);
+    $err = curl_error($ch);
+    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    
+    $codes = array(
+        0 => 'Domain Not Found',
+        100 => 'Continue',
+        101 => 'Switching Protocols',
+        200 => 'OK',
+        201 => 'Created',
+        202 => 'Accepted',
+        203 => 'Non-Authoritative Information',
+        204 => 'No Content',
+        205 => 'Reset Content',
+        206 => 'Partial Content',
+        300 => 'Multiple Choices',
+        301 => 'Moved Permanently',
+        302 => 'Found',
+        303 => 'See Other',
+        304 => 'Not Modified',
+        305 => 'Use Proxy',
+        307 => 'Temporary Redirect',
+        400 => 'Bad Request',
+        401 => 'Unauthorized',
+        402 => 'Payment Required',
+        403 => 'Forbidden',
+        404 => 'Not Found',
+        405 => 'Method Not Allowed',
+        406 => 'Not Acceptable',
+        407 => 'Proxy Authentication Required',
+        408 => 'Request Timeout',
+        409 => 'Conflict',
+        410 => 'Gone',
+        411 => 'Length Required',
+        412 => 'Precondition Failed',
+        413 => 'Request Entity Too Large',
+        414 => 'Request-URI Too Long',
+        415 => 'Unsupported Media Type',
+        416 => 'Requested Range Not Satisfiable',
+        417 => 'Expectation Failed',
+        500 => 'Internal Server Error',
+        501 => 'Not Implemented',
+        502 => 'Bad Gateway',
+        503 => 'Service Unavailable',
+        504 => 'Gateway Timeout',
+        505 => 'HTTP Version Not Supported'
+    );
+    
+    $httpcode_out = 'http: ' . $httpcode . ' (' . $codes[$httpcode] . ')';
+    $err = 'curl error: ' . $err;
+    
+    $out = array(
+        $url,
+        $httpcode_out,
+        $err
+    );
+    
+    if ($httpcode >= 200 && $httpcode < 307)
+    {//good
+        return array(
+            'Work',
+            $out
+        );
+    }
+    else
+    {//BAD
+        return array(
+            'Fail',
+            $out
+        );
+    }
+}
+check('http://www.ns.nl');
