@@ -42,20 +42,12 @@ class DownloadPage {
      */
     public function downloadData()
     {
-        $cnt = 0;
-        $err_c = 1;
-        $this->log->m_log($this->target . '------1');
-        while ($cnt < 3 && $err_c == 1) {
-            $err_c = $this->urlCheck();
-            $cnt++;
-        }
-        $this->log->m_log($this->target . '------2');
+        $err_c = $this->urlCheck();
         if ($err_c != 2) {
             $contents['error_page'] = 1;
             return $contents;
         }
         $file_headers = @get_headers($this->target);
-        $this->log->m_log('f');
         $pos = strpos($this->target, 'https://www.youtube.com');
         $posYoutube2 = strpos($this->target, 'youtu.be');
         $posVimeo = strpos($this->target, '.vimeo.com');
@@ -119,34 +111,82 @@ class DownloadPage {
      */
     private function urlCheck()
     {
-        $this->log->m_log($this->target . '------3');
-        $file_headers = @get_headers($this->target);
-        $this->log->m_log($this->target . '------4');
-        if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
-            $this->log->m_log('HTTP/1.1 404 Not Found:' . $this->target);
+        $agent = "Mozilla/4.0 (B*U*S)";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->target);
+        curl_setopt($ch, CURLOPT_USERAGENT, $agent);
+        
+        curl_setopt($ch, CURLOPT_VERBOSE, false);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 45);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 45);
+        
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 5); //follow up to 10 redirections - avoids loops
+        
+        
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); //fix for certificate issue
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); //fix for certificate issue
+        
+        
+        $page = curl_exec($ch);
+        $err = curl_error($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $effectiveUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL );
+        curl_close($ch);
+        
+        $codes = array(
+            0 => 'Domain Not Found',
+            100 => 'Continue',
+            101 => 'Switching Protocols',
+            200 => 'OK',
+            201 => 'Created',
+            202 => 'Accepted',
+            203 => 'Non-Authoritative Information',
+            204 => 'No Content',
+            205 => 'Reset Content',
+            206 => 'Partial Content',
+            300 => 'Multiple Choices',
+            301 => 'Moved Permanently',
+            302 => 'Found',
+            303 => 'See Other',
+            304 => 'Not Modified',
+            305 => 'Use Proxy',
+            307 => 'Temporary Redirect',
+            400 => 'Bad Request',
+            401 => 'Unauthorized',
+            402 => 'Payment Required',
+            403 => 'Forbidden',
+            404 => 'Not Found',
+            405 => 'Method Not Allowed',
+            406 => 'Not Acceptable',
+            407 => 'Proxy Authentication Required',
+            408 => 'Request Timeout',
+            409 => 'Conflict',
+            410 => 'Gone',
+            411 => 'Length Required',
+            412 => 'Precondition Failed',
+            413 => 'Request Entity Too Large',
+            414 => 'Request-URI Too Long',
+            415 => 'Unsupported Media Type',
+            416 => 'Requested Range Not Satisfiable',
+            417 => 'Expectation Failed',
+            500 => 'Internal Server Error',
+            501 => 'Not Implemented',
+            502 => 'Bad Gateway',
+            503 => 'Service Unavailable',
+            504 => 'Gateway Timeout',
+            505 => 'HTTP Version Not Supported'
+        ); 
+        if ($httpcode >= 200 && $httpcode < 307) {//good
+                $this->target = $effectiveUrl;
+                return 2;
+        } else {//BAD
+            $this->log->m_log('TARGET error: '.$this->target.' : http: ' . $httpcode . ' (' . $codes[$httpcode] . ') CURL error:' . $err);
             return 0;
-        } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.1 401 Unauthorized') {
-            $this->log->m_log('HTTP/1.1 401 Unauthorized:' . $this->target);
-            return 0;
-        } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.1 403 Forbidden') {
-            $this->log->m_log('HTTP/1.1 403 Forbidden:' . $this->target);
-            return 0;
-        } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.0 301 Moved Permanently') {
-            $this->log->m_log('HTTP/1.0 301 Moved Permanently:' . $this->target . ' changeto: ' . $file_headers[5]);
-            $this->target = ltrim($file_headers[5], 'Location: ');
-            return 1;
-        } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.1 301 Moved Permanently') {
-            $this->target = ltrim($file_headers[12], 'Location: ');
-            return 1;
-        } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.0 302 Moved Temporarily') {
-            $this->target = ltrim($file_headers[1], 'Location: ');
-            return 1;
-        } elseif (isset($file_headers[0]) && $file_headers[0] == 'HTTP/1.1 302 Found') {
-            $tmp = parse_url($this->target);
-            $this->target = $tmp['scheme'] .'://'. $tmp['host'] . ltrim($file_headers[3], 'Location: ');
-            return 1;
-        } else {
-            return 2;
         }
     }
     

@@ -30,7 +30,7 @@ class ParsePage
         $MySql = new DbMysql();
         $MySql->target = $this->target;
         $MySql->urlId = $this->urlId;
-        $log->m_log('parse_url');
+        
         // Parse URL and get Components
         $url_components = parse_url($this->target);
         if ($url_components === false) {
@@ -39,7 +39,7 @@ class ParsePage
             $MySql->endDownload();
             return false;
         }
-        $log->m_log('first');
+        
         if ($first) {
             $MySql->saveUrl();
             $this->urlId = $MySql->urlId;
@@ -47,7 +47,6 @@ class ParsePage
             $_SESSION['urlid'] = $this->urlId;
             session_write_close();
         }
-        $log->m_log('research');
         if ($reSearch === false) {
             $url_host = $url_components['host'];
             $url_path = '';
@@ -61,7 +60,6 @@ class ParsePage
         } else {
             $url_path = $this->target;
         }
-        $log->m_log('DownloadPage');
         // Download Page
         
         //echo "Downloading: $this->target\n<br>";
@@ -72,7 +70,6 @@ class ParsePage
         $dwl->urlId = $this->urlId;
         $dwl->browser = $this->browser;
         $contents = $dwl->downloadData();
-        $log->m_log('Contentcheck');
         //echo "Done\n";
         // Check Status
         if (isset($contents['ok'])) {
@@ -98,9 +95,9 @@ class ParsePage
             $log->m_log('Targer URL is bad: ' . $this->target);
             return true;
         }
+       //print_r($contents);
         $MySql->target = $this->target;
         // Parse Contents
-        $log->m_log('DomDocumentum');
         $doc = new DOMDocument();
         libxml_use_internal_errors(true);
         $doc->loadHTML($contents['body']);
