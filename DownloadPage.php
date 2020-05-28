@@ -120,7 +120,9 @@ class DownloadPage {
     private function urlCheck()
     {
         $this->log->m_log($this->target . '------3');
-        $file_headers = @get_headers($this->target);
+        $file_headers = get_headers($this->target);
+        print_r($file_headers);
+        die();
         $this->log->m_log($this->target . '------4');
         if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
             $this->log->m_log('HTTP/1.1 404 Not Found:' . $this->target);
