@@ -19,10 +19,10 @@ echo '</pre>';*/
 $str = ltrim($str, '//');
 
 echo $str; */
-echo '<pre>';
+/*echo '<pre>';
 $file_headers = @get_headers('https://www.aki.gov.hu/');
 var_dump($file_headers);
-echo 'ok';
+echo 'ok';*/
 /*$file_headers = @get_headers('http://www.ns.nl');
 var_dump($file_headers);
 echo 'ok';
@@ -31,3 +31,15 @@ $target = $tmp['scheme'] .'://'. $tmp['host'] . ltrim($file_headers[3], 'Locatio
 echo $target;
 $file_headers2 = @get_headers($target);
 var_dump($file_headers2);*/
+
+$curl = curl_init();
+curl_setopt_array($curl, array(
+    CURLOPT_URL => 'http://www.ns.nl',
+    CURLOPT_HEADER => true,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_NOBODY => true));
+
+$header = explode("\n", curl_exec($curl));
+curl_close($curl);
+
+print_r($header);
