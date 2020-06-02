@@ -76,7 +76,7 @@ class WebCrawler
               </div>
             </div>
               <!-- Top Navigation Menu -->
-            <div class="topnav">
+            <div class="topnav" style="margin-bottom: 10px;">
               <a class="active navbar-brand" href="/">
                     <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
                     EURAKNOS WEBCRAWLER

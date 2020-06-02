@@ -896,15 +896,6 @@ class DownloadFileExtended {
             $this->log->m_log('Create folder success: ' . FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id);
         }
         
-        
-       /* $opts= array(
-            'http' => array(
-                'proxy' => 'tcp://192.168.5.254:3128'
-            )
-        );
-        $context = stream_context_create($opts);*/ 
-        
-        //$downloadedFile = fopen($this->target, 'rb', false, $context);
         $downloadedFile = fopen($this->target, 'rb');
         if (!$downloadedFile) {
             $this->log->m_log('Error download file from url : ' . $this->target);

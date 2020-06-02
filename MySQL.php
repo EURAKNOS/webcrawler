@@ -453,6 +453,18 @@ class DbMysql {
         $this->result['content'] = $statementSelect->fetch(PDO::FETCH_OBJ)->cp;
     }
     
+    /**
+     * All page content
+     */
+    public function getAllDistinctContent()
+    {
+        $statementSelect = $this->db->prepare("SELECT COUNT(distinct path) AS cp FROM " . CONTENTS_TABLE . " WHERE download_time IS NOT NULL");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('getAllContent pages MySql function error');
+        }
+        $this->result['distinct_content'] = $statementSelect->fetch(PDO::FETCH_OBJ)->cp;
+    }
+    
     public function getAllContentWithMeta()
     {
         $this->result2 = array();
@@ -472,6 +484,18 @@ class DbMysql {
         $tmp = $statementSelect->fetchAll();
         foreach ($tmp as $item) {
             $this->result[$item['file_type']] = $item['cid'];
+        }
+    }
+    
+    public function countByTypeDistinctAllPage()
+    {
+        $statementSelect = $this->db->prepare("SELECT COUNT(distinct path) AS cid, file_type FROM " . FILES_TABLE . " WHERE downloaded_time IS NOT NULL GROUP BY file_type");
+        if(!$statementSelect->execute()){
+            $this->log->m_log('countByTypeDistinctAllPage MySql function error');
+        }
+        $tmp = $statementSelect->fetchAll();
+        foreach ($tmp as $item) {
+            $this->result['distinct_' . $item['file_type']] = $item['cid'];
         }
     }
     

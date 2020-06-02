@@ -68,11 +68,11 @@ class Detail
             'png' => 'PNG',
             'swf' => 'SWF',
             'svg' => 'SVG',
-            'youtube_video' => 'YOUTUBE',
-            'vimeo_video' => 'VIMEO',
-            'spotify' => 'SPOTIFY',
+            'youtube_video' => 'YOUTUBE (link)',
+            'vimeo_video' => 'VIMEO (link)',
+            'spotify' => 'SPOTIFY (link)',
             'mp4' => 'MP4',
-            'google_map' => 'GOOGLE MAPS',
+            'google_map' => 'GOOGLE MAPS (link)',
             'zip' => 'ZIP'
         );
         $this->MySql = new DbMysql();
@@ -115,8 +115,8 @@ class Detail
             </head>
             <body>
              <!-- Top Navigation Menu -->
-            <div class="topnav">
-              <a class="active navbar-brand" href="/">
+            <div class="topnav" style="margin-bottom: 10px;">
+              <a class="active navbar-brand" style="text-align: left;" href="/">
                     <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
                     EURAKNOS WEBCRAWLER
             	</a>
@@ -134,7 +134,7 @@ class Detail
             	<a class="navbar-brand" href="/">
                     <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
                     EURAKNOS WEBCRAWLER
-            	</a>
+            	</a>500-600
             	<ul class="navbar-nav">
                   	<li class="nav-item">
                     	<a class="nav-link" href="new.php">Add crawler</a>

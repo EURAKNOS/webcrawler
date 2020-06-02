@@ -31,11 +31,11 @@ class DetailsExport {
             'png' => 'PNG',
             'swf' => 'SWF',
             'svg' => 'SVG',
-            'youtube_video' => 'YOUTUBE',
-            'vimeo_video' => 'VIMEO',
-            'spotify' => 'SPOTIFY',
+            'youtube_video' => 'YOUTUBE (link)',
+            'vimeo_video' => 'VIMEO (link)',
+            'spotify' => 'SPOTIFY (link)',
             'mp4' => 'MP4',
-            'google_map' => 'GOOGLE MAPS',
+            'google_map' => 'GOOGLE MAPS (link)',
             'zip' => 'ZIP'
         );
     }

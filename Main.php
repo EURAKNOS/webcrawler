@@ -87,8 +87,8 @@ class MainPage
             </div>
 
             <!-- Top Navigation Menu -->
-            <div class="topnav">
-              <a class="active navbar-brand" href="/">
+            <div class="topnav" style="margin-bottom: 10px;">
+              <a class="active navbar-brand" style="text-align: left;" href="/">
                     <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
                     EURAKNOS WEBCRAWLER
             	</a>
@@ -147,6 +147,7 @@ class MainPage
                 	<div class="dashboardittem">
                         <p class="sitename">TEXT</p>
                         <p style="font-size:3rem;margin:0;padding:0;">' . $this->resultAllOutput['text']['all'] . '</p>
+                        <p style="font-size:1rem;margin:0;padding:0;">(' . $this->resultAllOutput['text']['distinct'] . ')</p>
             			<p style="margin-bottom:0;">metadata availability</p>
                         <canvas id="stat-text" class="chartjs" data-percentage="' . $this->resultAllOutput['text']['percentage'] . '" style="display: inline-block;height: 20px;width:100%;background-color:#e5e5e5;"></canvas>
                     </div>
@@ -156,6 +157,7 @@ class MainPage
                 	<div class="dashboardittem">
                         <p class="sitename">PRESENTATION</p>
                         <p style="font-size:3rem;margin:0;padding:0;">' . $this->resultAllOutput['presentation']['all'] . '</p>
+                        <p style="font-size:1rem;margin:0;padding:0;">(' . $this->resultAllOutput['presentation']['distinct'] . ')</p>
             			<p style="margin-bottom:0;">metadata availability</p>
                         <canvas id="stat-prez" class="chartjs" data-percentage="' . $this->resultAllOutput['presentation']['percentage'] . '" style="display: inline-block;height: 20px;width:100%;background-color:#e5e5e5;"></canvas>
                     </div>
@@ -164,6 +166,7 @@ class MainPage
                 	<div class="dashboardittem">
                         <p class="sitename">IMAGE</p>
                         <p style="font-size:3rem;margin:0;padding:0;">' . $this->resultAllOutput['image']['all'] . '</p>
+                        <p style="font-size:1rem;margin:0;padding:0;">(' . $this->resultAllOutput['image']['distinct'] . ')</p>
             			<p style="margin-bottom:0;">metadata availability</p>
                         <canvas id="stat-image" class="chartjs" data-percentage="' . $this->resultAllOutput['image']['percentage'] . '" style="display: inline-block;height: 20px;width:100%;background-color:#e5e5e5;"></canvas>
                     </div>
@@ -172,6 +175,7 @@ class MainPage
                 	<div class="dashboardittem">
                         <p class="sitename">VIDEO</p>
                         <p style="font-size:3rem;margin:0;padding:0;">' . $this->resultAllOutput['video']['all'] . '</p>
+                        <p style="font-size:1rem;margin:0;padding:0;">(' . $this->resultAllOutput['video']['distinct'] . ')</p>
             			<p style="margin-bottom:0;">metadata availability</p>
                         <canvas id="stat-video" class="chartjs" data-percentage="' . $this->resultAllOutput['video']['percentage'] . '" style="display: inline-block;height: 20px;width:100%;background-color:#e5e5e5;"></canvas>
                     </div>
@@ -180,6 +184,7 @@ class MainPage
                 	<div class="dashboardittem">
                         <p class="sitename">AUDIO</p>
                         <p style="font-size:3rem;margin:0;padding:0;">' . $this->resultAllOutput['audio']['all'] . '</p>
+                        <p style="font-size:1rem;margin:0;padding:0;">(' . $this->resultAllOutput['audio']['distinct'] . ')</p>
             			<p style="margin-bottom:0;">metadata availability</p>
                         <canvas id="stat-video" class="chartjs" data-percentage="' . $this->resultAllOutput['audio']['percentage'] . '" style="display: inline-block;height: 20px;width:100%;background-color:#e5e5e5;"></canvas>
                     </div>
@@ -188,6 +193,7 @@ class MainPage
                 	<div class="dashboardittem">
                         <p class="sitename">OTHER</p>
                         <p style="font-size:3rem;margin:0;padding:0;">' . $this->resultAllOutput['other']['all'] . '</p>
+                        <p style="font-size:1rem;margin:0;padding:0;">(' . $this->resultAllOutput['other']['distinct'] . ')</p>
             			<p style="margin-bottom:0;">metadata availability</p>
                         <canvas id="stat-other" class="chartjs" data-percentage="' . $this->resultAllOutput['other']['percentage'] . '" style="display: inline-block;height: 20px;width:100%;background-color:#e5e5e5;"></canvas>
                     </div>
@@ -274,12 +280,14 @@ class MainPage
     private function getAllTextCount()
     {
         $this->MySql->getAllContent();
+        $this->MySql->getAllDistinctContent();
         $this->MySql->getAllContentWithMeta();
     }
     
     private function countByType()
     {
         $this->MySql->countByTypeAllPage();
+        $this->MySql->countByTypeDistinctAllPage();
         $this->MySql->countByTypeAllPageWithMeta();
     }
     
@@ -288,8 +296,10 @@ class MainPage
         foreach ($this->types as $ktp => $tp) {
             $this->resultAllOutput[$ktp]['all'] = 0;
             $this->resultAllOutput[$ktp]['allmeta'] = 0;
+            $this->resultAllOutput[$ktp]['distinct'] = 0;
             foreach ($tp as $value) {
                 $this->resultAllOutput[$ktp]['all'] += (isset($this->resultAll[$value])) ? $this->resultAll[$value] : 0;
+                $this->resultAllOutput[$ktp]['distinct'] += (isset($this->resultAll['distinct_' . $value])) ? $this->resultAll['distinct_' . $value] : 0;
                 $this->resultAllOutput[$ktp]['allmeta'] += (isset($this->resultWithMeta[$value])) ? $this->resultWithMeta[$value] : 0;
                 $this->resultAllOutput[$ktp]['percentage'] = $this->percentageAllPage($this->resultAllOutput[$ktp]['all'], $this->resultAllOutput[$ktp]['allmeta']);
             }
