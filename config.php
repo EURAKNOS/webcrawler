@@ -1,5 +1,5 @@
 <?php
-define('VERSION', '0.5.9.7');
+define('VERSION', '0.5.9.8');
 
 define('DB_SERVER_HOST', 'localhost');
 define('DB_USER_NAME', 'webc');
@@ -33,3 +33,7 @@ define('YOUTUBE_API_KEY', 'AIzaSyBTQ6j6WWNPJ2uLifGuYrJELsRFjDDQWIo');
 define('VIMEO_API_KEY', '637ecf1ffbaedf398ecff5aaa31a27c4f780204c');
 define('VIMEO_API_SECRET', 'MGdf88z3eDABtapf2uBgfG8gpK6tLsnIeGhAUkspXmiaPRg1g5oRyhCccdOWD1D6vcq8s629kDfXCbUjfEcQoaHLJh8KVWHGUrdWpx4NEUrzhpVwAP3oa1BtYHAqg9MA');
 define('VIMEO_API_TOKEN', '8a984559b52476a22658d9a8aaada3e3');
+
+define('SPOTIFY_CLIENT_ID', 'a86a99cc3c8f41e688a413e19c2ddf63');
+define('SPOTIFY_CLIENT_SECRET', '870f5ca159b84d85a126b102f453b450');
+define('SPOTIFY_REDIRECT_URI', 'http://onpremgw1.bioeast.eu/spotify.php');
