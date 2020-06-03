@@ -20,7 +20,7 @@ $session = new SpotifyWebAPI\Session(
 $api = new SpotifyWebAPI\SpotifyWebAPI();
 
 
-$re = '/^(https:\/\/open.spotify.com\/episode\/)([a-zA-Z0-9]+)(.*)$/m';
+$re = '/^(https:\/\/open.spotify.com\/)([a-zA-Z0-9]+)(.*)\/([a-zA-Z0-9]+)(.*)$/m';
 
 $MySql = new DbMysql();
 $urls = $MySql->getEmptyMetaSpotifyUrls(); 
@@ -31,7 +31,11 @@ if (isset($_GET['code'])) {
     foreach ($urls as $value) {
         $MySql->data = array();
         preg_match_all($re, $value['path'], $matches, PREG_SET_ORDER, 0);
-        $show = $api->getEpisode($matches[0][2]);
+        if ($matches[0][2] == 'episode') {
+            $show = $api->getEpisode($matches[0][4]);
+        } elseif ($matches[0][2] == 'show') {
+            $show = $api->getShow($matches[0][4]);
+        }
         
         $saveData['meta_data'] = serialize($show);
         $saveData['id'] = $value['id'];
