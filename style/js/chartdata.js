@@ -308,7 +308,7 @@ $(document).ready(function() {
 		type:'horizontalBar',
 		data:{
 			datasets:[{
-				data:[videoPercentage],
+				data:[audioPercentage],
 				backgroundColor: '#ff9165',
 				barPercentage: 1,
 				categoryPercentage: 1,
