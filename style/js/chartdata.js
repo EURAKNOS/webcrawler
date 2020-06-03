@@ -70,6 +70,7 @@ $(document).ready(function() {
 	prezPercentage = $("#stat-prez").data("percentage"),
 	imagePercentage = $("#stat-image").data("percentage"),
 	videoPercentage = $("#stat-video").data("percentage"),
+	audioPercentage = $("#stat-audio").data("percentage"),
 	otherPercentage = $("#stat-other").data("percentage");
 
 	new Chart(document.getElementById("stat-text"),{
