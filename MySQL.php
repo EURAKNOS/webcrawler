@@ -547,4 +547,24 @@ class DbMysql {
             
     }
     
+    public function saveSpotifyMeta()
+    {
+        $this->data['download_time'] = time();
+        $statement = $this->db->prepare("UPDATE ".FILES_TABLE." SET downloaded_time = :download_time, meta_data = :meta_data WHERE id = :id");
+        if(!$statement->execute($this->data)){
+            $this->log->m_log('saveSpotifyMeta MySql function error');
+            throw new Exception("An operation failed saveSpotifyMeta function");
+        }
+        return true;
+     }
+     
+     public function getEmptyMetaSpotifyUrls()
+     {
+         $statementSelect = $this->db->prepare("SELECT * FROM " . FILES_TABLE . " WHERE file_type = 'spotify' AND meta_data = ''");
+         if(!$statementSelect->execute()){
+             $this->log->m_log('getAllFilesByUrlId MySql function error');
+         }
+         return $statementSelect->fetchAll();
+     }
+     
 }
