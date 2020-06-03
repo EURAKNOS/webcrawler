@@ -186,7 +186,7 @@ class MainPage
                         <p style="font-size:3rem;margin:0;padding:0;">' . $this->resultAllOutput['audio']['all'] . '</p>
                         <p style="font-size:1rem;margin:0;padding:0;">(' . $this->resultAllOutput['audio']['distinct'] . ')</p>
             			<p style="margin-bottom:0;">metadata availability</p>
-                        <canvas id="stat-video" class="chartjs" data-percentage="' . $this->resultAllOutput['audio']['percentage'] . '" style="display: inline-block;height: 20px;width:100%;background-color:#e5e5e5;"></canvas>
+                        <canvas id="stat-audio" class="chartjs" data-percentage="' . $this->resultAllOutput['audio']['percentage'] . '" style="display: inline-block;height: 20px;width:100%;background-color:#e5e5e5;"></canvas>
                     </div>
             	</div>	
             	<div class="col-md-2">

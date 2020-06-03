@@ -302,7 +302,64 @@ $(document).ready(function() {
 			},
 		},
 	});
+	// STAT AUDIO
+	new Chart(document.getElementById("stat-audio"),{
+		plugins: [ChartDataLabels],
+		type:'horizontalBar',
+		data:{
+			datasets:[{
+				data:[videoPercentage],
+				backgroundColor: '#ff9165',
+				barPercentage: 1,
+				categoryPercentage: 1,
+				datalabels: {
+					color: '#0b1c26',
+					labels: {
+						title: {
+							font: {
+								family: 'Lato',
+							}
+						},
+					},
+					formatter: function(value, context) {
+						return value + '%';
+					},
+				},
+			}],
+		},
 
+		options: {
+			animation: false,
+			legend: {
+				display: false,
+			},
+			title: {
+				display: false,
+			},
+			scales: {
+				yAxes: [{
+					display: false,
+					stacked: true,
+					ticks: {
+						display: false,	// Y tengely feliratok elrejtése
+					},
+				}],
+				xAxes: [{
+					display: false,
+					stacked: true,
+					ticks: {
+						display: false,
+						min:0,
+						max:100,
+					},
+				}],
+			},
+			tooltips: {
+				enabled: false,
+			},
+		},
+	});
+	
 // STAT OTHER
 	new Chart(document.getElementById("stat-other"),{
 		plugins: [ChartDataLabels],
