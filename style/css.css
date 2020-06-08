@@ -2,21 +2,40 @@
 
 body {
 	font-family: 'Lato', sans-serif;
-	text-align: center;
+/*	text-align: center; */
 	background: #f2f2f2;
 	color: #0b1c26;
 }
 
+/*
 form {
   width: 800px;
   margin: 8% auto;
   margin-top: 2%;
+}
+*/
+.navbar {
+	background-color: #215955;
+	margin-bottom: 1.5rem;
+}
+
+.navbar-brand {
+	font-weight: bold;
+	color:#fff;
+	margin-right: 2rem;
+}
+
+.navbar-brand img {
+	height:30px;
+	margin-right: .75rem;
 }
 
 .header {
   font-size: 35px;
   text-transform: uppercase;
   letter-spacing: 5px;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 .description {
@@ -34,6 +53,25 @@ form {
 .button {
   height: 44px;
   border: none;
+}
+
+.working {
+	-webkit-animation: pulsate 1.5s ease-out;
+    -webkit-animation-iteration-count: infinite;
+    opacity: 0;
+	margin-top:.5rem;
+}
+
+@-webkit-keyframes pulsate {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
 
 /* OLD URL DOWNLOAD
@@ -65,7 +103,7 @@ form {
 #submit:hover {
 	background: #4f8945;
 }
-*/  
+*/
 
 /* NEW URL DOWNLOAD */
 .downloadbutton {
@@ -124,6 +162,220 @@ td {
 td:first-child {text-align:right;}
 
 .logo {
-	width: 230px;
-	margin-bottom: .5em;
+	width: 200px;
+/*	margin-bottom: .5em; */
+}
+
+
+
+
+
+
+
+
+/* ------------------------- */
+/*         DASHBOARD         */
+/* ------------------------- */
+
+.dashboardittem {
+	margin-bottom: 2rem;
+	padding: 1rem;
+	background-color:#fff;
+	border-radius: .5rem;
+	-webkit-box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.5);
+	box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.5);
+}
+
+.dashboardittem .sitename {
+	font-size: 1.5rem;
+	font-weight:bold;
+	margin-bottom:0;
+}
+
+.dashboardittem .siteurl {
+	overflow:hidden;
+	text-overflow: ellipsis;
+	margin:0rem .5rem;
+}
+
+.stat p {
+	font-size: 3rem;
+	display: inline-block;
+	}
+
+.stat i {
+	margin: .2rem;
+	font-size: 2.5rem;
+	line-height: 3rem;
+}
+
+.finished {
+	margin-top:.5rem;
+}
+
+.details {
+	margin: .5rem 0 0 0;
+}
+
+/* DASHBOARD Table */
+.dashboard-table {
+	border-spacing: 0;
+	font-size: 1.1rem;
+}
+
+.dashboard-table td {
+	vertical-align: middle;
+}
+
+.dashboard-table td:first-child {
+	text-align:left;
+}
+
+
+/* HOWTO */
+.howto h1 {
+	text-align: center;
+	margin-bottom: 1rem;
+	font-weight: bold;
+	color:#215955;
+}
+	
+.howto h2 {
+	margin: 2rem 0rem 1rem 0rem;
+	font-weight: bold;
+	color:#215955;
+}
+
+.howto p {
+	margin-bottom: .75rem;
+	font-size: 1.2rem;
+}
+
+.howto table {
+	font-size: 1.2rem;
+	}
+
+.howto tr:last-child {
+	border-bottom: 2px solid #212529;
+}
+
+.howto th {
+	text-align: center;
+	vertical-align:middle !important;
+	}
+
+.howto td {
+	text-align: left;
+	vertical-align:middle !important;
+	}
+
+.howto td:first-child {
+/*	text-align:left; */
+	white-space:nowrap;
+}
+
+.howto td:last-child, .howto td:nth-last-child(2) {
+	text-align: center;
+}
+
+.howto ul {
+	padding-left:1rem;
+	font-size: 1.2rem;
+}
+	
+.howto li {
+	list-style: none;
+}
+
+
+
+
+
+
+
+
+/* FONT SIZES */
+
+@media (min-width: 576px) {
+    html {
+        font-size:9px
+    }
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size:11px
+    }
+}
+
+@media (min-width: 992px) {
+    html {
+        font-size:14px
+    }
+}
+
+@media (min-width: 1200px) {
+    html {
+        font-size:14px
+    }
+}
+ 
+.btn-orange-warning {
+    color: #fff;
+    background-color: #FF6C00;
+    border-color: #FF6C00;
+}
+.btn-orange-warning:hover {
+    color: #fff;
+    background-color: #FF5900;
+    border-color: #FF5900;
+}
+.version { 
+	margin-top: 50px;
+}
+.version p {text-align: center;}
+
+@media screen and (max-width: 1000px) {
+/* Hide the links inside the navigation menu (except for logo/home) */
+.navbar {
+	display: none;
+}
+.topnav #myLinks {
+  display: none;
+}
+
+/* Style navigation menu links */
+.topnav a {
+  color: white;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  display: block;
+  background-color: #215955;
+}
+
+/* Style the hamburger menu */
+.topnav a.icon {
+  background: black;
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+/* Add a grey background color on mouse-over */
+.topnav a:hover {
+  background-color: #215940;
+  color: white;
+}
+
+/* Style the active link (or home/logo) */
+.active {
+  background-color: #215955;
+  color: white;
+}
+}
+@media screen and (min-width: 1000px) {
+	.topnav {display: none;}
 }

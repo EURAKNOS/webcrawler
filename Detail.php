@@ -124,6 +124,7 @@ class Detail
               <div id="myLinks">
                 <a class="nav-link" href="new.php">Add Crawler</a>
                 <a class="nav-link" href="export_details.php?id='.$this->mainData['id'].'">Export details</a>
+                <a class="nav-link" href="howto.html" target="_blank">How to</a>
               </div>
               <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
               <a href="javascript:void(0);" class="icon" onclick="myFunction()">
@@ -134,13 +135,16 @@ class Detail
             	<a class="navbar-brand" href="/">
                     <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
                     EURAKNOS WEBCRAWLER
-            	</a>500-600
+            	</a>
             	<ul class="navbar-nav">
                   	<li class="nav-item">
                     	<a class="nav-link" href="new.php">Add crawler</a>
                   	</li>
                     <li class="nav-item">
                     	<a class="nav-link" href="export_details.php?id='.$this->mainData['id'].'">Export details</a>
+                  	</li>
+                    <li class="nav-item">
+                    	<a class="nav-link" href="howto.html" target="_blank">How to</a>
                   	</li>
             </ul>
             </div>

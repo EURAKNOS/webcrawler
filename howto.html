@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <title>Euraknos WebCrawler</title>
+    <link rel="stylesheet" href="style/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style/css.css">
+    <link rel="stylesheet" href="style/all.min.css"> <!-- Font Awesome --> 
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
+	<script src="style/js/jquery.min.js"></script>
+	<script src="style/js/bootstrap.min.js"></script>
+<!--	<script src="./js/main.js"></script> -->
+
+</head>
+<body>
+
+<div class="topnav" style="margin-bottom: 10px;">
+	<a class="active navbar-brand" style="text-align: left;" href="/">
+    	<img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
+        EURAKNOS WEBCRAWLER
+    </a>
+    <!-- Navigation links (hidden by default) -->
+    <div id="myLinks">
+        <a class="nav-link" href="new.php">Add Crawler</a>
+        <a class="nav-link" href="export_details.php">Export all</a>
+    </div>
+    <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
+</div>
+
+<div class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="/">
+        <img src="style/images/logo-white_notext2.png" class="d-inline-block align-top" alt="">
+        EURAKNOS WEBCRAWLER
+    </a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+        	<a class="nav-link" href="new.php">Add crawler</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="export_details.php">Export all</a>
+        </li>
+    </ul>
+</div>
+
+
+<!-- HOW-TO START-->
+
+
+<div class="container-fluid">
+	<div class="row justify-content-center">
+		<div class="col-md-8 howto">
+        	<h1>WEBCRAWLER TOOL</h1>
+            <h2>EURAKNOS webcrawler tool main page</h2>
+            <p>The main page of the webcrawler tool consists of three parts. There are six tiles directly under the menu functions. The list of the individual webcrawlers is located under these tiles.</p>
+            <p>Each tile shows the total and the distinct number of related contents and their metadata availability ratio.</p>
+            <ul>
+                <li><strong>TEXT</strong> tile shows the number of harvested contents that are in HTML, PDF, DOCX, XLSX, EPUB file formats.</li>
+                <li><strong>PRESENTATION</strong> tile shows the number of harvested contents in PPTX format.</li>
+                <li><strong>IMAGE</strong> tile shows the number of harvested contents in JPG, PNG, SWF, SVG formats.</li>
+                <li><strong>VIDEO</strong> tile shows the number of harvested contents in YouTube video, Vimeo video, MP4 formats.</li>
+                <li><strong>AUDIO</strong> tile shows the number of harvested contents in Spotify format.</li>
+                <li><strong>OTHER</strong> tile shows the number of harvested contents in Google Map, ZIP formats.</li>
+            </ul>
+            <h2>Create and start an individual webcrawler </h2>
+            <p>Using this function you will be able to create, configure and start your own webcrawler.</p>
+            <p>After clicking the “Add crawler” button on the main page, you must set the name and the starting URL of your webcrawler. Optionally you can set or add extra parameters that influence the working of your webcrawler. By clicking the “Start” button your webcrawler starts.</p>
+            <p>Adjustable parameters:</p>
+            <table class="table table-striped table-light">
+            <thead class="thead-dark">
+            	<tr>
+                	<th>Parameters</th>
+                	<th>Description</th>
+                	<th>Mandatory (Y/N)</th>
+                	<th>Default value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Starting URL</td>
+                    <td>The starting URL of the web crawler.</td>
+                    <td>Y</td>
+                    <td>Empty</td>
+                </tr>
+                <tr>
+                    <td>Base URL</td>
+                    <td>The base URL defines the constant prefix of contents’ URLs. In some special cases the starting and the base URL differs.</td>
+                    <td>N</td>
+                    <td>Empty</td>
+                </tr>
+                <tr>
+                    <td>Crawler’s name</td>
+                    <td>The name of the web crawler. Mandatory field.</td>
+                    <td>Y</td>
+                    <td>Empty</td>
+                </tr>
+                <tr>
+                    <td>External content download</td>
+                    <td>If set, crawler will download contents that are linked from the starting site but are not hosted on it.</td>
+                    <td>N</td>
+                    <td>On</td>
+                </tr>
+                <tr>
+                    <td>META Title</td>
+                    <td>Harvesting meta title from the site.</td>
+                    <td>N</td>
+                    <td>Off</td>
+                </tr>
+                <tr>
+                    <td>META Keywords</td>
+                    <td>Harvesting meta keywords from the site.</td>
+                    <td>N</td>
+                    <td>Off</td>
+                </tr>
+                <tr>
+                    <td>META Description</td>
+                    <td>Harvesting meta description from the site.</td>
+                    <td>N</td>
+                    <td>Off</td>
+                </tr>
+                <tr>
+                    <td>Heading 1</td>
+                    <td>Harvesting level 1 heading (H1) tags from the site.</td>
+                    <td>N</td>
+                    <td>Off</td>
+                </tr>
+                <tr>
+                    <td>Heading 2</td>
+                    <td>Harvesting level 2 heading (H2) tags from the site.</td>
+                    <td>N</td>
+                    <td>Off</td>
+                </tr>
+                <tr>
+                    <td>Heading 3</td>
+                    <td>Harvesting level 3 heading (H3) tags from the site.</td>
+                    <td>N</td>
+                    <td>Off</td>
+                </tr>
+                <tr>
+                    <td>Other searching elements </td>
+                    <td>In this parameter group it is possible to add some extra searching options to refine the crawling process. The first field contains the DIV class name, the second one is its the reference name in the database.</td>
+                    <td>N</td>
+                    <td>Empty, Empty</td>
+                </tr>
+			</tbody>
+            </table>
+			<h2>Details and Export details</h2>
+            <p>Applying this feature it is possible to view the terms and results of any individual webcrawler searches. The appearing chart shows the type, proportion, and number of files downloaded, as well as the percentage of metadata extracted.</p>
+            <p>By clicking on the “Export details” button, the download statistics of the current webcrawler can be exported in Excel format.</p>
+            <p><strong>Notice:</strong> In case at least one metadata value can be retrieved automatically for a specific content, we calculate that metadata is available for that content. We do not take into account whether the metadata is insufficient or incorrect.</p>
+            <h2>Stop</h2>
+            <p>You can use this feature to stop the selected running individual webcrawler. The process completes the search and cannot be restarted afterwards.</p>
+            <p>Clicking the “Stop” button will stop the search.</p>
+            <h2>Delete</h2>
+            <p>You can use this feature to delete data and metadata databases generated as a result of a completed individual webcrawler process. Deletion is permanent and cannot be undone.</p>
+            <p>Click the “Delete” button to delete the individual webcrawler and its downloaded data and metadata databases.</p>
+            <h2>Export all</h2>
+
+            <p>Using this feature, you can export the download statistics of all individual webcrawlers, in Excel format, regardless of whether the crawling process is still running or has been ended.</p>
+            <p>Clicking the “Export all” button will start the export process.</p>
+        	
+        </div>
+	</div>
+</div>
+
+
+<!-- HOW-TO END-->
+
+
+</body>
+</html>

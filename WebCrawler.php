@@ -84,6 +84,7 @@ class WebCrawler
               <!-- Navigation links (hidden by default) -->
               <div id="myLinks">
                 <a class="nav-link" href="new.php">Add crawler</a>
+                <a class="nav-link" href="howto.html" target="_blank">How to</a>
               </div>
               <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
               <a href="javascript:void(0);" class="icon" onclick="myFunction()">
@@ -98,6 +99,9 @@ class WebCrawler
             	<ul class="navbar-nav">
                   	<li class="nav-item">
                     	<a class="nav-link" href="new.php">Add Crawler</a>
+                  	</li>
+                     <li class="nav-item">
+                    	<a class="nav-link" target="_blank" href="howto.html">How to</a>
                   	</li>
                 </ul>
             </div>
