@@ -281,11 +281,14 @@ class ParsePage
 
     public function relativeToAbsolute($relative, $base)
     {
-        
-        //$relative = ltrim($relative, '//');
-        
         if ($relative == "" || $base == "")
             return "";
+        
+        // Some sites have a non-standard url for youtube content. This is what brings this part down.
+        if ( strpos($relative, '/www.youtube.com/embed' )) {
+            $str = ltrim($relative, '//');
+            return 'https://' . $str;
+        }
         // Check Base
         $base_parsed = parse_url($base);
         if (! array_key_exists('scheme', $base_parsed) || ! array_key_exists('host', $base_parsed) || ! array_key_exists('path', $base_parsed)) {
