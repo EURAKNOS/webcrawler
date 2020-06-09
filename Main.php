@@ -96,6 +96,7 @@ class MainPage
               <div id="myLinks">
                 <a class="nav-link" href="new.php">Add Crawler</a>
                 <a class="nav-link" href="export_details.php">Export all</a>
+                <a class="nav-link" href="export_meta.php">Export all meta</a>
                 <a class="nav-link" href="howto.html" target="_blank">How to</a>
               </div>
               <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
@@ -115,6 +116,9 @@ class MainPage
                   	</li>
                     <li class="nav-item">
                     	<a class="nav-link" href="export_details.php">Export all</a>
+                  	</li>
+                    <li class="nav-item">
+                    	<a class="nav-link" href="export_meta.php">Export all meta</a>
                   	</li>
                     <li class="nav-item">
                     	<a class="nav-link" href="howto.html" target="_blank">How to</a>

@@ -124,6 +124,7 @@ class Detail
               <div id="myLinks">
                 <a class="nav-link" href="new.php">Add Crawler</a>
                 <a class="nav-link" href="export_details.php?id='.$this->mainData['id'].'">Export details</a>
+                <a class="nav-link" href="export_meta.php?id='.$this->mainData['id'].'">Export meta</a>
                 <a class="nav-link" href="howto.html" target="_blank">How to</a>
               </div>
               <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
@@ -142,6 +143,9 @@ class Detail
                   	</li>
                     <li class="nav-item">
                     	<a class="nav-link" href="export_details.php?id='.$this->mainData['id'].'">Export details</a>
+                  	</li>
+                    <li class="nav-item">
+                    	<a class="nav-link" href="export_meta.php?id='.$this->mainData['id'].'">Export meta</a>
                   	</li>
                     <li class="nav-item">
                     	<a class="nav-link" href="howto.html" target="_blank">How to</a>
