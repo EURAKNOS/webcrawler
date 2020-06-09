@@ -577,4 +577,18 @@ class DbMysql {
          return $statementSelect->fetchAll();
      }
      
+     /**
+      * All page content
+      */
+     public function getMetaContent($id)
+     {
+         $data['url_id'] = $id;
+         $this->result = array();
+         $statementSelect = $this->db->prepare("SELECT * FROM " . CONTENTS_TABLE . " WHERE url_id = :url_id ");
+         if(!$statementSelect->execute($data)){
+             $this->log->m_log('getAllContent pages MySql function error');
+         }
+         return $statementSelect->fetchAll();
+     }
+     
 }
