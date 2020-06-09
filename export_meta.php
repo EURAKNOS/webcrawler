@@ -72,9 +72,10 @@ class MetaExport {
     
     public function getDownloadMetaByUrlId($id)
     {
-       
+        //echo '<pre>';
         $data = $this->MySql->getAllFilesMetaByUrlId($id);
-        //print_r($data);
+       
+        $content = $this->MySql->getMetaContent($id);
         $this->meta = array();
         $this->metadata = array();
         $this->cnta = array();
@@ -86,8 +87,6 @@ class MetaExport {
                     $this->cnta[$item['file_type']] = 1;
                     $this->meta[$item['file_type']] = array();
                     $this->metadata[$item['file_type']][$this->cnta[$item['file_type']]] = array();
-                    
-                    
                 }
                 $meta = array();
                 if ( $item['meta_data'] != '' ) {
@@ -118,6 +117,44 @@ class MetaExport {
                 $this->cnta[$item['file_type']]++;
             }
         }
+        
+        
+        if (isset($content) && !empty($content)) {
+            foreach ($content as $key => $item) {
+                
+                if (!isset($this->metadata['content'])) {
+                    $this->cnta['content'] = 1;
+                    $this->meta['content'] = array();
+                    $this->metadata['content'][$this->cnta['content']] = array();
+                }
+                $meta = array();
+                if ( $item['content'] != '' ) {
+                    $meta = unserialize($item['content']);
+                }
+                $this->meta['content'][strtoupper('ID')] = strtoupper('ID');
+                $this->meta['content'][strtoupper('URL_ID')] = strtoupper('URL_ID');
+                $this->meta['content'][strtoupper('PAGE')] = strtoupper('PAGE');
+                $this->meta['content'][strtoupper('PATH')] = strtoupper('PATH');
+                
+                $this->metadata['content'][$this->cnta['content']]['ID'] = $item['id'];
+                $this->metadata['content'][$this->cnta['content']]['URL_ID'] = $item['url_id'];
+                $this->metadata['content'][$this->cnta['content']]['PAGE'] = $item['page'];
+                $this->metadata['content'][$this->cnta['content']]['PATH'] = $item['path'];
+                
+                foreach ($meta as $keyMeta => $value) {
+                    if (!isset($this->meta['content'][strtoupper($keyMeta)])) {
+                        $this->meta['content'][strtoupper($keyMeta)] = strtoupper($keyMeta);
+                    }
+                    if (is_array($value)) {
+                        $this->arrayMetaProcess($value, 'content');
+                    } else {
+                        $this->metadata['content'][$this->cnta['content']][strtoupper($keyMeta)] = $this->cleanData($value);
+                    }
+                }
+                $this->cnta['content']++;
+            }
+        }
+        
         
     }
     
