@@ -567,4 +567,14 @@ class DbMysql {
          return $statementSelect->fetchAll();
      }
      
+     public function getAllFilesMetaByUrlId($id)
+     {
+         $data['url_id'] = $id;
+         $statementSelect = $this->db->prepare("SELECT * FROM " . FILES_TABLE . " WHERE url_id = :url_id ORDER BY file_type ");
+         if(!$statementSelect->execute($data)){
+             $this->log->m_log('getAllFilesMetaByUrlId MySql function error');
+         }
+         return $statementSelect->fetchAll();
+     }
+     
 }
