@@ -111,7 +111,7 @@ class DownloadPage {
      */
     private function urlCheck()
     {
-        $agent = "Mozilla/4.0 (B*U*S)";
+        $agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->target);
         curl_setopt($ch, CURLOPT_USERAGENT, $agent);
