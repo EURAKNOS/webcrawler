@@ -591,4 +591,27 @@ class DbMysql {
          return $statementSelect->fetchAll();
      }
      
+     public function getRefererUrl($urlId, $url)
+     {
+         $data['url_id'] = $urlId;
+         $data['path'] = $url;
+         $statementSelect = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE url_id = :url_id AND path = :path ");
+         if(!$statementSelect->execute($data)){
+             $this->log->m_log('GetRefererUrl pages error');
+         }
+         
+         return $statementSelect->fetch();
+     }
+     
+     public function getRefererUrlLike($urlId, $url)
+     {
+         $data['url_id'] = $urlId;
+         $data['path'] = '%' . $url;
+         $statementSelect = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE url_id = :url_id AND path LIKE :path ");
+         if(!$statementSelect->execute($data)){
+             $this->log->m_log('getRefererUrlLike pages error');
+         }
+         
+         return $statementSelect->fetch();
+     }
 }

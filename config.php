@@ -1,5 +1,5 @@
 <?php
-define('VERSION', '0.6.4');
+define('VERSION', '0.6.5');
 
 define('DB_SERVER_HOST', 'localhost');
 define('DB_USER_NAME', 'webc');
@@ -25,6 +25,7 @@ define('FOLDER_ZIP', 'zip');
 define('FOLDER_SVG', 'svg');
 define('FOLDER_PPT', 'ppt');
 
+define('FOLDER_META_EXPORT', 'meta');
 
 set_time_limit(10000);
 
