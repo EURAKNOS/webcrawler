@@ -1,6 +1,8 @@
 <?php
 session_start ();
 error_reporting(E_ALL);
+set_time_limit (10000);
+
 require_once 'config.php';
 require_once 'WebCrawler.php';
 require_once 'ParsePage.php';
@@ -14,6 +16,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Helper\Sample;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 
 class MetaExport {
     
