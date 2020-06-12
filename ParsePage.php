@@ -30,6 +30,7 @@ class ParsePage
         $MySql = new DbMysql();
         $MySql->target = $this->target;
         $MySql->urlId = $this->urlId;
+        $MySql->pagesId = $this->pagesId;
         
         // Parse URL and get Components
         $url_components = parse_url($this->target);
@@ -69,6 +70,7 @@ class ParsePage
         $dwl->referer = $this->referer;
         $dwl->urlId = $this->urlId;
         $dwl->browser = $this->browser;
+        $dwl->pagesId = $this->pagesId;
         $contents = $dwl->downloadData();
         //echo "Done\n";
         // Check Status
@@ -179,6 +181,7 @@ class ParsePage
         if ($contents['headers']['status_info'][1] == 200) {
             $MySql->data['page'] = $this->referer;
             $MySql->data['path'] = $this->path;
+            $MySql->data['pages_id'] = $this->pagesId;
             $MySql->data['content'] = '';
             if (isset($this->result)) {
                 $MySql->data['content'] = serialize($this->result);
@@ -244,6 +247,22 @@ class ParsePage
                     if ((! array_key_exists('host', $link_parsed) || $link_parsed['host'] == "" || $link_parsed['host'] == $url_host) && array_key_exists('path', $link_parsed) && $link_parsed['path'] != "" && array_search($link_parsed['path'], $links) === false) {
                         $links[] = $this->urlClear($link_parsed['path']);
                     }
+                }
+            }
+        }
+        
+        $link_tags = $doc->getElementsByTagName('source');
+        foreach ($link_tags as $tag) {
+            if (($href_value = $tag->getAttribute('src'))) {
+               
+                $link_absolute = $this->relativeToAbsolute($href_value, $this->target);
+                
+                $link_parsed = parse_url($link_absolute);
+                if ($link_parsed === null || $link_parsed === false) {
+                    die('Unable to Parse Link URL');
+                }
+                if ((! array_key_exists('host', $link_parsed) || $link_parsed['host'] == "" || $link_parsed['host'] == $url_host) && array_key_exists('path', $link_parsed) && $link_parsed['path'] != "" && array_search($link_parsed['path'], $links) === false) {
+                    $links[] = $this->urlClear($link_parsed['path']);
                 }
             }
         }

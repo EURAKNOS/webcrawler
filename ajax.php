@@ -139,13 +139,15 @@ class AjaxProcess {
             'args' => [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
-                '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
+                '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'
             ]
         ]);
         
         
         
         $parsePage->browser = $browser;
+        
+        $parsePage->pagesId = NULL;
         $parsePage->parsePage(true);
         $this->urlId = $parsePage->urlId;
         
@@ -213,6 +215,7 @@ class AjaxProcess {
                             $parsePage->referer = $url_start . $referer;
                             $parsePage->path = $path;
                         }
+                        $parsePage->pagesId = $row['id'];
                         
                         $parsePage->browser = $browser;
                         if ($parsePage->parsePage()) {

@@ -1,5 +1,5 @@
 <?php
-define('VERSION', '0.6.5.2');
+define('VERSION', '0.6.5.3');
 
 define('DB_SERVER_HOST', 'localhost');
 define('DB_USER_NAME', 'webc');

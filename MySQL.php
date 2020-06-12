@@ -175,7 +175,7 @@ class DbMysql {
         $this->data['download_time'] = time();
         $this->data['url_id'] = $this->urlId;
         
-        $statement = $this->db->prepare("INSERT INTO ".CONTENTS_TABLE." (`id`, `url_id`, `page`, `path`, `content`, `download_time`) VALUES (NULL, :url_id, :page, :path, :content, :download_time)");
+        $statement = $this->db->prepare("INSERT INTO ".CONTENTS_TABLE." (`id`, `url_id`, `pages_id`, `page`, `path`, `content`, `download_time`) VALUES (NULL, :url_id, :pages_id, :page, :path, :content, :download_time)");
         if(!$statement->execute($this->data)){
             $this->log->m_log('savePage MySql function error');
             throw new Exception("An operation failed saveLinks function");
@@ -242,7 +242,8 @@ class DbMysql {
         $this->log->m_log('startDownloadFile MySql function start');
         $data['path'] = $this->target;
         $data['url_id'] = $this->urlId;
-        $statement = $this->db->prepare("INSERT INTO ".FILES_TABLE." (id, url_id, path) VALUES(NULL, :url_id, :path)");
+        $data['pages_id'] = $this->pagesId;
+        $statement = $this->db->prepare("INSERT INTO ".FILES_TABLE." (id, url_id, pages_id, path) VALUES(NULL, :url_id, :pages_id, :path)");
         
         if(!$statement->execute($data)){
             $this->log->m_log('startDownloadFile MySql function error');

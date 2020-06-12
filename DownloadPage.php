@@ -29,6 +29,8 @@ class DownloadPage {
     
     public $urlId;
     
+    public $pagesId;
+    
     public $browser;
     
     public function __construct()
@@ -321,6 +323,7 @@ class DownloadPage {
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
         $dl->target = $this->target;
+        $dl->pagesId = $this->pagesId;
         $dl->folder = FOLDER_PDF;
         $dl->downloadProcessing();
         // Parse pdf file and build necessary objects.
@@ -359,6 +362,7 @@ class DownloadPage {
         $this->log->m_log('Start download jpg');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_JPG;
         $dl->downloadProcessing();
@@ -388,6 +392,7 @@ class DownloadPage {
         $this->log->m_log('Start download png');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_PNG;
         $dl->downloadProcessing();
@@ -417,6 +422,7 @@ class DownloadPage {
         $this->log->m_log('Start download pptx');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_PPTX;
         $dl->downloadProcessing();
@@ -450,6 +456,7 @@ class DownloadPage {
         $this->log->m_log('Start download ppt');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_PPT;
         $dl->downloadProcessing();
@@ -475,6 +482,7 @@ class DownloadPage {
         $this->log->m_log('Start download Docx');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_DOCX;
         $dl->downloadProcessing();
@@ -509,6 +517,7 @@ class DownloadPage {
         $this->log->m_log('Start download xlsx');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_XLSX;
         $dl->downloadProcessing();
@@ -541,6 +550,7 @@ class DownloadPage {
         $this->log->m_log('Start youtube meta');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = '';
         $dl->preSaveDatabaseDownlodedFile();
@@ -585,6 +595,7 @@ class DownloadPage {
         $this->log->m_log('Start Vimeo meta');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = '';
         $dl->preSaveDatabaseDownlodedFile();
@@ -620,6 +631,7 @@ class DownloadPage {
         $this->log->m_log('Start spotify');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = '';
         $dl->preSaveDatabaseDownlodedFile();
@@ -642,6 +654,7 @@ class DownloadPage {
         $this->log->m_log('Start google map');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = '';
         $dl->preSaveDatabaseDownlodedFile();
@@ -667,6 +680,7 @@ class DownloadPage {
         $this->log->m_log('Start download epub');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_EPUB;
         $dl->downloadProcessing();
@@ -703,6 +717,7 @@ class DownloadPage {
         $this->log->m_log('Start download swf');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_SWF;
         $dl->downloadProcessing();
@@ -741,6 +756,7 @@ class DownloadPage {
         $this->log->m_log('Start download mp4');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_MP4;
         $dl->downloadProcessing();
@@ -768,6 +784,7 @@ class DownloadPage {
         $this->log->m_log('Start download zip');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_ZIP;
         $dl->downloadProcessing();
@@ -816,6 +833,7 @@ class DownloadPage {
         $this->log->m_log('Start download svg');
         $dl = new DownloadFileExtended();
         $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
         $dl->folder = FOLDER_SVG;
         $dl->downloadProcessing();
@@ -864,6 +882,8 @@ class DownloadFileExtended {
     
     public $urlId;
     
+    public $pagesId;
+    
     public function __construct()
     {
         $this->log = new WLog();
@@ -884,11 +904,68 @@ class DownloadFileExtended {
         $this->MySql = new DbMysql();
         $this->MySql->urlId = $this->urlId;
         $this->MySql->target = $this->target;
+        $this->MySql->pagesId = $this->pagesId;
         $this->MySql->startDownloadFile();
         $this->id = $this->MySql->id;
     }
     
-    public function downloadFile()
+    public function DownloadFile()
+    {
+        $this->log->m_log('Create folder: ' . FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id);
+        if (!file_exists(FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id)) {
+            mkdir(FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id, 0777, true);
+            $this->log->m_log('Create folder success: ' . FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id);
+        }
+        //The resource that we want to download.
+        $fileUrl = $this->target;
+        
+        $agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36";
+        //The path & filename to save to.
+        $saveTo = $this->localfile = FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id . '/' . basename($this->target);
+        
+        //Open file handler.
+        $fp = fopen($saveTo, 'w+');
+        
+        //If $fp is FALSE, something went wrong.
+        if($fp === false){
+            throw new Exception('Could not open: ' . $saveTo);
+        }
+        
+        //Create a cURL handle.
+        $ch = curl_init($fileUrl);
+        curl_setopt($ch, CURLOPT_USERAGENT, $agent);
+        //Pass our file handle to cURL.
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        
+        //Timeout if the file doesn't download after 20 seconds.
+        curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+        
+        //Execute the request.
+        curl_exec($ch);
+        
+        //If there was an error, throw an Exception
+        if(curl_errno($ch)){
+            throw new Exception(curl_error($ch));
+        }
+        
+        //Get the HTTP status code.
+        $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        
+        //Close the cURL handler.
+        curl_close($ch);
+        
+        //Close the file handler.
+        fclose($fp);
+        
+        if($statusCode == 200){
+            $this->log->m_log('Downloadfile success: ' . $this->target);
+            return true;
+        } else{
+            $this->log->m_log('Error download file from url : ' . $this->target);
+        }
+    }
+    
+    public function downloadFileOld()
     {
         $this->log->m_log('Create folder: ' . FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id);
         if (!file_exists(FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id)) {
@@ -952,7 +1029,7 @@ class DownloadFile {
         
     }
     
-    public function downloadFile()
+    public function downloadFileOld()
     {
         if (!file_exists($this->folder)) {
             mkdir($this->folder, 0777, true);
@@ -976,6 +1053,59 @@ class DownloadFile {
         fclose($downloadedFile);
         
         return true;
+    }
+    
+    public function DownloadFile()
+    {
+        if (!file_exists($this->folder)) {
+            mkdir($this->folder, 0777, true);
+        }
+        //The resource that we want to download.
+        $fileUrl = $this->location;
+        
+        $agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36";
+        //The path & filename to save to.
+        $saveTo = FOLDER_DEFAULT . '/' . $this->localFile;
+        
+        //Open file handler.
+        $fp = fopen($saveTo, 'w+');
+        
+        //If $fp is FALSE, something went wrong.
+        if($fp === false){
+            throw new Exception('Could not open: ' . $saveTo);
+        }
+        
+        //Create a cURL handle.
+        $ch = curl_init($fileUrl);
+        curl_setopt($ch, CURLOPT_USERAGENT, $agent);
+        //Pass our file handle to cURL.
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        
+        //Timeout if the file doesn't download after 20 seconds.
+        curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+        
+        //Execute the request.
+        curl_exec($ch);
+        
+        //If there was an error, throw an Exception
+        if(curl_errno($ch)){
+            throw new Exception(curl_error($ch));
+        }
+        
+        //Get the HTTP status code.
+        $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        
+        //Close the cURL handler.
+        curl_close($ch);
+        
+        //Close the file handler.
+        fclose($fp);
+        
+        if($statusCode == 200){
+            return true;
+        } else{
+            echo "Status Code: " . $statusCode;
+        }
     }
     
 }

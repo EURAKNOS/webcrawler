@@ -63,7 +63,7 @@ class ResearchProcess {
                         $parsePage->target = $row['path'];
                         $parsePage->referer = '';
                         $parsePage->path = $row['path'];
-                        
+                        $parsePage->pagesId = $row['id'];
                         
                         $parsePage->browser = $browser;
                         if ($parsePage->parsePage(false, true)) {
