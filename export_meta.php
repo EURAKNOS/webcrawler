@@ -43,10 +43,10 @@ class MetaExport {
             $this->getDataById($_GET['id']);
             $this->filename = $this->mainData['id'] . '_' . date('Y-m-d') . '.xlsx';
             $this->createExcel();
-        } else {
+        } /*else {
             $this->filename = 'all_' . date('Y-m-d') . '.xlsx';
             $this->createAllPage();
-        }
+        }*/
         exit;
     }
     
