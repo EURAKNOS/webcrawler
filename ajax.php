@@ -39,7 +39,7 @@ class AjaxProcess {
     {
         $this->MySql = new DbMysql();
         
-        $this->fileTypes = array('page','jpg','png','pdf','docx','xlsx','pptx','epub','swf','youtube_video','vimeo_video','google_map','mp4','zip');
+        $this->fileTypes = array('page','jpg','bmp','png','pdf','docx','xlsx','pptx','epub','swf','youtube_video','vimeo_video','google_map','mp4','zip');
     }
     
     public function process()
@@ -284,6 +284,7 @@ class AjaxProcess {
         <th scope="col">XLSX</th>
         <th scope="col">EPUB</th>
         <th scope="col">JPG</th>
+        <th scope="col">BMP</th>
         <th scope="col">PNG</th>
         <th scope="col">PPTX</th>
         <th scope="col">MP4</th>
@@ -312,6 +313,7 @@ class AjaxProcess {
                 <td scope="row">' . $value['xlsx'] . '</td>
                 <td scope="row">' . $value['epub'] . '</td>
                 <td scope="row">' . $value['jpg'] . '</td>
+                <td scope="row">' . $value['bmp'] . '</td>
                 <td scope="row">' . $value['png'] . '</td>
                 <td scope="row">' . $value['pptx'] . '</td>
                 <td scope="row">' . $value['mp4'] . '</td>
@@ -333,6 +335,7 @@ class AjaxProcess {
                 <td scope="row">' . $this->calculated[$key]['xlsx'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['epub'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['jpg'] . '</td>
+                <td scope="row">' . $this->calculated[$key]['bmp'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['png'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['pptx'] . '</td>
                 <td scope="row">' . $this->calculated[$key]['mp4'] . '</td>

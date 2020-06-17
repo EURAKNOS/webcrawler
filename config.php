@@ -1,5 +1,5 @@
 <?php
-define('VERSION', '0.6.5.4');
+define('VERSION', '0.6.5.5');
 
 define('DB_SERVER_HOST', 'localhost');
 define('DB_USER_NAME', 'webc');
@@ -15,6 +15,7 @@ define('ROOT_PATH', $_SERVER['REQUEST_URI']);
 define('FOLDER_DEFAULT', 'download');
 define('FOLDER_PDF', 'pdf');
 define('FOLDER_JPG', 'jpg');
+define('FOLDER_BMP', 'bmp');
 define('FOLDER_PNG', 'png');
 define('FOLDER_DOCX', 'docx');
 define('FOLDER_PPTX', 'pptx');

@@ -76,6 +76,8 @@ class DownloadPage {
                     return $this->processPdf();
                 } elseif ($info["extension"] == "jpg") {
                     return $this->processJpg();
+                } elseif ($info["extension"] == "bmp") {
+                    return $this->processBmp();
                 } elseif ($info["extension"] == "png") {
                     return $this->processPng();
                 } elseif ($info["extension"] == "pptx") {
@@ -381,6 +383,35 @@ class DownloadPage {
         $dl->saveData = $saveData;
         return $dl->saveEnd();
           
+    }
+    
+    /**
+     * Download and store bmp metadata and file
+     * @return array
+     */
+    public function processBmp()
+    {
+        $this->log->m_log('Start download bmp');
+        $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
+        $dl->target = $this->target;
+        $dl->folder = FOLDER_BMP;
+        $dl->downloadProcessing();
+        
+        
+        $result = getimagesize ($dl->localfile);
+        $saveData['meta_data'] = '';
+        if (isset($result) && !empty($result)) {
+            $saveData['meta_data'] = serialize($result);
+        }
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = $dl->localfile;
+        $saveData['file_type'] = 'bmp';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        return $dl->saveEnd();
     }
     
     /**
@@ -825,7 +856,7 @@ class DownloadPage {
     }
     
     /**
-     * Download and store jpg metadata and file
+     * Download and store svg metadata and file
      * @return array
      */
     public function processSvg()
@@ -912,6 +943,10 @@ class DownloadFileExtended {
     public function DownloadFile()
     {
         $this->log->m_log('Create folder: ' . FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id);
+        if (!file_exists(FOLDER_DEFAULT . "/" . $this->folder)) {
+            mkdir(FOLDER_DEFAULT . "/" . $this->folder, 0777, true);
+            $this->log->m_log('Create folder success: ' . FOLDER_DEFAULT . "/" . $this->folder);
+        }
         if (!file_exists(FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id)) {
             mkdir(FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id, 0777, true);
             $this->log->m_log('Create folder success: ' . FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id);

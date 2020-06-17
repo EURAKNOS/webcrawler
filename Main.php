@@ -22,7 +22,7 @@ class MainPage
     {
         $this->types['text'] = array('content', 'pdf', 'docx', 'xlsx', 'epub');
         $this->types['presentation'] = array('pptx', 'ppt');
-        $this->types['image'] = array('jpg', 'png', 'swf', 'svg');
+        $this->types['image'] = array('jpg', 'bmp', 'png', 'swf', 'svg');
         $this->types['video'] = array('youtube_video', 'vimeo_video', 'mp4');
         $this->types['audio'] = array('spotify');
         $this->types['other'] = array('google_map', 'zip');

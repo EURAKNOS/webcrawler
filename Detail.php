@@ -40,6 +40,7 @@ class Detail
         );
         $this->types['image'] = array(
             'jpg',
+            'bmp',
             'png',
             'swf',
             'svg'
@@ -65,6 +66,7 @@ class Detail
             'epub' => 'EPUB',
             'pptx' => 'PPTX',
             'jpg' => 'JPG',
+            'bmp' => 'BMP',
             'png' => 'PNG',
             'swf' => 'SWF',
             'svg' => 'SVG',

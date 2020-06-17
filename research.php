@@ -13,7 +13,7 @@ class ResearchProcess {
     {
         $this->MySql = new DbMysql();
         
-        $this->fileTypes = array('page','jpg','png','pdf','docx','xlsx','pptx','epub','swf','youtube_video','vimeo_video','google_map','mp4','zip');
+        $this->fileTypes = array('page','jpg','bmp','png','pdf','docx','xlsx','pptx','epub','swf','youtube_video','vimeo_video','google_map','mp4','zip');
     }
     
     public function process()

@@ -28,6 +28,7 @@ class DetailsExport {
             'epub' => 'EPUB',
             'pptx' => 'PPTX',
             'jpg' => 'JPG',
+            'bmp' => 'BMP',
             'png' => 'PNG',
             'swf' => 'SWF',
             'svg' => 'SVG',
