@@ -44,11 +44,11 @@ class DownloadPage {
      */
     public function downloadData()
     {
-        $err_c = $this->urlCheck();
+        /*$err_c = $this->urlCheck();
         if ($err_c != 2) {
             $contents['error_page'] = 1;
             return $contents;
-        }
+        }*/
         $file_headers = @get_headers($this->target);
         $pos = strpos($this->target, 'https://www.youtube.com');
         $posYoutube2 = strpos($this->target, 'youtu.be');
