@@ -138,8 +138,8 @@ class AjaxProcess {
         $browser = $puppeteer->launch([
             'args' => [
                 '--no-sandbox',
-                '--disable-setuid-sandbox'//,
-                //'--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'
+                '--disable-setuid-sandbox',
+                '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'
             ]
         ]);
         
