@@ -110,7 +110,7 @@ class ParsePage
         $doc = new DOMDocument();
         libxml_use_internal_errors(true);
         $doc->loadHTML($contents['body']);
-        $log->contentLog($this->target, $contents['body']);
+        //$log->contentLog($this->target, $contents['body']);
         $finder = new DomXPath($doc);
 
         // Get title

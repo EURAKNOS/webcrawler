@@ -177,7 +177,7 @@ class AjaxProcess {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $url_start . $referer;
                                 $parsePage->path = $path;
-                            } elseif (strpos($row['path'], 'mailchimp.com') !== false) {
+                            } elseif (strpos($row['path'], 'mailchimp.com') !== false || strpos($row['path'], 'https://mailchi.mp') !== false) {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $url_start . $referer;
                                 $parsePage->path = $path;

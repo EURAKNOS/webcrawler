@@ -75,6 +75,7 @@ class DownloadPage {
         $posMaps2 = strpos($this->target, 'maps.google.com');
         $posPrezi = strpos($this->target, 'https://prezi.com');
         $posMailChimp = strpos($this->target, 'mailchimp.com');
+        $posMailChimp2 = strpos($row['path'], 'https://mailchi.mp');
         
         
 
@@ -84,7 +85,7 @@ class DownloadPage {
             return $this->processVimeo();
         } elseif ($posPrezi !== false) {
             return $this->processPrezi();
-        } elseif ($posMailChimp !== false) {
+        } elseif ($posMailChimp !== false || $posMailChimp2 !== false) {
             return $this->processMailChimp();
         } elseif ($posSpotify !== false) {
             return $this->processSpotify();
