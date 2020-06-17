@@ -75,7 +75,7 @@ class DownloadPage {
         $posMaps2 = strpos($this->target, 'maps.google.com');
         $posPrezi = strpos($this->target, 'https://prezi.com');
         $posMailChimp = strpos($this->target, 'mailchimp.com');
-        $posMailChimp2 = strpos($row['path'], 'https://mailchi.mp');
+        $posMailChimp2 = strpos($this->target, 'https://mailchi.mp');
         
         
 

@@ -35,6 +35,7 @@ class ParsePage
         $MySql->pagesId = $this->pagesId;
         
         // Parse URL and get Components
+        $url_host = '';
         $url_components = parse_url($this->target);
         if ($url_components === false) {
             $log->m_log('Target error (url_compnents): ' . $this->target);
