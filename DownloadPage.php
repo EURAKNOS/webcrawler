@@ -73,6 +73,8 @@ class DownloadPage {
         $posSpotify = strpos($this->target, '.spotify.com');
         $posMaps = strpos($this->target, 'www.google.com/maps');
         $posMaps2 = strpos($this->target, 'maps.google.com');
+        $posPrezi = strpos($this->target, 'https://prezi.com');
+        $posMailChimp = strpos($this->target, 'mailchimp.com');
         
         
 
@@ -80,6 +82,10 @@ class DownloadPage {
             return $this->processYoutube();
         } elseif ($posVimeo !== false) {
             return $this->processVimeo();
+        } elseif ($posPrezi !== false) {
+            return $this->processPrezi();
+        } elseif ($posMailChimp !== false) {
+            return $this->processMailChimp();
         } elseif ($posSpotify !== false) {
             return $this->processSpotify();
         } elseif ($posMaps !== false || $posMaps2 !== false) {
@@ -893,6 +899,62 @@ class DownloadPage {
         
         // File data Save Database
         $dl->saveData = $saveData;
+        return $dl->saveEnd();
+        
+    }
+    
+    /**
+     * Link PREZI
+     * @return array
+     */
+    public function processPrezi()
+    {
+        $this->log->m_log('Start prezi');
+        $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
+        $dl->target = $this->target;
+        $dl->folder = '';
+        $dl->preSaveDatabaseDownlodedFile();
+        
+        $saveData['meta_data'] = '';
+        $saveData['meta_data'] = serialize($this->target);
+        
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = ''; //$dl->localfile;
+        $saveData['file_type'] = 'prezi';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        $this->log->m_log('End prezi');
+        return $dl->saveEnd();
+        
+    }
+    
+    /**
+     * Link PREZI
+     * @return array
+     */
+    public function processMailChimp()
+    {
+        $this->log->m_log('Start mailchimp');
+        $dl = new DownloadFileExtended();
+        $dl->urlId = $this->urlId;
+        $dl->pagesId = $this->pagesId;
+        $dl->target = $this->target;
+        $dl->folder = '';
+        $dl->preSaveDatabaseDownlodedFile();
+        
+        $saveData['meta_data'] = '';
+        $saveData['meta_data'] = serialize($this->target);
+        
+        $saveData['id'] = $dl->id;
+        $saveData['local_location'] = ''; //$dl->localfile;
+        $saveData['file_type'] = 'mailchimp';
+        
+        // File data Save Database
+        $dl->saveData = $saveData;
+        $this->log->m_log('End mailchimp');
         return $dl->saveEnd();
         
     }

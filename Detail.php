@@ -36,7 +36,8 @@ class Detail
         );
         $this->types['presentation'] = array(
             'pptx',
-            'ppt'
+            'ppt',
+            'prezi'
         );
         $this->types['image'] = array(
             'jpg',
@@ -55,7 +56,8 @@ class Detail
         );
         $this->types['other'] = array(
             'google_map',
-            'zip'
+            'zip',
+            'mailchimp'
         );
 
         $this->javascriptPlus = array(
@@ -65,6 +67,7 @@ class Detail
             'xlsx' => 'XLSX',
             'epub' => 'EPUB',
             'pptx' => 'PPTX',
+            'prezi' => 'PREZI (link)',
             'jpg' => 'JPG',
             'bmp' => 'BMP',
             'png' => 'PNG',
@@ -75,7 +78,8 @@ class Detail
             'spotify' => 'SPOTIFY (link)',
             'mp4' => 'MP4',
             'google_map' => 'GOOGLE MAPS (link)',
-            'zip' => 'ZIP'
+            'zip' => 'ZIP',
+            'mailchimp' => 'MAILCHIMP (link)'
         );
         $this->MySql = new DbMysql();
     }

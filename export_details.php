@@ -27,6 +27,7 @@ class DetailsExport {
             'xlsx' => 'XLSX',
             'epub' => 'EPUB',
             'pptx' => 'PPTX',
+            'prezi' => 'PREZI',
             'jpg' => 'JPG',
             'bmp' => 'BMP',
             'png' => 'PNG',
@@ -37,7 +38,8 @@ class DetailsExport {
             'spotify' => 'SPOTIFY (link)',
             'mp4' => 'MP4',
             'google_map' => 'GOOGLE MAPS (link)',
-            'zip' => 'ZIP'
+            'zip' => 'ZIP',
+            'mailchimp' => 'MAILCHIMP'
         );
     }
     

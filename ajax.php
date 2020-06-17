@@ -173,6 +173,14 @@ class AjaxProcess {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $url_start . $referer;
                                 $parsePage->path = $path;
+                            } elseif (strpos($row['path'], 'https://prezi.com') !== false) {
+                                $parsePage->target = $path;
+                                $parsePage->referer = $url_start . $referer;
+                                $parsePage->path = $path;
+                            } elseif (strpos($row['path'], 'mailchimp.com') !== false) {
+                                $parsePage->target = $path;
+                                $parsePage->referer = $url_start . $referer;
+                                $parsePage->path = $path;
                             } elseif (strpos($row['path'], 'youtu.be') !== false) {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $url_start . $referer;
@@ -201,7 +209,7 @@ class AjaxProcess {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $referer;
                                 $parsePage->path = $path;
-                            }  
+                            }  //https://prezi.com/i7ccxsi5tcrv/new-developments-in-yield-safe/
                             /*elseif (strpos($row['path'], 'https://www.google.com'))
                             $parsePage->target = $path;
                             $parsePage->referer = $url_start . $referer;
