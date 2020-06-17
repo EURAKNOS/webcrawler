@@ -60,13 +60,13 @@ class DownloadPage {
         
 
         if ($pos !== false || $posYoutube2 !== false) {
-            $this->processYoutube();
+            return $this->processYoutube();
         } elseif ($posVimeo !== false) {
-            $this->processVimeo();
+            return $this->processVimeo();
         } elseif ($posSpotify !== false) {
-            $this->processSpotify();
+            return $this->processSpotify();
         } elseif ($posMaps !== false || $posMaps2 !== false) {
-            $this->processMaps();
+            return $this->processMaps();
         }else {
             $info = pathinfo($this->target);
             
@@ -637,7 +637,6 @@ class DownloadPage {
         $dl->preSaveDatabaseDownlodedFile();
         
         $saveData['meta_data'] = '';
-        $saveData['meta_data'] = serialize($this->target);
         
         $saveData['id'] = $dl->id;
         $saveData['local_location'] = ''; //$dl->localfile;
@@ -645,7 +644,8 @@ class DownloadPage {
         
         // File data Save Database
         $dl->saveData = $saveData;
-        $this->log->m_log('Start spotify');
+        $this->log->m_log('Start spotify save ' . $this->target);
+        
         return $dl->saveEnd();
     }
     

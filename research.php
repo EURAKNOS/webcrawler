@@ -60,7 +60,7 @@ class ResearchProcess {
                         $parsePage = new ParsePage();
                         $parsePage->urlId = $this->urlId;
                        
-                        $parsePage->target = $row['path'];
+                        $parsePage->target = str_replace(array('–'), array('%E2%80%93'), $row['path']);
                         $parsePage->referer = '';
                         $parsePage->path = $row['path'];
                         $parsePage->pagesId = $row['id'];
