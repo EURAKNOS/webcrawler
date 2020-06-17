@@ -13,6 +13,8 @@ class ParsePage
     public $urlId;
     
     public $browser;
+    
+    public $firstCheck;
 
     public function __construct()
     {}
@@ -71,6 +73,11 @@ class ParsePage
         $dwl->urlId = $this->urlId;
         $dwl->browser = $this->browser;
         $dwl->pagesId = $this->pagesId;
+        
+        if ($first) {
+            $this->firstCheck = $dwl->firstPageCheck();
+        }
+        $dwl->firstCheck = $this->firstCheck;
         $contents = $dwl->downloadData();
         //echo "Done\n";
         // Check Status

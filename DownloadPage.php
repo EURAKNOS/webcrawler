@@ -39,15 +39,32 @@ class DownloadPage {
     }
     
     /**
+     * First page check static or dinamic page
+     */
+    public function firstPageCheck()
+    {
+        $curlRes = $this->dinamicDownloadPage();
+        $puppRes = $this->DownloadPage();
+        if ($curlRes['body'] == $puppRes['body']) { // if curl and puppether content equal  = STATIC PAGE
+            return true;
+        } else {
+            return false;   // DINAMIC PAGE
+        }
+    }
+    
+    /**
      * Determines the type of link.
      * It can be a document, but it can even be a web page.
+     * The first parameter to first page check dinamic or static content.
      */
     public function downloadData()
     {
-        $err_c = $this->urlCheck();
-        if ($err_c != 2) {
-            $contents['error_page'] = 1;
-            return $contents;
+        if ($this->firstCheck) {    // DINAMIC OR STATIC , STATIC IS TRUE
+            $err_c = $this->urlCheck();
+            if ($err_c != 2) {
+                $contents['error_page'] = 1;
+                return $contents;
+            }
         }
         $file_headers = @get_headers($this->target);
         $pos = strpos($this->target, 'https://www.youtube.com');

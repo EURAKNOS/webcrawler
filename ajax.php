@@ -150,6 +150,7 @@ class AjaxProcess {
         $parsePage->pagesId = NULL;
         $parsePage->parsePage(true);
         $this->urlId = $parsePage->urlId;
+        $this->firstCheck = $parsePage->firstCheck;
         
         // Loop through all pages on site.
         while (1) {
@@ -165,6 +166,7 @@ class AjaxProcess {
                         $referer = $row['path'];
                         $parsePage = new ParsePage();
                         $parsePage->urlId = $this->urlId;
+                        $parsePage->firstCheck = $this->firstCheck;
                         //Check if first character isn't a '/'
                         if ($path[0] != '/') {
                             if (strpos($row['path'], 'https://www.youtube.com') !== false) {
