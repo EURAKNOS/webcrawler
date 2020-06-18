@@ -300,7 +300,11 @@ class MetaExport {
         //object of the Spreadsheet class to create the excel data
         $spreadsheet = new Spreadsheet();
 
-        
+        $spreadsheet->getActiveSheet()->setCellValueExplicit(
+            'A8',
+            "01513789642",
+            \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING
+            );
         $cntSheet = 0;
         foreach($this->readyMeta as $type => $metaPack) {
             $flag = false;
@@ -309,7 +313,7 @@ class MetaExport {
             // Zero based, so set the second tab as active sheet
             $spreadsheet->setActiveSheetIndex($cntSheet);
             $spreadsheet->setActiveSheetIndex($cntSheet)->setTitle($type);
-            
+            //            
             $cntRow = 2;    // Second row 
             foreach ($metaPack as $row) {
                 if(!$flag) {
@@ -317,6 +321,8 @@ class MetaExport {
                     $cntColumn = 1;
                     foreach ($row as $key => $item) {
                         $spreadsheet->setActiveSheetIndex($cntSheet)->setCellValueByColumnAndRow($cntColumn, 1, $key);    //first row, dinamic column
+                        $lastCellAddress = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($cntColumn, 1)->getCoordinate();
+                        $spreadsheet->getActiveSheet()->getCell($lastCellAddress)->setDataType(\PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                         $cntColumn++;
                     }
                     $flag = true;
@@ -324,6 +330,8 @@ class MetaExport {
                 $cntColumn = 1;
                 foreach ($row as $item) {
                     $spreadsheet->setActiveSheetIndex($cntSheet)->setCellValueByColumnAndRow($cntColumn, $cntRow, $item);
+                    $lastCellAddress = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($cntColumn, $cntRow)->getCoordinate();
+                    $spreadsheet->getActiveSheet()->getCell($lastCellAddress)->setDataType(\PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                     $cntColumn++;
                 }
                 $cntRow++;
