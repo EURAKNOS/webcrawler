@@ -313,9 +313,14 @@ class ParsePage
             return "";
         
         // Some sites have a non-standard url for youtube content. This is what brings this part down.
-        if ( strpos($relative, '/www.youtube.com/embed' )) {
+        if ( strpos($relative, '/www.youtube.com/embed' ) !== false) {
             $str = ltrim($relative, '//');
-            return 'https://' . $str;
+            
+            if (strpos($relative, 'https://') !== false) {
+                return $str;
+            } else {
+                return 'https://' . $str;
+            }
         }
         // Check Base
         $base_parsed = parse_url($base);
