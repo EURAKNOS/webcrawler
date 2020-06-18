@@ -1003,7 +1003,13 @@ class DownloadFileExtended {
     public function downloadProcessing()
     {
         $this->preSaveDatabaseDownlodedFile();
-        $this->downloadFile();
+        try {
+            $this->downloadFile();
+        } catch (Exception $e) {
+            $this->log->m_log('Exception:' . $this->target);
+            $this->log->m_log($e);
+        }
+       
     }
     
     /**
