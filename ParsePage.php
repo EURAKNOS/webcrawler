@@ -276,6 +276,22 @@ class ParsePage
             }
         }
         
+        $link_tags = $doc->getElementsByTagName('video');
+        foreach ($link_tags as $tag) {
+            if (($href_value = $tag->getAttribute('src'))) {
+                
+                $link_absolute = $this->relativeToAbsolute($href_value, $this->target);
+                
+                $link_parsed = parse_url($link_absolute);
+                if ($link_parsed === null || $link_parsed === false) {
+                    die('Unable to Parse Link URL');
+                }
+                if ((! array_key_exists('host', $link_parsed) || $link_parsed['host'] == "" || $link_parsed['host'] == $url_host) && array_key_exists('path', $link_parsed) && $link_parsed['path'] != "" && array_search($link_parsed['path'], $links) === false) {
+                    $links[] = $this->urlClear($link_parsed['path']);
+                }
+            }
+        }
+        
         $link_tags = $doc->getElementsByTagName('iframe');
         foreach ($link_tags as $tag) {
             if (($href_value = $tag->getAttribute('src'))) {
