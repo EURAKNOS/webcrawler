@@ -611,6 +611,7 @@ class DownloadPage {
         $dl->preSaveDatabaseDownlodedFile();
         
         preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $this->target, $match);
+        if (!isset($match[1])) return array('error_page' => 1);
         $videoId = $match[1];
         
         $googleApiUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' . $videoId . '&key=' . YOUTUBE_API_KEY . '&part=snippet';

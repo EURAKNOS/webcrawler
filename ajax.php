@@ -181,7 +181,6 @@ class AjaxProcess {
                     $this->MySql->urlId = $this->urlId;
                     if($this->MySql->checkStop() === true)  break;
                     $row = $this->MySql->getLinkRow();
-                   
                     if ($row !== false) {
                         $path = $row['path'];
                         $referer = $row['path'];
@@ -189,9 +188,14 @@ class AjaxProcess {
                         $parsePage->urlId = $this->urlId;
                         $parsePage->firstCheck = $this->firstCheck;
                         //Check if first character isn't a '/'
+                        
                         if ($path[0] != '/') {
                             if (strpos($row['path'], 'https://www.youtube.com') !== false) {
                                 $parsePage->target = $path;
+                                $parsePage->referer = $url_start . $referer;
+                                $parsePage->path = $path;
+                            } elseif (strpos($row['path'], 'www.youtube.com') !== false) {
+                                $parsePage->target = 'https://' . $row['path'];
                                 $parsePage->referer = $url_start . $referer;
                                 $parsePage->path = $path;
                             } elseif (strpos($row['path'], 'https://prezi.com') !== false) {
