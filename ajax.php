@@ -228,7 +228,6 @@ class AjaxProcess {
                         $parsePage->pagesId = $row['id'];
                         
                         $parsePage->browser = $browser;
-                        $parsePage->target = str_replace(array('–'), array('%E2%80%93'), $parsePage->target);
                         if ($parsePage->parsePage()) {
                             $counter ++;
                         }

@@ -1038,7 +1038,8 @@ class DownloadFileExtended {
             $this->log->m_log('Create folder success: ' . FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id);
         }
         //The resource that we want to download.
-        $fileUrl = $this->target;
+        
+        $fileUrl = str_replace(array('–'), array('%E2%80%93'), $this->target);
         
         $agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36";
         //The path & filename to save to.
