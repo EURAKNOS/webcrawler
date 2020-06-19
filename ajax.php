@@ -40,6 +40,7 @@ class AjaxProcess {
         $this->MySql = new DbMysql();
         
         $this->fileTypes = array('page','jpg','bmp','png','pdf','docx','xlsx','pptx','epub','swf','youtube_video','vimeo_video','google_map','mp4','zip');
+        $this->firstCheck = 0;
     }
     
     public function process()
@@ -68,7 +69,6 @@ class AjaxProcess {
          $_SESSION["processing"] = 1;
          
          $this->MySql->startStatus($this->urlId);
-         $this->firstCheck = true;
          
          $this->startCrawler(true);
          if (isset($_POST['external'])) {
@@ -167,6 +167,7 @@ class AjaxProcess {
         
         $parsePage->pagesId = NULL;
         if ($continueCrawler === false) {
+            $parsePage->firstCheck = $this->firstCheck;
             $parsePage->parsePage(true);
             $this->urlId = $parsePage->urlId;
             $this->firstCheck = $parsePage->firstCheck;
@@ -249,6 +250,7 @@ class AjaxProcess {
                         
                         $parsePage->browser = $browser;
                         if ($parsePage->parsePage()) {
+                            $this->firstCheck = $parsePage->firstCheck;
                             $counter ++;
                         }
                         sleep(1);

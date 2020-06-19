@@ -14,7 +14,7 @@ class ParsePage
     
     public $browser;
     
-    public $firstCheck;
+    public $firstCheck; //dinamic or static page
 
     public function __construct()
     {}
@@ -75,7 +75,7 @@ class ParsePage
         $dwl->browser = $this->browser;
         $dwl->pagesId = $this->pagesId;
         
-        if ($first) {
+        if ($this->firstCheck == 0) {
             $this->firstCheck = $dwl->firstPageCheck();
         }
         $dwl->firstCheck = $this->firstCheck;

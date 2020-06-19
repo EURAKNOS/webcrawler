@@ -46,9 +46,9 @@ class DownloadPage {
         $curlRes = $this->dinamicDownloadPage();
         $puppRes = $this->DownloadPage();
         if ($curlRes['body'] == $puppRes['body']) { // if curl and puppether content equal  = STATIC PAGE
-            return true;
+            return 1;
         } else {
-            return false;   // DINAMIC PAGE
+            return 2;   // DINAMIC PAGE
         }
     }
     
@@ -59,7 +59,7 @@ class DownloadPage {
      */
     public function downloadData()
     {
-        if ($this->firstCheck) {    // DINAMIC OR STATIC , STATIC IS TRUE
+        if ($this->firstCheck == 1) {    // DINAMIC OR STATIC , STATIC IS TRUE
             $err_c = $this->urlCheck();
             if ($err_c != 2) {
                 $contents['error_page'] = 1;
@@ -1061,6 +1061,9 @@ class DownloadFileExtended {
         
         //Timeout if the file doesn't download after 20 seconds.
         curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+        
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 5); //follow up to 10 redirections - avoids loops
         
         //Execute the request.
         curl_exec($ch);
