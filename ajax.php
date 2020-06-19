@@ -60,6 +60,24 @@ class AjaxProcess {
         }
         $this->MySql->endDownloadUrl($this->urlId);
      }
+     
+     public function continueCrawler()
+     {
+         $log = new WLog();
+         $log->m_log('Load WebCrawler page');
+         $_SESSION["processing"] = 1;
+         
+         $this->MySql->startStatus($this->urlId);
+         $this->firstCheck = true;
+         
+         $this->startCrawler(true);
+         if (isset($_POST['external'])) {
+             $researchProcess = new ResearchProcess();
+             $researchProcess->urlId = $this->urlId;
+             $researchProcess->process();
+         }
+         $this->MySql->endDownloadUrl($this->urlId);
+     }
 
      private function changePost()
      {    
@@ -87,7 +105,7 @@ class AjaxProcess {
      * After receiving the starting url, it starts processing the first page. Processing the first page is also storing the found urls.
      * In the next round, you will start queuing the urls already stored in the database.
      */
-    private function startCrawler()
+    private function startCrawler($continueCrawler = false)
     {
         /*$req = new HTTP_Request("http://example.com/");
          $req->setProxy("192.168.5.254", 3128);*/
@@ -125,7 +143,7 @@ class AjaxProcess {
         //  $parsePage->path =$seed_components['path'];
         $this->MySql = new DbMysql();
         $this->MySql->exitsUrl($parsePage->target);
-        if ($this->MySql->result && !empty($this->MySql->result)) {
+        if ($this->MySql->result && !empty($this->MySql->result) && $continueCrawler === false) {
             $this->MySql->deleteWebPageData($this->MySql->result['id']);
         }
         
@@ -148,10 +166,11 @@ class AjaxProcess {
         $parsePage->browser = $browser;
         
         $parsePage->pagesId = NULL;
-        $parsePage->parsePage(true);
-        $this->urlId = $parsePage->urlId;
-        $this->firstCheck = $parsePage->firstCheck;
-        
+        if ($continueCrawler === false) {
+            $parsePage->parsePage(true);
+            $this->urlId = $parsePage->urlId;
+            $this->firstCheck = $parsePage->firstCheck;
+        }
         // Loop through all pages on site.
         while (1) {
             $counter = 0;
@@ -161,6 +180,7 @@ class AjaxProcess {
                     $this->MySql->urlId = $this->urlId;
                     if($this->MySql->checkStop() === true)  break;
                     $row = $this->MySql->getLinkRow();
+                   
                     if ($row !== false) {
                         $path = $row['path'];
                         $referer = $row['path'];
@@ -398,4 +418,6 @@ if (isset($_POST['processFunction']) && $_POST['processFunction'] == 'startcrawl
     $ajaxProcess->status();
 } elseif (isset($_POST['processFunction']) && $_POST['processFunction'] == 'checkUrl') {
     $ajaxProcess->checkUrl();
+} elseif (isset($_POST['processFunction']) && $_POST['processFunction'] == 'continue') {
+    
 }

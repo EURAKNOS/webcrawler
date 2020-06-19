@@ -534,6 +534,17 @@ class DbMysql {
         return true;
     }
     
+    public function startStatus($id)
+    {
+        $data['id'] = $id;
+        $statement = $this->db->prepare("UPDATE ".URLS_TABLE." SET download = 0, stop = 0, end_time = 0 WHERE id = :id");
+        if(!$statement->execute($data)){
+            $this->log->m_log('startStatus MySql function error');
+            throw new Exception("An operation failed startStatus function");
+        }
+        return true;
+    }
+    
     public function checkStop()
     {
         $data['id'] = $this->urlId;
