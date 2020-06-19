@@ -234,7 +234,11 @@ class AjaxProcess {
                                 $parsePage->target = $path;
                                 $parsePage->referer = $referer;
                                 $parsePage->path = $path;
-                            }  //https://prezi.com/i7ccxsi5tcrv/new-developments-in-yield-safe/
+                            } elseif (strpos($row['path'],'https://4d4f.eu/') !== false ) { 
+                                $parsePage->target = $path;
+                                $parsePage->referer = $referer;
+                                $parsePage->path = $path;
+                            }
                             /*elseif (strpos($row['path'], 'https://www.google.com'))
                             $parsePage->target = $path;
                             $parsePage->referer = $url_start . $referer;
