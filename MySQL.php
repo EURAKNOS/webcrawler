@@ -571,7 +571,7 @@ class DbMysql {
      public function getAllFilesMetaByUrlId($id)
      {
          $data['url_id'] = $id;
-         $statementSelect = $this->db->prepare("SELECT * FROM " . FILES_TABLE . " WHERE url_id = :url_id ORDER BY file_type ");
+         $statementSelect = $this->db->prepare("SELECT f.*, p.referer FROM " . FILES_TABLE . " AS f RIGHT JOIN " . PAGE_TABLE . " AS p ON f.pages_id = p.id WHERE f.url_id = :url_id ORDER BY f.file_type ");
          if(!$statementSelect->execute($data)){
              $this->log->m_log('getAllFilesMetaByUrlId MySql function error');
          }
@@ -585,7 +585,7 @@ class DbMysql {
      {
          $data['url_id'] = $id;
          $this->result = array();
-         $statementSelect = $this->db->prepare("SELECT * FROM " . CONTENTS_TABLE . " WHERE url_id = :url_id ");
+         $statementSelect = $this->db->prepare("SELECT c.*, p.referer FROM " . CONTENTS_TABLE . " AS c RIGHT JOIN " . PAGE_TABLE . " AS p ON c.pages_id = p.id WHERE c.url_id = :url_id ");
          if(!$statementSelect->execute($data)){
              $this->log->m_log('getAllContent pages MySql function error');
          }

@@ -813,7 +813,7 @@ class DownloadPage {
         $dl->urlId = $this->urlId;
         $dl->pagesId = $this->pagesId;
         $dl->target = $this->target;
-        $dl->folder = FOLDER_MP4;
+        $dl->folder = 'mp4';
         $dl->downloadProcessing();
         
         $getID3 = new getID3;

@@ -93,7 +93,7 @@ class MetaExport {
         if (isset($data) && !empty($data)) {
             foreach ($data as $key => $item) {
                 
-                $referer = $this->getRefererUrl($item['url_id'], $item['path']);
+                //$referer = $this->getRefererUrl($item['url_id'], $item['path']);
                 
                 if (!isset($this->metadata[$item['file_type']])) {
                     $this->cnta[$item['file_type']] = 1;
@@ -119,7 +119,7 @@ class MetaExport {
                 $this->metadata[$item['file_type']][$this->cnta[$item['file_type']]]['ID'] = $item['id'];
                 $this->metadata[$item['file_type']][$this->cnta[$item['file_type']]]['URL_ID'] = $item['url_id'];
                 $this->metadata[$item['file_type']][$this->cnta[$item['file_type']]]['PATH'] = $item['path'];
-                $this->metadata[$item['file_type']][$this->cnta[$item['file_type']]]['REFERER'] = $referer;
+                $this->metadata[$item['file_type']][$this->cnta[$item['file_type']]]['REFERER'] = $item['referer'];
                 $this->metadata[$item['file_type']][$this->cnta[$item['file_type']]]['LOCATION'] = $item['local_location'];
                 $this->metadata[$item['file_type']][$this->cnta[$item['file_type']]]['SIZE'] = filesize($item['local_location']);
                 if (is_array($meta)) {
