@@ -300,11 +300,11 @@ class MetaExport {
         //object of the Spreadsheet class to create the excel data
         $spreadsheet = new Spreadsheet();
 
-        $spreadsheet->getActiveSheet()->setCellValueExplicit(
+        /*$spreadsheet->getActiveSheet()->setCellValueExplicit(
             'A8',
             "01513789642",
             \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING
-            );
+            );*/
         $cntSheet = 0;
         foreach($this->readyMeta as $type => $metaPack) {
             $flag = false;
