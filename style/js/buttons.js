@@ -8,6 +8,8 @@ var classButtons = function() {
 	this.init = function() {
 		this.stopButton();
 		this.deleteButton();
+		this.metaButton();
+		this.metaCheck();
 	}
 
 	
@@ -83,6 +85,65 @@ var classButtons = function() {
 						}
 					}
 				});
+			});
+		});
+		return false;
+	}
+	
+	this.metaButton = function() {
+		$( ".export-meta" ).click(function(event) {
+			$('#meta-export-modal').modal({backdrop: 'static', keyboard: false});
+			var button = $(this);
+			var data = $(this).data("id"); // form data
+			
+			event.preventDefault();
+			
+			$.ajax({
+				url : "export_meta.php",
+				type : "POST",
+				dataType : "json",
+				data : {
+					id : data
+				},
+				async : true,
+				cache : false,
+				timeout : 10000,
+				error : function() {
+					//console.log('error stopButton');
+				},
+				success : function(response) {
+				}
+			});
+			
+		});
+		return false;
+	}
+	
+	
+	this.metaCheck = function() {
+		$( ".export-meta" ).click(function(event) {
+			event.preventDefault();
+			$.ajax({
+				url : "ajaxmetacheck.php",
+				type : "POST",
+				dataType : "json",
+				data : {
+				},
+				async : true,
+				cache : false,
+				timeout : 1000,
+				error : function() {
+					console.log('error2');
+				},
+				success : function(response) {
+					if (response.check == 0) {
+						$('.progress').html(response.percentage);
+						setTimeout(self.metaCheck(), 5000);
+					} else {
+						
+					}
+					
+				}
 			});
 		});
 		return false;

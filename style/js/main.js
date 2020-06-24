@@ -101,7 +101,6 @@ var classPage = function() {
 				console.log('error1');
 			},
 			success : function(response) {
-				console.log(response);
 				$('.status').html(response);
 				//eval(document.getElementById("status").innerHTML);
 			}
