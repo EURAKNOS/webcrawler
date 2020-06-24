@@ -1,5 +1,24 @@
 <?php
-session_start ();
+session_name('meta');
+/*session_start ();
+ session_write_close();*/
+
+ini_set('session.use_only_cookies', false);
+ini_set('session.use_cookies', false);
+ini_set('session.use_trans_sid', false);
+ini_set('session.cache_limiter', null);
+
+if(array_key_exists('PHPSESSID', $_COOKIE))
+    session_id($_COOKIE['PHPSESSID']);
+    else {
+        session_start();
+        setcookie('PHPSESSID', session_id());
+        session_write_close();
+    }
+    
+    
+
+
 error_reporting(E_ALL);
 set_time_limit (10000);
 
@@ -11,7 +30,6 @@ require_once 'MySQL.php';
 require_once 'Log.php';
 require_once 'Detail.php';
 require_once 'vendor/PhpSpreadsheet/vendor/autoload.php';
-require_once 'vendor/php-export-data-master/php-export-data.class.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -44,11 +62,12 @@ class MetaExport {
         $this->meta = array();
         $this->metadata = array();
         $this->cnt = 0;
-        if (isset($_GET['id'])) {
-            $this->getDataById($_GET['id']);
+        if (isset($_POST['id'])) {
+            $this->getDataById($_POST['id']);
             $this->filename = $this->mainData['id'] . '_' . date('Y-m-d') . '.xlsx';
             $this->createExcel();
-        } /*else {
+        }
+        /*else {
             $this->filename = 'all_' . date('Y-m-d') . '.xlsx';
             $this->createAllPage();
         }*/
@@ -99,12 +118,10 @@ class MetaExport {
     {
         
         $data = $this->MySql->getAllFilesMetaByUrlId($id);
-        $sec = (string)(microtime(true) - $this->start);
-        $this->log->m_log('FILE EXPORT DB: ' . $sec . ' second');
-       
         $content = $this->MySql->getMetaContent($id);
-        $sec = (string)(microtime(true) - $this->start);
-        $this->log->m_log('CONTENT EXPORT DB: ' . $sec . ' second');
+        $_SESSION['meta_all_cnt'] += count($data);
+        $_SESSION['meta_all_cnt'] += count($content);
+        
         if (isset($data) && !empty($data)) {
             foreach ($data as $key => $item) {
                 
@@ -310,7 +327,7 @@ class MetaExport {
     }*/
     
     private function createExcel()
-    {        
+    {    
         /*$sec = (string)(microtime(true) - $this->start);
         $this->log->m_log('DATA PREPARE OK: ' . $sec . ' second');*/
         //object of the Spreadsheet class to create the excel data
@@ -349,6 +366,7 @@ class MetaExport {
                     $lastCellAddress = $activeSheet->getCellByColumnAndRow($cntColumn, $cntRow)->getCoordinate();
                     $spreadsheet->getActiveSheet()->getCell($lastCellAddress)->setDataType(\PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                     ++$cntColumn;
+                    ++$_SESSION['meta_export_cnt'];
                 }
                 /*$sec = (string)(microtime(true) - $this->start);
                 $this->log->m_log('resz BENT: ' . $sec . 'second');*/
@@ -379,13 +397,14 @@ class MetaExport {
             mkdir(FOLDER_META_EXPORT, 0777, true);
         }
         
-        
         $writer->save($fxls);
+        $_SESSION['meta_export_file'] = $fxls;
+        $_SESSION['meta_export_check'] = 1;
         // download
         //$file = basename($_GET['file']);
         /*$sec = (string)(microtime(true) - $this->start);
         $this->log->m_log('MENTES: ' . $sec . 'second');*/
-        if(!file_exists($fxls)){ // file does not exist
+        /*if(!file_exists($fxls)){ // file does not exist
             die('file not found');
         } else {
             header('Content-disposition: attachment; filename='.$fxls);
@@ -397,7 +416,7 @@ class MetaExport {
             ob_clean();
             flush();
             readfile($fxls);
-        }
+        }*/
        /* $sec = (string)(microtime(true) - $this->start);
         $this->log->m_log('EXCEL GENERATE OK: ' . $sec . 'second');*/
     }
