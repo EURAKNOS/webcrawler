@@ -3,14 +3,17 @@
 <head>
 	<meta charset="utf-8">
     <title>Euraknos WebCrawler</title>
-    <link rel="stylesheet" href="style/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style/css.css">
-    <link rel="stylesheet" href="style/all.min.css"> <!-- Font Awesome --> 
+    <link rel="stylesheet" href="./styles/bootstrap.min.css">
+    <link rel="stylesheet" href="./styles/css.css">
+    <link rel="stylesheet" href="./styles/all.min.css"> <!-- Font Awesome --> 
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
-	<script src="style/js/jquery.min.js"></script>
-	<script src="style/js/bootstrap.min.js"></script>
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
 <!--	<script src="./js/main.js"></script> -->
 
+	<script src="./js/Chart/Chart.min.js"></script>
+	<script src="./js/chartjs-plugin-datalabels.min.js"></script>
+    
 </head>
 <body>
 
@@ -58,13 +61,14 @@
             <p>Each tile shows the total and the distinct number of related contents and their metadata availability ratio.</p>
             <ul>
                 <li><strong>TEXT</strong> tile shows the number of harvested contents that are in HTML, PDF, DOCX, XLSX, EPUB file formats.</li>
-                <li><strong>PRESENTATION</strong> tile shows the number of harvested contents in PPTX format.</li>
-                <li><strong>IMAGE</strong> tile shows the number of harvested contents in JPG, BMP, PNG, SWF, SVG formats.</li>
+                <li><strong>PRESENTATION</strong> tile shows the number of harvested contents in PPTX and Prezi format.</li>
+                <li><strong>IMAGE</strong> tile shows the number of harvested contents in JPG, PNG, BMP, SWF, SVG formats.</li>
                 <li><strong>VIDEO</strong> tile shows the number of harvested contents in YouTube video, Vimeo video, MP4 formats.</li>
                 <li><strong>AUDIO</strong> tile shows the number of harvested contents in Spotify format.</li>
-                <li><strong>OTHER</strong> tile shows the number of harvested contents in Google Map, ZIP formats.</li>
+                <li><strong>OTHER</strong> tile shows the number of harvested contents in Google Map, ZIP and Mailchimp formats.</li>
             </ul>
-            <h2>Create and start an individual webcrawler </h2>
+            <h2>EURAKNOS webcrawler tool functions</h2>
+            <h3>Create and start an individual webcrawler</h3>
             <p>Using this function you will be able to create, configure and start your own webcrawler.</p>
             <p>After clicking the “Add crawler” button on the main page, you must set the name and the starting URL of your webcrawler. Optionally you can set or add extra parameters that influence the working of your webcrawler. By clicking the “Start” button your webcrawler starts.</p>
             <p>Adjustable parameters:</p>
@@ -80,7 +84,7 @@
             <tbody>
                 <tr>
                     <td>Starting URL</td>
-                    <td>The starting URL of the webcrawler.</td>
+                    <td>The starting URL of the web crawler.</td>
                     <td>Y</td>
                     <td>Empty</td>
                 </tr>
@@ -92,7 +96,7 @@
                 </tr>
                 <tr>
                     <td>Crawler’s name</td>
-                    <td>The name of the web crawler.</td>
+                    <td>The name of the web crawler. Mandatory field.</td>
                     <td>Y</td>
                     <td>Empty</td>
                 </tr>
@@ -140,23 +144,27 @@
                 </tr>
                 <tr>
                     <td>Other searching elements </td>
-                    <td>In this parameter group it is possible to add some extra searching options to refine the crawling process. The first field contains the DIV class name, the second one is its reference name in the database.</td>
+                    <td>In this parameter group it is possible to add some extra searching options to refine the crawling process. The first field contains the DIV class name, the second one is its the reference name in the database.</td>
                     <td>N</td>
                     <td>Empty, Empty</td>
                 </tr>
 			</tbody>
             </table>
-			<h2>Details and Export details</h2>
+            <p><strong>Notice:</strong> Use this function with responsibility! Crawling and scraping internet sites are not always a warmly welcomed activity.</p>
+			<h3>Details and Export details</h3>
             <p>Applying this feature it is possible to view the terms and results of any individual webcrawler searches. The appearing chart shows the type, proportion, and number of files downloaded, as well as the percentage of metadata extracted.</p>
             <p>By clicking on the “Export details” button, the download statistics of the current webcrawler can be exported in Excel format.</p>
-            <p><strong>Notice:</strong> In case at least one metadata value can be retrieved automatically for a specific content, we calculate that metadata is available for that content. We do not take into account whether the metadata is insufficient or incorrect.</p>
-            <h2>Stop</h2>
+            <p><strong>Notice:</strong> In case at least one metadata value can be retrieved automatically for a specific content, we calculate that metadata is available for that content. We do not take into account whether the metadata is insufficient or incorrect. This indicator will be refined soon.</p>
+            <h3>Export metadata</h3>
+            <p>Using this feature, you can export all automatically extracted metadata of an individual webcrawler, in Excel format, regardless of whether the crawling process is still running or has been ended.</p>
+			<p>Clicking the “Export metadata” button will start the export process.</p>
+            <h3>Stop running individual webcrawler</h3>
             <p>You can use this feature to stop the selected running individual webcrawler. The process completes the search and cannot be restarted afterwards.</p>
             <p>Clicking the “Stop” button will stop the search.</p>
-            <h2>Delete</h2>
+            <h3>Delete completed individual webcrawler and its data</h3>
             <p>You can use this feature to delete data and metadata databases generated as a result of a completed individual webcrawler process. Deletion is permanent and cannot be undone.</p>
             <p>Click the “Delete” button to delete the individual webcrawler and its downloaded data and metadata databases.</p>
-            <h2>Export all</h2>
+            <h3>Export all download statistics</h3>
 
             <p>Using this feature, you can export the download statistics of all individual webcrawlers, in Excel format, regardless of whether the crawling process is still running or has been ended.</p>
             <p>Clicking the “Export all” button will start the export process.</p>

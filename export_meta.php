@@ -11,6 +11,7 @@ require_once 'MySQL.php';
 require_once 'Log.php';
 require_once 'Detail.php';
 require_once 'vendor/PhpSpreadsheet/vendor/autoload.php';
+require_once 'vendor/php-export-data-master/php-export-data.class.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -24,11 +25,15 @@ class MetaExport {
     public $data = array();
     
     public $result = array();
+    
+    public $start;
   
     private $metadata = array();
     
     public function __construct()
     {
+        $this->start = microtime(true);
+        $this->log = new WLog();
         $this->MySql = new DbMysql();
     }
     
@@ -47,7 +52,18 @@ class MetaExport {
             $this->filename = 'all_' . date('Y-m-d') . '.xlsx';
             $this->createAllPage();
         }*/
-        exit;
+        
+       /* $this->log->m_log('Memory used: ' . $this->isa_convert_bytes_to_specified(memory_get_peak_usage(), 'M'));
+        exit;*/
+    }
+    
+    function isa_convert_bytes_to_specified($bytes, $to, $decimal_places = 1) {
+        $formulas = array(
+            'K' => number_format($bytes / 1024, $decimal_places),
+            'M' => number_format($bytes / 1048576, $decimal_places),
+            'G' => number_format($bytes / 1073741824, $decimal_places)
+        );
+        return isset($formulas[$to]) ? $formulas[$to] : 0;
     }
     
     private function createAllPage()
@@ -77,19 +93,18 @@ class MetaExport {
         $this->mainData = array();
         $this->MySql->getCrawlingData($id);
         $this->mainData = $this->MySql->result;
-        $this->mainData['post'] = unserialize($this->mainData['post_data']);
-        $this->mainData['run'] = $this->hourAndMinConverter($this->mainData['end_time'] - $this->mainData['download_time']);
-        $this->mainData['post']['match_url'] = (isset($this->mainData['post']['match_url'])) ? $this->mainData['post']['match_url'] : '';
-        $this->mainData['post']['class'] = (isset($this->mainData['post']['class'])) ? $this->mainData['post']['class'] : array();
     }
     
     public function getDownloadMetaByUrlId($id)
     {
-        //echo '<pre>';
+        
         $data = $this->MySql->getAllFilesMetaByUrlId($id);
+        $sec = (string)(microtime(true) - $this->start);
+        $this->log->m_log('FILE EXPORT DB: ' . $sec . ' second');
        
         $content = $this->MySql->getMetaContent($id);
-        
+        $sec = (string)(microtime(true) - $this->start);
+        $this->log->m_log('CONTENT EXPORT DB: ' . $sec . ' second');
         if (isset($data) && !empty($data)) {
             foreach ($data as $key => $item) {
                 
@@ -295,26 +310,25 @@ class MetaExport {
     }*/
     
     private function createExcel()
-    {
-        
+    {        
+        /*$sec = (string)(microtime(true) - $this->start);
+        $this->log->m_log('DATA PREPARE OK: ' . $sec . ' second');*/
         //object of the Spreadsheet class to create the excel data
         $spreadsheet = new Spreadsheet();
 
-        /*$spreadsheet->getActiveSheet()->setCellValueExplicit(
-            'A8',
-            "01513789642",
-            \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING
-            );*/
         $cntSheet = 0;
+
         foreach($this->readyMeta as $type => $metaPack) {
             $flag = false;
-            if ($type == '') continue; 
+            if ($type == '') continue;
+            
             $spreadsheet->createSheet();
             // Zero based, so set the second tab as active sheet
             $spreadsheet->setActiveSheetIndex($cntSheet);
             $spreadsheet->setActiveSheetIndex($cntSheet)->setTitle($type);
             //            
-            $cntRow = 2;    // Second row 
+            $cntRow = 2;    // Second row
+            $spreadsheet->getActiveSheet()->insertNewRowBefore(1, count($metaPack));
             foreach ($metaPack as $row) {
                 if(!$flag) {
                     // display field/column names as first row
@@ -323,18 +337,22 @@ class MetaExport {
                         $spreadsheet->setActiveSheetIndex($cntSheet)->setCellValueByColumnAndRow($cntColumn, 1, $key);    //first row, dinamic column
                         $lastCellAddress = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($cntColumn, 1)->getCoordinate();
                         $spreadsheet->getActiveSheet()->getCell($lastCellAddress)->setDataType(\PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-                        $cntColumn++;
+                        ++$cntColumn;
                     }
                     $flag = true;
                 }
                 $cntColumn = 1;
+                $tmp = $spreadsheet->setActiveSheetIndex($cntSheet);
+                $activeSheet = $spreadsheet->getActiveSheet();
                 foreach ($row as $item) {
-                    $spreadsheet->setActiveSheetIndex($cntSheet)->setCellValueByColumnAndRow($cntColumn, $cntRow, $item);
-                    $lastCellAddress = $spreadsheet->getActiveSheet()->getCellByColumnAndRow($cntColumn, $cntRow)->getCoordinate();
+                    $tmp->setCellValueByColumnAndRow($cntColumn, $cntRow, $item);
+                    $lastCellAddress = $activeSheet->getCellByColumnAndRow($cntColumn, $cntRow)->getCoordinate();
                     $spreadsheet->getActiveSheet()->getCell($lastCellAddress)->setDataType(\PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-                    $cntColumn++;
+                    ++$cntColumn;
                 }
-                $cntRow++;
+                /*$sec = (string)(microtime(true) - $this->start);
+                $this->log->m_log('resz BENT: ' . $sec . 'second');*/
+                ++$cntRow;
             }
             $cell_st =[
                 'font' =>['bold' => true],
@@ -342,8 +360,10 @@ class MetaExport {
                 'borders'=>['bottom' =>['style'=> \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM]]
             ];
             $spreadsheet->setActiveSheetIndex($cntSheet)->getStyle('A1:Z1')->applyFromArray($cell_st);
-            $cntSheet++;
+            ++$cntSheet;
         }
+        /*$sec = (string)(microtime(true) - $this->start);
+        $this->log->m_log('ADAT BENT: ' . $sec . 'second');*/
 
         
         //set columns width
@@ -363,7 +383,8 @@ class MetaExport {
         $writer->save($fxls);
         // download
         //$file = basename($_GET['file']);
-        
+        /*$sec = (string)(microtime(true) - $this->start);
+        $this->log->m_log('MENTES: ' . $sec . 'second');*/
         if(!file_exists($fxls)){ // file does not exist
             die('file not found');
         } else {
@@ -377,6 +398,8 @@ class MetaExport {
             flush();
             readfile($fxls);
         }
+       /* $sec = (string)(microtime(true) - $this->start);
+        $this->log->m_log('EXCEL GENERATE OK: ' . $sec . 'second');*/
     }
     
     
@@ -448,6 +471,5 @@ class MetaExport {
     
     
 }
-
 $export = new MetaExport();
 $export->exportProcess();
