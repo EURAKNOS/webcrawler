@@ -97,6 +97,7 @@ class Detail
      */
     public function template()
     {
+     
         $h1check = (isset($this->mainData['post']['h1']) && $this->mainData['post']['h1'] == '1') ? ' checked' : '';
         $h2check = (isset($this->mainData['post']['h2']) && $this->mainData['post']['h2'] == '1') ? ' checked' : '';
         $h3check = (isset($this->mainData['post']['h3']) && $this->mainData['post']['h3'] == '1') ? ' checked' : '';
@@ -115,11 +116,29 @@ class Detail
             	<script src="style/js/jquery.min.js"></script>
             	<script src="style/js/bootstrap.min.js"></script>
             	<script src="style/js/detailpage.js"></script>
+                <script src="style/js/buttons.js"></script>
             
             	<script src="style/js/Chart/Chart.min.js"></script>
             
             </head>
             <body>
+
+            <!-- Modal -->
+            <div class="modal fade" id="meta-export-modal" data-id="" tabindex="-1" role="dialog" aria-labelledby="meta-export-modal" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="metaExportModal">Export in progress, please wait!</h5>
+                  </div>
+                  <div class="modal-body">
+                     <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
              <!-- Top Navigation Menu -->
             <div class="topnav" style="margin-bottom: 10px;">
               <a class="active navbar-brand" style="text-align: left;" href="/">
@@ -130,7 +149,7 @@ class Detail
               <div id="myLinks">
                 <a class="nav-link" href="new.php">Add Crawler</a>
                 <a class="nav-link" href="export_details.php?id='.$this->mainData['id'].'">Export details</a>
-                <a class="nav-link" href="export_meta.php?id='.$this->mainData['id'].'">Export metadata</a>
+                <a class="nav-link export-meta" data-id="'.$this->mainData['id'].'" href="#">Export metadata</a>
                 <a class="nav-link" href="howto.html" target="_blank">How to</a>
               </div>
               <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
@@ -151,7 +170,7 @@ class Detail
                     	<a class="nav-link" href="export_details.php?id='.$this->mainData['id'].'">Export details</a>
                   	</li>
                     <li class="nav-item">
-                    	<a class="nav-link" href="export_meta.php?id='.$this->mainData['id'].'">Export metadata</a>
+                    	<a class="nav-link export-meta" data-id="'.$this->mainData['id'].'">Export metadata</a>
                   	</li>
                     <li class="nav-item">
                     	<a class="nav-link" href="howto.html" target="_blank">How to</a>

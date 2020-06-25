@@ -323,3 +323,5 @@ td:first-child {text-align:right;}
 @media screen and (min-width: 1000px) {
 	.topnav {display: none;}
 }
+
+.export-meta { cursor: pointer; }

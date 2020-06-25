@@ -3,6 +3,7 @@
  */
 var classButtons = function() {
 	var self = this;
+	var ok = 0;
 	var responseDataStatus = 0;
 
 	this.init = function() {
@@ -107,7 +108,7 @@ var classButtons = function() {
 				},
 				async : true,
 				cache : false,
-				timeout : 10000,
+				timeout : 90000,
 				error : function() {
 					//console.log('error stopButton');
 				},
@@ -123,30 +124,44 @@ var classButtons = function() {
 	this.metaCheck = function() {
 		$( ".export-meta" ).click(function(event) {
 			event.preventDefault();
-			$.ajax({
-				url : "ajaxmetacheck.php",
-				type : "POST",
-				dataType : "json",
-				data : {
-				},
-				async : true,
-				cache : false,
-				timeout : 1000,
-				error : function() {
-					console.log('error2');
-				},
-				success : function(response) {
-					if (response.check == 0) {
-						$('.progress').html(response.percentage);
-						setTimeout(self.metaCheck(), 5000);
-					} else {
-						
-					}
-					
-				}
-			});
+			setTimeout(function() {
+						  self.metaCheckAjax();
+					  }, 5000);
 		});
-		return false;
+	}
+	
+	this.metaCheckAjax = function() {
+		var ok = 0;
+		var mca = $.ajax({
+			url : "ajaxmetacheck.php",
+			type : "POST",
+			dataType : "json",
+			data : {
+			},
+			async : true,
+			cache : false,
+			timeout : 90000,
+			error : function() {
+				console.log('error2');
+			},
+			success : function(response) {
+				if (response.check == 0) {
+					$('.progress').html(response.percentage);
+				} else {
+					$('#meta-export-modal').modal('hide');
+					window.location = 'downloadmeta.php?file=' + response.file;
+					ok = 1;
+				}
+			}
+		}).then(function() { // on completion, restart
+		    if (ok == 1){
+			 	
+			} else {
+				setTimeout(self.metaCheckAjax, 2000); // function refers to
+			}
+														// itself
+
+		});
 	}
 
 }
