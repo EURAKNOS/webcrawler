@@ -14,7 +14,7 @@
             $this->MySql = new DbMysql();
             $this->getCrawlerById();
             $crawler = new AjaxProcess();
-            $crawler->urlId = $_GET['id'];
+            $crawler->urlId = $_POST['id'];
             $crawler->continueCrawler();
         }
         
@@ -27,9 +27,10 @@
         
         private function getCrawlerById()
         {
-            $this->MySql->getCrawlingData($_GET['id']);
+            $this->MySql->getCrawlingData($_POST['id']);
             $_POST = unserialize($this->MySql->result['post_data']);
             $_POST['processFunction'] = 'continue';
+            $_POST['id'] = $this->MySql->result['id'];
         }        
     }
     

@@ -11,6 +11,7 @@ var classButtons = function() {
 		this.deleteButton();
 		this.metaButton();
 		this.metaCheck();
+		this.continueButton();
 	}
 
 	
@@ -22,8 +23,6 @@ var classButtons = function() {
 			var data = $(this).data("id"); // form data
 			var buttonTd = button.closest('.fbuttons');
 			event.preventDefault();
-			
-			
 
 			$.ajax({
 				url : "buttons-ajax.php",
@@ -162,6 +161,34 @@ var classButtons = function() {
 														// itself
 
 		});
+	}
+	
+	this.continueButton = function() {
+		$( ".continue-button" ).click(function(event) {
+			var button = $(this);
+			var data = $(this).data("id"); // form data
+			
+			event.preventDefault();
+			button.remove();
+			$.ajax({
+				url : "continue.php",
+				type : "POST",
+				dataType : "json",
+				data : {
+					id : data
+				},
+				async : true,
+				cache : false,
+				timeout : 90000,
+				error : function() {
+					//console.log('error stopButton');
+				},
+				success : function(response) {
+				}
+			});
+			
+		});
+		return false;
 	}
 
 }

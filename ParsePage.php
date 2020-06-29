@@ -51,6 +51,9 @@ class ParsePage
             $_SESSION['urlid'] = $this->urlId;
             session_write_close();
         }
+        
+        $MySql->updateLastParser($this->urlId);
+        
         if ($reSearch === false) {
             $url_host = $url_components['host'];
             $url_path = '';

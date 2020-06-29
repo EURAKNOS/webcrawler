@@ -626,4 +626,26 @@ class DbMysql {
          
          return $statementSelect->fetch();
      }
+     
+     public function updateLastParser($id)
+     {
+         $data['id'] = $id;
+         $data['last_parser'] = time();
+         $statement = $this->db->prepare("UPDATE ".URLS_TABLE." SET last_parser = :last_parser WHERE id = :id");
+         if(!$statement->execute($data)){
+             $this->log->m_log('updateLastParser MySql function error');
+             throw new Exception("An operation failed updateLastParser function");
+         }
+         return true;
+     }
+     
+     public function stuckProcessStop()
+     {
+         $statement = $this->db->prepare("UPDATE ".URLS_TABLE." SET download = 2 WHERE from_unixtime(`last_parser`) < (NOW() - INTERVAL 1 HOUR) AND download = 0");
+         if(!$statement->execute()){
+             $this->log->m_log('stuckProcessStop MySql function error');
+             throw new Exception("An operation failed stuckProcessStop function");
+         }
+         return true;
+     }
 }

@@ -35,6 +35,8 @@ class AjaxProcess {
     
     public $urlId;
     
+    private $stop = false;
+    
     public function __construct()
     {
         $this->MySql = new DbMysql();
@@ -54,12 +56,14 @@ class AjaxProcess {
         } else {
             echo json_encode(array('status' => 0) );
         }
-        if (isset($_POST['external'])) {
+        if (isset($_POST['external']) && $this->stop !== true) {
             $researchProcess = new ResearchProcess();
             $researchProcess->urlId = $this->urlId;
             $researchProcess->process();
         }
-        $this->MySql->endDownloadUrl($this->urlId);
+        if ($this->stop !== true) {
+            $this->MySql->endDownloadUrl($this->urlId);
+        }
      }
      
      public function continueCrawler()
@@ -76,7 +80,9 @@ class AjaxProcess {
              $researchProcess->urlId = $this->urlId;
              $researchProcess->process();
          }
-         $this->MySql->endDownloadUrl($this->urlId);
+         if ($this->stop !== true) {
+             $this->MySql->endDownloadUrl($this->urlId);
+         }
      }
 
      private function changePost()
@@ -179,7 +185,10 @@ class AjaxProcess {
             if ($rowCount) {
                 for ($i = 0; $i < $rowCount; $i ++) {
                     $this->MySql->urlId = $this->urlId;
-                    if($this->MySql->checkStop() === true)  break;
+                    if($this->MySql->checkStop() === true) {
+                        $this->stop = true;
+                        break;
+                    }
                     $row = $this->MySql->getLinkRow();
                     if ($row !== false) {
                         $path = $row['path'];

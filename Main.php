@@ -57,6 +57,7 @@ class MainPage
             	<script src="style/js/Chart/Chart.min.js"></script>
             	<script src="style/js/chartjs-plugin-datalabels.min.js"></script>
                 <script src="style/js/mainpage.js"></script>
+                
             
             </head>
             <body>
@@ -225,11 +226,14 @@ class MainPage
                             <tbody>');
         foreach($this->tableData as $item) {
             $this->ctemplate .= ('<tr class="w-row">');
-            $this->ctemplate .= ('<td class="fbuttons dashboard-table-details">');
+            $this->ctemplate .= ('<td class="fbuttons dashboard-table-details" style="width: 140px;">');
             if ( $item['status_n'] == 0 ) {
                 $this->ctemplate .= ('<span class="stop-button btn btn-sm btn-orange-warning" data-id="' . $item['id'] . '">Stop</span>');
             } else {
                 $this->ctemplate .= ('<span class="delete-button btn btn-sm btn-danger" data-id="' . $item['id'] . '">Delete</span>');
+                if ($item['status_n'] == 2) {
+                    $this->ctemplate .= ('<span class="continue-button btn btn-sm btn-success" data-id="' . $item['id'] . '">Continue</span>');
+                }
             }
             $this->ctemplate .= ('</td>');
             $this->ctemplate .= ('<td class="dashboard-table-name">' . $item['wname'] . '</td>');
@@ -365,8 +369,15 @@ class MainPage
     
     public function getMainContentAjax()
     {
+        $this->stuckProcess();
         $this->getData();
         $this->contentTemplate();
+    }
+    
+    private function stuckProcess()
+    {
+        $this->MySql = new DbMysql();
+        $this->MySql->stuckProcessStop();
     }
     
     
