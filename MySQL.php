@@ -648,4 +648,14 @@ class DbMysql {
          }
          return true;
      }
+     
+     public function getDataMetaTitleFilesByType($type)
+     {
+         $data['file_type'] = $type;
+         $statementSelect = $this->db->prepare("SELECT meta_data FROM " . FILES_TABLE . " WHERE file_type = :file_type AND meta_data IS NOT NULL");
+         if(!$statementSelect->execute($data)){
+             $this->log->m_log('getDataMetaTitleFilesByType MySql function error');
+         }
+         return $statementSelect->fetchAll();
+     }
 }
