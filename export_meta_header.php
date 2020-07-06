@@ -49,7 +49,6 @@ class MetaHeaderExport
     {
         $this->result = $this->MySql->getDataMetaTitleFilesByType($this->type);
         $this->processingArra();
-
         $this->excelHeader();
         $this->createExcel();
     }
@@ -60,8 +59,8 @@ class MetaHeaderExport
         $this->readyHeader[strtoupper('sitename')] = 'sitename';
         $this->readyHeader[strtoupper('wcfilepath')] = 'wcfilepath';
         $this->readyHeader[strtoupper('local_location')] = 'local_locationlocal_location';
-        
         foreach ($this->result as $key => &$value) {
+            
             $this->readyMeta[$key][strtoupper('url')] = $this->cleanData($value['url']);
             $this->readyMeta[$key][strtoupper('sitename')] = $this->cleanData($value['wname']);
             $this->readyMeta[$key][strtoupper('wcfilepath')] = $this->cleanData($value['path']);
@@ -98,10 +97,13 @@ class MetaHeaderExport
 
     private function cleanData(&$str)
     {
-        $str = preg_replace("/\t/", "\\t", $str);
-        $str = preg_replace("/\r?\n/", "\\n", $str);
-        if (strstr($str, '"'))
+        $str = str_replace("\r", " ", $str);
+        $str = str_replace("\n", " ", $str);
+        $str = str_replace("\t", " ", $str);
+      
+        if (strstr($str, '"')) {
             $str = '"' . str_replace('"', '""', $str) . '"';
+        }
         return $str;
     }
 
