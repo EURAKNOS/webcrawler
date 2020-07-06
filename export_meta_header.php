@@ -58,13 +58,13 @@ class MetaHeaderExport
     {
         $this->readyHeader[strtoupper('url')] = 'url';
         $this->readyHeader[strtoupper('sitename')] = 'sitename';
-        $this->readyHeader[strtoupper('path')] = 'path';
-        $this->readyHeader[strtoupper('location')] = 'location';
+        $this->readyHeader[strtoupper('wcfilepath')] = 'wcfilepath';
+        $this->readyHeader[strtoupper('local_location')] = 'local_locationlocal_location';
         
         foreach ($this->result as $key => &$value) {
             $this->readyMeta[$key][strtoupper('url')] = $this->cleanData($value['url']);
             $this->readyMeta[$key][strtoupper('sitename')] = $this->cleanData($value['wname']);
-            $this->readyMeta[$key][strtoupper('path')] = $this->cleanData($value['path']);
+            $this->readyMeta[$key][strtoupper('wcfilepath')] = $this->cleanData($value['path']);
             $this->readyMeta[$key][strtoupper('local_location')] = $this->cleanData($value['local_location']);
             $value['ok'] = unserialize($value['meta_data']);
             if ($value['ok']) {
