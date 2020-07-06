@@ -652,7 +652,7 @@ class DbMysql {
      public function getDataMetaTitleFilesByType($type)
      {
          $data['file_type'] = $type;
-         $statementSelect = $this->db->prepare("SELECT meta_data FROM " . FILES_TABLE . " WHERE file_type = :file_type AND meta_data IS NOT NULL");
+         $statementSelect = $this->db->prepare("SELECT u.url, u.wname, f.path, f.local_location, f.meta_data FROM " . FILES_TABLE . " AS f RIGHT JOIN " . PAGE_TABLE . " AS p ON f.pages_id = p.id RIGHT JOIN " . URLS_TABLE . " AS u ON p.url_id = u.id WHERE file_type = :file_type AND meta_data IS NOT NULL");
          if(!$statementSelect->execute($data)){
              $this->log->m_log('getDataMetaTitleFilesByType MySql function error');
          }
