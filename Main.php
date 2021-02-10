@@ -6,7 +6,6 @@
  * Main page (DASHBOARD)
  *
  * @author Zoltan Szabo
- * Email: szabo.zoltan@aki.naik.hu
  *
  *
  */
@@ -143,6 +142,10 @@ class MainPage
         print($this->html);
     }
     
+    /**
+     * Prepares the content section for display
+     * View statistics for downloaded pages
+     */
     private function contentTemplate()
     {
         $this->ctemplate = ('
@@ -260,6 +263,9 @@ class MainPage
                 <script src="style/js/buttons.js"></script>');
     }
     
+    /**
+     * Retrieve data for all downloaded pages
+     */
     private function getData()
     {
         $this->MySql = new DbMysql();
@@ -299,6 +305,9 @@ class MainPage
         $this->MySql->countByTypeAllPageWithMeta();
     }
     
+    /**
+     * Organizes the display
+     */
     private function systematization()
     {
         foreach ($this->types as $ktp => $tp) {
@@ -315,6 +324,12 @@ class MainPage
         }
     }
     
+    /**
+     * Calculate
+     * @param int $all
+     * @param int $meta
+     * @return number
+     */
     private function percentageAllPage($all, $meta)
     {
         if ($all > 0 && $meta > 0) {
@@ -324,6 +339,9 @@ class MainPage
         }
     }
     
+    /**
+     * Retrieves the data from the database to create the table
+     */
     private function getDataToTable()
     {
         $this->MySql->getAllUrlWithoutDelete();

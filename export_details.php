@@ -8,7 +8,12 @@ require_once 'DownloadPage.php';
 require_once 'MySQL.php';
 require_once 'Log.php';
 require_once 'Detail.php';
-
+/**
+ * Export current web page from the details page or all page on mainpage.
+ * The contents of the page display the number of files and statistics in an excel file.
+ * @author szabo
+ *
+ */
 class DetailsExport {
     
   
@@ -43,7 +48,9 @@ class DetailsExport {
         );
     }
     
-  
+    /**
+     * Start exporting
+     */ 
     public function exportProcess()
     {
         $this->cnt = 0;
@@ -64,13 +71,21 @@ class DetailsExport {
         }
     }
     
+    /**
+     * Retrieve page information
+     * @param int $id
+     */
     private function getDataById($id)
     {
         $this->getDataByUrlId($id);
         $this->getDownloadStatisticsByUrlId($id);
         $this->prepareData();
     }
-        
+    
+    /**
+     * Retrieve page information
+     * @param int $id
+     */
     private function getDataByUrlId($id)
     {
         $this->mainData = array();
@@ -82,6 +97,9 @@ class DetailsExport {
         $this->mainData['post']['class'] = (isset($this->mainData['post']['class'])) ? $this->mainData['post']['class'] : array();
     }
     
+    /**
+     * Generate download statistics
+     */
     public function getDownloadStatisticsByUrlId($id)
     {
         $this->statistics = array();
@@ -118,6 +136,12 @@ class DetailsExport {
     
     }
     
+    /**
+     * Calculate
+     * @param int $all
+     * @param int $meta
+     * @return number
+     */
     private function percentageAllPage($all, $meta)
     {
         if ($all > 0 && $meta > 0) {
@@ -127,6 +151,11 @@ class DetailsExport {
         }
     }
     
+    /**
+     * 
+     * @param int $time
+     * @return string
+     */
     private function hourAndMinConverter($time)
     {
         $hours = floor($time / 60);
@@ -135,6 +164,9 @@ class DetailsExport {
         return $hours . "h " . $minutes . "min ";
     }
     
+    /**
+     * Downloaded datat prepare from database
+     */
     private function prepareData()
     {
         $this->edata[$this->cnt] = array('webpage_data' => 'QUANTITY', 'url' => $this->cleanData($this->mainData['url']), 
@@ -160,6 +192,7 @@ class DetailsExport {
         
     }
     
+    
     private function cleanData(&$str)
     {
         $str = preg_replace("/\t/", "\\t", $str);
@@ -168,6 +201,9 @@ class DetailsExport {
         return $str;
     }
     
+    /**
+     * Create excel file 
+     */
     private function createExcel() 
     {
     // filename for download

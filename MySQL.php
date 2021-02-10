@@ -106,7 +106,7 @@ class DbMysql {
     }
     
     /**
-     * Stores a status
+     * Saves the status for the search
      */
     public function statusSaveResearch()
     {
@@ -154,7 +154,7 @@ class DbMysql {
     }
     
     /**
-     * Stores a status
+     * Stores a status END download
      */
     public function endDownload()
     {
@@ -169,7 +169,10 @@ class DbMysql {
         $this->log->m_log('endDownload MySql function success: "UPDATE pages SET download_time = ' . $data['download_time'] . ' WHERE path = '.$data['path'].'"');
         
     }
-    
+    /**
+     * Saves the content found on the page
+     * @throws Exception
+     */
     public function savePage()
     {
         $this->data['download_time'] = time();
@@ -183,7 +186,10 @@ class DbMysql {
         $this->id = $this->db->lastInsertId();
         $this->log->m_log('savePage MySql function success');
     }
-    
+    /**
+     * Prompts for saved links
+     * @return number|boolean
+     */
     public function getLinks()
     {       
         $statement = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE path != '' AND download_time IS NULL ");
@@ -196,6 +202,10 @@ class DbMysql {
         
     }
     
+    /**
+     * Retrieves unfinished links
+     * @return number|boolean
+     */
     public function getLinksUnSuccess()
     {
         $data['url_id'] = $this->urlId;
@@ -209,6 +219,10 @@ class DbMysql {
         
     }
     
+    /**
+     * Returns a queue based on URL ID.
+     * @return row
+     */
     public function getLinkRow()
     {
         $statement = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE path != '' AND url_id = :url_id AND download_time IS NULL ");
@@ -219,6 +233,10 @@ class DbMysql {
        
     }
     
+    /**
+     * Returns a row of incomplete urls based on URL ID
+     * @return mixed
+     */
     public function getLinkRowUnSuccess()
     {
         $data['url_id'] = $this->urlId;
@@ -253,6 +271,12 @@ class DbMysql {
         $this->log->m_log('startDownloadFile MySql function success');
     }
     
+    /**
+     * 
+     * Save file download completion status
+     * @throws Exception
+     * @return boolean
+     */
     public function endDownloadFile()
     {
         $this->data['download_time'] = time();
@@ -264,6 +288,9 @@ class DbMysql {
         return true;
     }
     
+    /**
+     * Retrieve downloaded page information
+     */
     public function getDownlodedPages()
     {
         $statementSelect = $this->db->prepare("SELECT * FROM " . PAGE_TABLE . " WHERE 1 ");
@@ -274,6 +301,9 @@ class DbMysql {
         $this->result = $statementSelect->fetchAll();
     }
     
+    /**
+     * Get all downloaded files mixed
+     */
     public function getAllDownlodedFiles()
     {
         $statementSelect = $this->db->prepare("SELECT * FROM " . FILES_TABLE . " WHERE downloaded_time IS NOT NULL ");
@@ -283,6 +313,9 @@ class DbMysql {
         $this->result = $statementSelect->fetchAll();
     }
     
+    /**
+     * Retrieve URLs that have not been deleted or downloaded
+     */
     public function getUrls()
     {
         $statementSelect = $this->db->prepare("SELECT * FROM " . URLS_TABLE . " WHERE deleted = 0 AND download_time IS NOT NULL");
@@ -292,6 +325,10 @@ class DbMysql {
         $this->resultUrl = $statementSelect->fetchAll();
     }
     
+    /**
+     * Counts files by url. here you get the URL ID for the parameter
+     * @param unknown $id
+     */
     public function countFileElement($id)
     {
         $this->result = array();
@@ -316,6 +353,11 @@ class DbMysql {
         }
     }
     
+    /**
+     * Calculate percentages based on URL id.
+     * Grouped by content and files.
+     * @param int $id
+     */
     public function percentage($id)
     {
         $this->result2 = array();
@@ -343,7 +385,7 @@ class DbMysql {
     }
     
     /**
-     * 
+     * Saves the URL you want to download and the data sent in the POST.
      */
     public function saveUrl()
     {
@@ -363,7 +405,7 @@ class DbMysql {
     }
     
     /**
-     *
+     * Finish download sets the status to downloaded
      */
     public function endDownloadUrl($id)
     {
@@ -377,6 +419,10 @@ class DbMysql {
         return true;
     }
     
+    /**
+     * Checks if this url exists in the database
+     * @param string $url
+     */
     public function exitsUrl($url)
     {
         $data['url'] = $url;
@@ -387,6 +433,10 @@ class DbMysql {
         $this->result = $statementSelect->fetch();
     }
     
+    /**
+     * Retrieves page information based on an ID in a database
+     * @param int $id
+     */
     public function getCrawlingData($id)
     {
         $data['id'] = $id;
@@ -396,7 +446,11 @@ class DbMysql {
         }
         $this->result = $statementSelect->fetch();
     }
-    
+    /**
+     * Retrieves the file types associated with the page by id
+     * @param int $id
+     * @return array
+     */
     public function getAllFilesByUrlId($id)
     {
         $data['url_id'] = $id;
@@ -407,7 +461,12 @@ class DbMysql {
         return $statementSelect->fetchAll();
     }
     
-    
+    /**
+     * Deletes the download and all its items
+     * @param int $id
+     * @throws Exception
+     * @return boolean
+     */
     public function deleteWebPageData($id)
     {
         $data['url_id'] = $id;
@@ -455,7 +514,9 @@ class DbMysql {
     }
     
     /**
-     * All page content
+     * Count for contents, taking care not to take content from the same url, 
+     * that is, counting it only once. 
+     * Each identical occurrence is seen only once
      */
     public function getAllDistinctContent()
     {
@@ -466,6 +527,9 @@ class DbMysql {
         $this->result['distinct_content'] = $statementSelect->fetch(PDO::FETCH_OBJ)->cp;
     }
     
+    /**
+     * Count for content that is not empty.
+     */
     public function getAllContentWithMeta()
     {
         $this->result2 = array();
@@ -476,6 +540,11 @@ class DbMysql {
         $this->result2['content'] = $statementSelect->fetch(PDO::FETCH_OBJ)->cp;
     }
     
+    /**
+     * File aggregation by type , taking care not to take content from the same url, 
+     * that is, counting it only once. 
+     * Each identical occurrence is seen only once
+     */
     public function countByTypeAllPage()
     {
         $statementSelect = $this->db->prepare("SELECT COUNT(id) AS cid, file_type FROM " . FILES_TABLE . " WHERE downloaded_time IS NOT NULL GROUP BY file_type");
@@ -488,6 +557,9 @@ class DbMysql {
         }
     }
     
+    /**
+     * File aggregation by type
+     */
     public function countByTypeDistinctAllPage()
     {
         $statementSelect = $this->db->prepare("SELECT COUNT(distinct path) AS cid, file_type FROM " . FILES_TABLE . " WHERE downloaded_time IS NOT NULL GROUP BY file_type");
@@ -500,6 +572,9 @@ class DbMysql {
         }
     }
     
+    /**
+     * Aggregation of files that contain data in the database, by type
+     */
     public function countByTypeAllPageWithMeta()
     {
         $statementSelect = $this->db->prepare("SELECT COUNT(id) AS cid, file_type FROM " . FILES_TABLE . " WHERE meta_data != '' AND downloaded_time IS NOT NULL GROUP BY file_type");
@@ -513,6 +588,9 @@ class DbMysql {
         }
     }
     
+    /**
+     * Retrieve all urls that have not been deleted
+     */
     public function getAllUrlWithoutDelete()
     {
         $statementSelect = $this->db->prepare("SELECT * FROM " . URLS_TABLE . " WHERE deleted = 0");
@@ -534,6 +612,12 @@ class DbMysql {
         return true;
     }
     
+    /**
+     * Set page download statuses
+     * @param int $id
+     * @throws Exception
+     * @return boolean
+     */
     public function startStatus($id)
     {
         $data['id'] = $id;
@@ -545,6 +629,10 @@ class DbMysql {
         return true;
     }
     
+    /**
+     * Checks if you have this download set
+     * @return boolean
+     */
     public function checkStop()
     {
         $data['id'] = $this->urlId;
@@ -559,6 +647,11 @@ class DbMysql {
             
     }
     
+    /**
+     * Save Spotify metadata
+     * @throws Exception
+     * @return boolean
+     */
     public function saveSpotifyMeta()
     {
         $this->data['download_time'] = time();
@@ -570,6 +663,10 @@ class DbMysql {
         return true;
      }
      
+     /**
+      * Spotify data verification, retrieves the spotify queue that failed to retrieve its metadata
+      * @return array
+      */
      public function getEmptyMetaSpotifyUrls()
      {
          $statementSelect = $this->db->prepare("SELECT * FROM " . FILES_TABLE . " WHERE file_type = 'spotify' AND meta_data = ''");
@@ -579,6 +676,11 @@ class DbMysql {
          return $statementSelect->fetchAll();
      }
      
+     /**
+      * Retrieve all file metadata based on Url ID
+      * @param id $id
+      * @return array
+      */
      public function getAllFilesMetaByUrlId($id)
      {
          $data['url_id'] = $id;
@@ -603,6 +705,13 @@ class DbMysql {
          return $statementSelect->fetchAll();
      }
      
+     /**
+      * Retrieves referrer data based on url ID
+      * 
+      * @param int $urlId
+      * @param string $url
+      * @return mixed
+      */
      public function getRefererUrl($urlId, $url)
      {
          $data['url_id'] = $urlId;
@@ -615,6 +724,12 @@ class DbMysql {
          return $statementSelect->fetch();
      }
      
+     /**
+      * Retrieves referrer data based on url ID and current url
+      * @param int $urlId
+      * @param string $url
+      * @return mixed
+      */
      public function getRefererUrlLike($urlId, $url)
      {
          $data['url_id'] = $urlId;
@@ -627,6 +742,12 @@ class DbMysql {
          return $statementSelect->fetch();
      }
      
+     /**
+      * Frissíti az utolsó leszedés idejét 
+      * @param int $id
+      * @throws Exception
+      * @return boolean
+      */
      public function updateLastParser($id)
      {
          $data['id'] = $id;
@@ -639,6 +760,11 @@ class DbMysql {
          return true;
      }
      
+     /**
+      * stops stuck downloads
+      * @throws Exception
+      * @return boolean
+      */
      public function stuckProcessStop()
      {
          $statement = $this->db->prepare("UPDATE ".URLS_TABLE." SET download = 2 WHERE from_unixtime(`last_parser`) < (NOW() - INTERVAL 1 HOUR) AND download = 0");
@@ -649,6 +775,11 @@ class DbMysql {
          return true;
      }
      
+     /**
+      * Queries the file address by type
+      * @param unknown $type
+      * @return array
+      */
      public function getDataMetaTitleFilesByType($type)
      {
          $data['file_type'] = $type;

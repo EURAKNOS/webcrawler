@@ -9,9 +9,12 @@ require_once 'MySQL.php';
 require_once 'Log.php';
 set_time_limit(500000);
 
-/*
- * $_POST['class'][1] = array ('name' => 'elements-box', 'title' => 'articlecontent');
- * $_POST['class'][2] = array ('name' => 'page-title', 'title' => 'also');
+/**
+ * Details page compilation.
+ * Here you can find all the data of the query page.
+ * Or graphical statistics on the download
+ * 
+ *
  */
 class Detail
 {
@@ -24,7 +27,9 @@ class Detail
     
     private $types;
     
-
+    /**
+     * List of different types
+     */
     public function __construct()
     {
         $this->types['text'] = array(
@@ -84,6 +89,9 @@ class Detail
         $this->MySql = new DbMysql();
     }
 
+    /**
+     * Prompts for display information
+     */
     public function getDetails()
     {
         $this->getData();
@@ -301,12 +309,19 @@ class Detail
         print($this->html);
     }
 
+    /**
+     * Retrieve data by ID
+     */
     private function getData()
     {
         $this->getDataByUrlId($_GET['id']);
         $this->getDownloadStatisticsByUrlId($_GET['id']);
     }
 
+    /**
+     * Retrieve data by ID
+     * @param int $id
+     */
     private function getDataByUrlId($id)
     {
         $this->MySql->getCrawlingData($id);
@@ -321,6 +336,10 @@ class Detail
          */
     }
 
+    /**
+     * Compile download statistics by ID
+     * @param int $id 
+     */
     public function getDownloadStatisticsByUrlId($id)
     {
         $this->getDataByUrlId($id);
@@ -354,6 +373,12 @@ class Detail
         $this->statisticsJavaScript();
     }
 
+    /**
+     * Percentage calculation
+     * @param int $all
+     * @param int $meta
+     * @return number
+     */
     private function percentageAllPage($all, $meta)
     {
         if ($all > 0 && $meta > 0) {
@@ -368,6 +393,11 @@ class Detail
         return gmdate('G\h i\m\i\n', $time);
     }
 
+    /**
+     * Use Javascript to display graphical statistics.
+     *
+     * Detailed instructions for use can be found at https://www.chartjs.org/
+     */
     private function statisticsJavaScript()
     {
         if (isset($this->statistics1)) {
@@ -482,7 +512,10 @@ class Detail
             $this->statHtml = '';
         }
     }
-    
+    /**
+     * Get status by GET ID
+     * @param int $id
+     */
     public function getStatus($id)
     {
         $this->getDataByUrlId($id);

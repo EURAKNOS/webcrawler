@@ -1,4 +1,7 @@
 <?php
+/**
+ * Download meta data to FILE
+ */
 if (isset($_GET['file']) && $_GET['file'] != '') {
     $fxls = $_GET['file'];
     if(!file_exists($fxls)){ // file does not exist

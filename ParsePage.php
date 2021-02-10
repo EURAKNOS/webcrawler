@@ -21,6 +21,9 @@ class ParsePage
 
     /**
      * Processing the content of a website
+     * 
+     * Processing downloaded text content. 
+     *  The links are extracted here. Next link for processing task.
      *
      * @return boolean
      */
@@ -43,7 +46,7 @@ class ParsePage
             $MySql->endDownload();
             return false;
         }
-        
+        // If first download 
         if ($first) {
             $MySql->saveUrl();
             $this->urlId = $MySql->urlId;
@@ -117,15 +120,6 @@ class ParsePage
         //$log->contentLog($this->target, $contents['body']);
         $finder = new DomXPath($doc);
 
-        // Get title
-        /*
-         * $titleTags = $doc->getElementsByTagName('title');
-         * if( count( $titleTags ) > 0 ) {
-         * $this->result['title'] = '';
-         *
-         * $this->result['title'] = $titleTags[0]->nodeValue;
-         * }
-         */
         // Get Description ------------------------------------------
         $metaTags = $doc->getElementsByTagName('meta');
         foreach ($metaTags as $tag) {

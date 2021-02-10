@@ -14,7 +14,6 @@ use Nesk\Rialto\Exceptions\IdleTimeoutException;
 use PNGMetadata\PNGMetadata;
 /**
  * Download Actual URL
- * @author szabo
  *
  */
 class DownloadPage {
@@ -66,6 +65,7 @@ class DownloadPage {
                 return $contents;
             }
         }
+        // List of pages from which the program requests data
         $file_headers = @get_headers($this->target);
         $pos = strpos($this->target, 'https://www.youtube.com');
         $posYoutube2 = strpos($this->target, 'youtu.be');
@@ -78,7 +78,7 @@ class DownloadPage {
         $posMailChimp2 = strpos($this->target, 'https://mailchi.mp');
         
         
-
+    
         if ($pos !== false || $posYoutube2 !== false) {
             return $this->processYoutube();
         } elseif ($posVimeo !== false) {
@@ -93,7 +93,7 @@ class DownloadPage {
             return $this->processMaps();
         }else {
             $info = pathinfo($this->target);
-            
+            // Processing by file type
             if (isset($info["extension"])) {
                 $info["extension"] = strtolower($info["extension"]);
                 if ($info["extension"] == "pdf") {
@@ -135,6 +135,7 @@ class DownloadPage {
     }
     
     /**
+     * Checks redirects and filters out broken pages
      * Check 301 and 404 urls
      */
     private function urlCheck()
@@ -268,6 +269,10 @@ class DownloadPage {
         return $ret;
     }	
         
+    /**
+     * Use Puppeteer to take down the page.
+     * @return page data end header data arrays
+     */
     public function dinamicDownloadPage()
     {
         $this->log->m_log('Start download (DinamicDownloadPage) content');
@@ -289,6 +294,10 @@ class DownloadPage {
         return array("headers" => $headers, "body" => $data);
     }
     
+    /**
+     * Use Puppeteer to start downloading the page, handling the possibility of errors
+     * @return data array and status
+     */
     private function dinamicDownloadPageProcess(){
         try {
             //$browser = $puppeteer->launch();
@@ -342,7 +351,12 @@ class DownloadPage {
         return $dl->saveEnd();
     }*/
     
-    
+    /**
+     * Processing a PDF file
+     * Retrieve metadata, save file to host.
+     * Use an external program to retrieve information.
+     * @return array status 
+     */
     public function processPdf()
     {
         $this->log->m_log('Start download pdf');
@@ -380,8 +394,10 @@ class DownloadPage {
     }
     
     /**
-     * Download and store jpg metadata and file
-     * @return array
+     * Processing a JPG file
+     * Retrieve metadata, save file to host.
+     * Use an external program to retrieve information.
+     * @return array status 
      */
     public function processJpg()
     {
@@ -410,8 +426,10 @@ class DownloadPage {
     }
     
     /**
-     * Download and store bmp metadata and file
-     * @return array
+     * Processing a BMP file
+     * Retrieve metadata, save file to host.
+     * Use an external program to retrieve information.
+     * @return array status 
      */
     public function processBmp()
     {
@@ -439,8 +457,10 @@ class DownloadPage {
     }
     
     /**
-     * Download and store png metadata and file
-     * @return array
+     * Processing a PNG file
+     * Retrieve metadata, save file to host.
+     * Use an external program to retrieve information.
+     * @return array status 
      */
     public function processPng()
     {
@@ -469,8 +489,10 @@ class DownloadPage {
     }
     
     /**
-     * Download and store pptx metadata and file
-     * @return array
+     * Processing a PPTX file
+     * Retrieve metadata, save file to host.
+     * Use an external program to retrieve information.
+     * @return array status 
      */
     public function processPptx()
     {
@@ -503,8 +525,10 @@ class DownloadPage {
     }
     
     /**
-     * Download and store pptx metadata and file
-     * @return array
+     * Processing a PPTX file
+     * Retrieve metadata, save file to host.
+     * Use an external program to retrieve information.
+     * @return array status
      */
     public function processPpt()
     {
@@ -529,8 +553,10 @@ class DownloadPage {
     }
     
     /**
-     * Download and store docx metadata and file
-     * @return array
+     * Processing a DOCX file
+     * Retrieve metadata, save file to host.
+     * Use an external program to retrieve information.
+     * @return array status
      */
     public function processDocx()
     {
@@ -564,8 +590,10 @@ class DownloadPage {
     }
     
     /**
-     * Download and store xlsx metadata and file
-     * @return array
+     * Processing a XLSX file
+     * Retrieve metadata, save file to host.
+     * Use an external program to retrieve information.
+     * @return array status 
      */
     public function processXlsx()
     {
@@ -598,7 +626,10 @@ class DownloadPage {
     }
     
     /**
-     * Youtube metadata
+     * Processing a YOUTUBE
+     * Retrieve metadata.
+     * Use an external program to retrieve information.
+     * @return array status 
      */
     public function processYoutube()
     {
@@ -646,6 +677,12 @@ class DownloadPage {
         return $dl->saveEnd();
     }
     
+    /**
+     * Processing a VIMEO 
+     * Retrieve metadata
+     * Use an external program to retrieve information.
+     * @return array status
+     */
     private function processVimeo()
     {
         $this->log->m_log('Start Vimeo meta');
@@ -682,6 +719,12 @@ class DownloadPage {
         
     }
     
+    /**
+     * Processing a SPOTIFY
+     * Retrieve metadata
+     * Use an external program to retrieve information.
+     * @return array status
+     */
     private function processSpotify()
     {
         $this->log->m_log('Start spotify');
@@ -705,6 +748,12 @@ class DownloadPage {
         return $dl->saveEnd();
     }
     
+    /**
+     * Processing a GOOGLE MAPS
+     * Retrieve metadata
+     * Use an external program to retrieve information.
+     * @return array status
+     */
     private function processMaps()
     {
         $this->log->m_log('Start google map');
@@ -729,7 +778,10 @@ class DownloadPage {
     }
 
      /**
-     * Epub metadata
+     * Processing a EPUB file
+     * Retrieve metadata, save file to host.
+     * Use an external program to retrieve information.
+     * @return array status 
      */
     private function processEpub()
     {
@@ -768,6 +820,12 @@ class DownloadPage {
         return $dl->saveEnd();
     }
     
+    /**
+     * Processing a SWF file
+     * Retrieve metadata, save file to host.
+     * Use an external program to retrieve information.
+     * @return array status
+     */
     private function processSwf()
     {        
         $this->log->m_log('Start download swf');
@@ -807,6 +865,12 @@ class DownloadPage {
         return $dl->saveEnd();
     }
     
+    /**
+     * Processing a MP4 file
+     * Retrieve metadata, save file to host.
+     * Use an external program to retrieve information.
+     * @return array status
+     */
     private function processMp4()
     {
         $this->log->m_log('Start download mp4');
@@ -835,6 +899,12 @@ class DownloadPage {
         return $dl->saveEnd();
     }
     
+    /**
+     * Processing a ZIP file
+     * Retrieve metadata, save file to host.
+     * Use an external program to retrieve information.
+     * @return array status
+     */
     private function processZip()
     {
         $this->log->m_log('Start download zip');
@@ -881,8 +951,10 @@ class DownloadPage {
     }
     
     /**
-     * Download and store svg metadata and file
-     * @return array
+     * Processing a SVG file
+     * Retrieve metadata, save file to host.
+     * Use an external program to retrieve information.
+     * @return array status 
      */
     public function processSvg()
     {
@@ -906,8 +978,10 @@ class DownloadPage {
     }
     
     /**
-     * Link PREZI
-     * @return array
+     * Processing a PREZI
+     * Retrieve metadata
+     * Use an external program to retrieve information.
+     * @return array status 
      */
     public function processPrezi()
     {
@@ -934,8 +1008,10 @@ class DownloadPage {
     }
     
     /**
-     * Link PREZI
-     * @return array
+     * Processing a MAILCHIMP
+     * Retrieve metadata
+     * Use an external program to retrieve information.
+     * @return array status 
      */
     public function processMailChimp()
     {
@@ -969,7 +1045,7 @@ class DownloadPage {
  * Saves the file to be processed to a database.
  * The download to the local machine will then take place.
  * Returns control to the function for the current file type.
- * It then saves the obtained values ​​in the database.
+ * It then saves the obtained values in the database.
  *
  * @author szabo
  *
@@ -1027,6 +1103,9 @@ class DownloadFileExtended {
         $this->id = $this->MySql->id;
     }
     
+    /**
+     * Download file to host
+     */
     public function DownloadFile()
     {
         $this->log->m_log('Create folder: ' . FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id);
@@ -1090,7 +1169,11 @@ class DownloadFileExtended {
             $this->log->m_log('Error download file from url : ' . $this->target);
         }
     }
-    
+    /**
+     * OLD FILE DOWNLOAD
+     * Not used
+     * @return boolean
+     */
     public function downloadFileOld()
     {
         $this->log->m_log('Create folder: ' . FOLDER_DEFAULT . "/" . $this->folder . "/" . $this->id);
@@ -1154,7 +1237,10 @@ class DownloadFile {
     {
         
     }
-    
+    /**
+     * Not used
+     * @return boolean
+     */
     public function downloadFileOld()
     {
         if (!file_exists($this->folder)) {

@@ -8,6 +8,11 @@ require_once 'Log.php';
 require_once 'Detail.php';
 set_time_limit (10000);
 
+/**
+ * Functions of buttons that send Ajax requests
+ * STOP AND DELETE button
+ *
+ */
 class ButtonsAjax {
     
     
@@ -16,6 +21,9 @@ class ButtonsAjax {
         $this->MySql = new DbMysql();
     }
     
+    /**
+     * Stops the download. It stores the required status in a database and creates a restart button in return.
+     */
     public function stopCrawler()
     {
         $this->stopStatusDb();
@@ -29,6 +37,9 @@ class ButtonsAjax {
         
     }
     
+    /**
+     * Deletes the received download data.
+     */
     public function deleteCrawler()
     {
         $this->deleteFiles();
@@ -57,6 +68,9 @@ class ButtonsAjax {
         
     }
     
+    /**
+     * Sets the status value in the database to deleted
+     */
     private function deleteStatusDb()
     {
         if ($this->MySql->deleteWebPageData($_POST['data'])) {

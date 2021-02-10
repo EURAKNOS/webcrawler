@@ -1,4 +1,7 @@
 <?php
+/**
+ * Launch a new web crawling
+ */
 session_start();
 error_reporting(E_ALL);
 header('Content-Type: text/html; charset=utf-8');

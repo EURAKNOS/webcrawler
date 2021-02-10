@@ -30,9 +30,11 @@ set_time_limit (10000);
 use Nesk\Puphpeteer\Puppeteer;
 use Nesk\Puphpeteer\Resources\ElementHandle;
 use Sunra\PhpSimple\HtmlDomParser;
-
+/**
+ * System AJAX operations. This includes functions for occasional page refresh. Monitoring while the webrawler is running.
+ */
 class AjaxProcess {
-    
+    /*URL ID*/
     public $urlId;
     
     private $stop = false;
@@ -44,18 +46,21 @@ class AjaxProcess {
         $this->fileTypes = array('page','jpg','bmp','png','pdf','docx','xlsx','pptx','epub','swf','youtube_video','vimeo_video','google_map','mp4','zip');
         $this->firstCheck = 0;
     }
-    
+    /**
+     * Function to run Web Crawler. It sets the values and starts downloading the website. 
+     */
     public function process()
     {
         $log = new WLog();
         $log->m_log('Load WebCrawler page');
         $this->changePost();
-        $_SESSION["processing"] = 1;
+        $_SESSION["processing"] = 1;    // Started the download sets the status
         if($this->startCrawler()) {
             echo json_encode(array('status' => 1) );
         } else {
             echo json_encode(array('status' => 0) );
         }
+        // If external links download is enabled and is not stopped running then the process will run
         if (isset($_POST['external']) && $this->stop !== true) {
             $researchProcess = new ResearchProcess();
             $researchProcess->urlId = $this->urlId;
@@ -65,7 +70,10 @@ class AjaxProcess {
             $this->MySql->endDownloadUrl($this->urlId);
         }
      }
-     
+     /** 
+      * Continue downloading
+      * Rechecks or sets the required items.
+      */
      public function continueCrawler()
      {
          $log = new WLog();
@@ -85,6 +93,9 @@ class AjaxProcess {
          }
      }
 
+     /**
+      * It prepares the data received in the POST according to the use
+      */
      private function changePost()
      {    
          $temp = $_POST['formdata'];
@@ -94,7 +105,6 @@ class AjaxProcess {
                  $formdata[$item['name']] = $item['value'];
              } else {
                  if (strpos($item['name'], '[name]') !== false) {
-                 //$formdata['class'][] = array('name' => $item['value'], 'title' => $item[''];
                      $formdata['class'][$cnt]['name'] = $item['value'];
                  } else {
                      $formdata['class'][$cnt]['title'] = $item['value'];
@@ -133,8 +143,6 @@ class AjaxProcess {
         } else {
             $url_start = $seed_scheme . '://' . $seed_host;
         }
-        //print_r($_POST);
-        //$url_start = rtrim($_POST['url'], "/");
         // Download Seed URL
         $parsePage = new ParsePage();
         $parsePage->referer = "/";
@@ -153,7 +161,7 @@ class AjaxProcess {
             $this->MySql->deleteWebPageData($this->MySql->result['id']);
         }
         
-        //dinamic
+        // Puppeteer preparing
         $puppeteer = new Puppeteer([
             'idle_timeout' => 300,
             'read_timeout' => 300,
@@ -181,7 +189,7 @@ class AjaxProcess {
         // Loop through all pages on site.
         while (1) {
             $counter = 0;
-            $rowCount = $this->MySql->getLinks();
+            $rowCount = $this->MySql->getLinks();   
             if ($rowCount) {
                 for ($i = 0; $i < $rowCount; $i ++) {
                     $this->MySql->urlId = $this->urlId;
@@ -198,6 +206,7 @@ class AjaxProcess {
                         $parsePage->firstCheck = $this->firstCheck;
                         //Check if first character isn't a '/'
                         
+                        /* List of urls that should be handled differently from the general one */
                         if ($path[0] != '/') {
                             if (strpos($row['path'], 'https://www.youtube.com') !== false) {
                                 $parsePage->target = $path;
@@ -284,6 +293,9 @@ class AjaxProcess {
         }
     }
     
+    /**
+     * Query download status
+     */
     public function status()
     {   
         $this->getDownloadStatus();
@@ -295,7 +307,9 @@ class AjaxProcess {
         }
     }
     
-    
+    /**
+     * Query download status and set values.
+     */
     private function getDownloadStatus(){
         $this->MySql->getUrls();
         if ($this->MySql->resultUrl && !empty($this->MySql->resultUrl)) {
@@ -309,7 +323,10 @@ class AjaxProcess {
             }
         }
     }
-        
+    
+    /**
+     * Compile the HTML display required for statistics
+     */
     private function checkHtml()
     {
         $this->htmlResult = '<h2>DOWNLOAD STATISTICS</h2><table class="table table-striped table-light"><thead class="thead-dark">
@@ -397,6 +414,10 @@ class AjaxProcess {
         $this->htmlResult .= '</tbody></table>';
     }
     
+    /**
+     * Calculates values for statistics.
+     * @param int $id url ID
+     */
     private function calculate($id)
     {
         foreach ($this->fileTypes as $item) {

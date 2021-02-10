@@ -1,6 +1,6 @@
 <?php
 define('VERSION', '0.6.8.1');
-
+/* Database setup */
 define('DB_SERVER_HOST', 'localhost');
 define('DB_USER_NAME', 'webc');
 define('DB_SERVER_PASSWORD', 'test');
@@ -9,6 +9,7 @@ define('PAGE_TABLE', 'pages');
 define('FILES_TABLE', 'files');
 define('URLS_TABLE', 'urls');
 define('CONTENTS_TABLE', 'contents');
+
 define('ROOT_PATH', $_SERVER['REQUEST_URI']);
 
 // Downloads FILE Folders
@@ -30,6 +31,7 @@ define('FOLDER_META_EXPORT', 'meta');
 
 set_time_limit(10000);
 
+/* Keys for external APIs */
 define('YOUTUBE_API_KEY', 'AIzaSyBTQ6j6WWNPJ2uLifGuYrJELsRFjDDQWIo');
 
 define('VIMEO_API_KEY', '637ecf1ffbaedf398ecff5aaa31a27c4f780204c');

@@ -4,10 +4,13 @@ session_write_close();
 require_once 'config.php';
 set_time_limit (10000);
 
+/**
+ * Check metadata
+ *
+ */
 class AjaxMetaCheck {
     
-   
-    public function __construct()
+     public function __construct()
     {
         
     }

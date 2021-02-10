@@ -8,7 +8,12 @@ require_once 'Log.php';
 require_once 'Main.php';
 require_once 'Detail.php';
 set_time_limit (10000);
-
+/**
+ * 
+ * Functions for ajax operations on the home page
+ * @author szabo
+ *
+ */
 class MainPageAjax {
     
    
@@ -34,6 +39,9 @@ class MainPageAjax {
         echo $this->htmlResult;
     }
     
+    /**
+     * Display download statistics in chart js
+     */
     public function statTemplate() {
 
         $this->htmlResult = ('
@@ -52,6 +60,10 @@ class MainPageAjax {
         <script>'.$this->statHtml.'</script>');
     }
     
+    
+    /**
+     * Extract download status information from a database
+     */
     public function detailStatus()
     {
         $this->details = new Detail();

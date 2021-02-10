@@ -7,7 +7,11 @@ require_once 'MySQL.php';
 require_once 'Log.php';
 require_once 'Detail.php';
 set_time_limit (10000);
-
+/**
+ * 
+ * Returns the current download status to Ajax
+ *
+ */
 class AjaxCheck {
     
    
@@ -16,7 +20,9 @@ class AjaxCheck {
         $this->MySql = new DbMysql();
     }
     
-
+    /**
+     * Start a status query
+     */
     public function status()
     {  
         if(isset($_SESSION['urlid']) && $_SESSION['urlid']) {
@@ -33,6 +39,9 @@ class AjaxCheck {
         }
     }
     
+    /**
+     * Create a status statement to display
+     */
     public function statTemplate() {
         if ($this->details->mainData['download'] == 1) {
             $status = '<p>Finished</p>';
