@@ -299,6 +299,8 @@ class MetaExport {
     
     private function cleanData(&$str)
     {
+        // test
+        
         if ( is_string  ($str) ) {
             $str = preg_replace("/\t/", "\\t", $str);
             $str = preg_replace("/\r?\n/", "\\n", $str);
