@@ -305,7 +305,10 @@ class MetaExport {
             $str = preg_replace("/\t/", "\\t", $str);
             $str = preg_replace("/\r?\n/", "\\n", $str);
             if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
+        } else {
+            $str = ' ';
         }
+        
         return $str;
     }
     
@@ -373,6 +376,7 @@ class MetaExport {
                 $activeSheet = $spreadsheet->getActiveSheet();
                 
                 foreach ($row as $item) {
+                    
                     $tmp->setCellValueByColumnAndRow($cntColumn, $cntRow, $item);
                     $lastCellAddress = $activeSheet->getCellByColumnAndRow($cntColumn, $cntRow)->getCoordinate();
                     $spreadsheet->getActiveSheet()->getCell($lastCellAddress)->setDataType(\PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
