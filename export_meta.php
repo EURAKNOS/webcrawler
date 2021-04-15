@@ -299,9 +299,11 @@ class MetaExport {
     
     private function cleanData(&$str)
     {
-        $str = preg_replace("/\t/", "\\t", $str);
-        $str = preg_replace("/\r?\n/", "\\n", $str);
-        if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
+        if ( is_string  ($str) ) {
+            $str = preg_replace("/\t/", "\\t", $str);
+            $str = preg_replace("/\r?\n/", "\\n", $str);
+            if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
+        }
         return $str;
     }
     
